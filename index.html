@@ -1,912 +1,139 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="hi">
 <head>
-<meta charset="UTF-8">
+<meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#090a10">
-<title>GSN INFINITY | Creative Command Center</title>
+<meta name="theme-color" content="#090b13">
+<meta name="description" content="UPS Creator Studio — All-in-One AI Creative Production Software. Created & Developed by Umesh Prakash Singh.">
+<title>UPS Creator Studio | AI Creative Production Suite</title>
 <style>
-:root{--bg:#090a10;--side:#10121b;--panel:#151824;--card:#1b1e2b;--border:#2b3040;--purple:#9165ff;--cyan:#35d9ed;--gold:#d8b66e;--text:#f5f5fa;--muted:#9ba1b3;--green:#36d68a}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,Arial,sans-serif}button,input,select,textarea{font:inherit}button{cursor:pointer}
-.sidebar{position:fixed;top:0;bottom:0;left:0;width:260px;background:var(--side);border-right:1px solid var(--border);padding:20px 14px;overflow-y:auto;z-index:30;transition:.25s}
-.brand{font-size:22px;font-weight:900;color:var(--gold);padding:12px 8px 25px;letter-spacing:1px}.brand small{display:block;font-size:9px;color:var(--muted);letter-spacing:3px;margin-top:7px}
-.nav-label{font-size:10px;letter-spacing:2px;color:var(--muted);padding:17px 10px 7px}.nav button{width:100%;border:0;background:transparent;color:#bbc0ce;text-align:left;padding:12px;border-radius:9px;margin:2px 0;font-size:13px}.nav button:hover,.nav button.active{background:linear-gradient(90deg,#9165ff30,#35d9ed12);color:white;border-left:3px solid var(--purple)}
-.main{margin-left:260px;min-height:100vh}.topbar{height:68px;background:#0e1018;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 25px;position:sticky;top:0;z-index:20}
-.menu{display:none;background:var(--card);color:white;border:1px solid var(--border);padding:9px;border-radius:8px}.topbrand{font-weight:800;letter-spacing:1px}.online{font-size:11px;color:var(--green)}
-.content{padding:26px;max-width:1500px;margin:auto}.page{display:none}.page.active{display:block}
-.hero{padding:32px;border-radius:19px;background:linear-gradient(115deg,#291b49,#151d32 60%,#10333b);border:1px solid #654b91;position:relative;overflow:hidden}.hero:after{content:"GSN";position:absolute;right:20px;top:0;font-size:105px;font-weight:900;color:#ffffff09;pointer-events:none}
-.eyebrow{color:var(--gold);font-size:10px;letter-spacing:3px}h1{font-size:29px;margin:12px 0}.hero p{color:#c4c8d6;max-width:620px;line-height:1.7}
-.btn{border:0;border-radius:9px;padding:12px 17px;background:linear-gradient(110deg,var(--purple),#6541c7);color:white;font-weight:700;margin:7px 5px 7px 0}.btn.secondary{background:var(--card);border:1px solid var(--border)}.btn.green{background:#176d4a}.btn.danger{background:#7d2935}
-.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:17px}
-.card,.stat,.panel{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px}.card{transition:.2s}.card:hover{transform:translateY(-3px);border-color:var(--purple)}.card h3{font-size:15px;margin:10px 0 6px}.card p,.muted{color:var(--muted);font-size:12px;line-height:1.6}.icon{font-size:27px}.stat small{color:var(--muted);font-size:10px}.stat strong{display:block;font-size:26px;margin:9px 0}
-.section-title{display:flex;justify-content:space-between;align-items:center;margin:27px 0 14px}.section-title h2{font-size:17px;margin:0}.section-title span{font-size:10px;color:var(--muted)}
-.field{margin:16px 0}.field label{display:block;font-size:13px;margin-bottom:8px;color:#d9dbea}input,select,textarea{width:100%;padding:13px;background:#0d0f17;border:1px solid var(--border);border-radius:9px;color:white;outline:none}input:focus,select:focus,textarea:focus{border-color:var(--purple)}textarea{resize:vertical}
-.row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:13px 2px;border-bottom:1px solid var(--border);font-size:12px}.badge{background:#36d68a18;color:var(--green);border-radius:20px;padding:5px 9px;font-size:10px}.tag{background:#9165ff20;color:#c4adff;padding:5px 9px;border-radius:20px;font-size:10px}
-.question{font-size:19px;font-weight:700;margin:12px 0}.progress{height:5px;background:#303344;border-radius:8px;overflow:hidden}.progress div{height:100%;background:linear-gradient(90deg,var(--purple),var(--cyan));width:0;transition:width .2s}
-.result{white-space:pre-wrap;line-height:1.8;font-size:13px;color:#d9dbea;background:#0c0e16;padding:17px;border-radius:10px;overflow-wrap:anywhere;min-height:20px}.small{font-size:11px;color:var(--muted)}.switch{background:#414657;border:0;border-radius:20px;width:42px;height:23px;position:relative}.switch:after{content:"";position:absolute;width:17px;height:17px;background:white;border-radius:50%;left:3px;top:3px;transition:.2s}.switch.on{background:var(--purple)}.switch.on:after{left:22px}
-.footer{text-align:center;padding:25px;color:var(--muted);font-size:10px;border-top:1px solid var(--border);margin-top:35px}.overlay{display:none;position:fixed;inset:0;background:#0009;z-index:25}
-.choice{display:block;width:100%;text-align:left;margin:8px 0;padding:13px;background:#10131e;border:1px solid var(--border);border-radius:9px;color:var(--text)}.choice.selected{border-color:var(--purple);background:#9165ff20}.item{padding:12px 0;border-bottom:1px solid var(--border)}.item strong{display:block;font-size:13px}.item span{display:block;color:var(--muted);font-size:11px;margin-top:5px;line-height:1.5}
-@media(max-width:950px){.sidebar{transform:translateX(-100%)}.sidebar.open{transform:translateX(0)}.main{margin-left:0}.menu{display:block}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.overlay.show{display:block}}
-@media(max-width:550px){.content{padding:14px}.grid{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}.hero{padding:23px}h1{font-size:24px}.topbar{padding:0 13px}.hero:after{font-size:65px}}
+:root{--bg:#090b13;--side:#101421;--panel:#171d2c;--card:#1c2435;--line:#303b52;--purple:#9165ff;--cyan:#43d9e8;--gold:#e3c27b;--text:#f6f7fb;--muted:#a8b0c2;--green:#42d99a}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,Arial,sans-serif}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+.sidebar{position:fixed;inset:0 auto 0 0;width:265px;background:var(--side);border-right:1px solid var(--line);padding:18px 14px;overflow:auto;z-index:30;transition:.25s}
+.brand{padding:12px 9px 22px;font-size:19px;font-weight:900;color:var(--gold)}
+.brand small{display:block;color:var(--muted);font-size:9px;letter-spacing:2px;margin-top:7px}
+.nav-label{padding:16px 10px 7px;color:#8490a8;font-size:10px;letter-spacing:1.5px}
+.nav button{display:block;width:100%;text-align:left;border:0;background:transparent;color:#c5ccda;padding:11px;border-radius:9px;margin:2px 0;font-size:13px}
+.nav button.active,.nav button:hover{background:#9165ff28;color:#fff;border-left:3px solid var(--purple)}
+.main{margin-left:265px;min-height:100vh}
+.topbar{height:68px;position:sticky;top:0;z-index:20;background:#0d111c;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 22px}
+.topbrand{font-weight:900;letter-spacing:.7px}
+.topbrand span{color:var(--gold)}
+.menu{display:none;background:var(--card);border:1px solid var(--line);color:white;padding:9px 12px;border-radius:8px}
+.status{font-size:10px;color:var(--green)}
+.content{max-width:1450px;margin:auto;padding:24px}
+.page{display:none}
+.page.active{display:block}
+.hero{padding:32px;border:1px solid #66518e;border-radius:20px;background:radial-gradient(circle at 90% 5%,#43d9e82b,transparent 30%),linear-gradient(120deg,#291d4b,#17233b 65%,#10333b);position:relative;overflow:hidden}
+.eyebrow{font-size:10px;letter-spacing:2.5px;color:var(--gold);font-weight:800}
+.hero h1{font-size:clamp(25px,4vw,38px);margin:15px 0}
+.hero p{max-width:720px;color:#d0d6e5;line-height:1.75}
+.tagline{font-weight:800;letter-spacing:1.5px;margin:16px 0}
+.btn{border:0;border-radius:9px;padding:12px 16px;margin:6px 6px 6px 0;background:linear-gradient(110deg,var(--purple),#6845c8);color:#fff;font-weight:750}
+.btn.secondary{background:#20283a;border:1px solid var(--line)}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:11px;margin-top:15px}
+.card,.stat,.panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:17px;min-width:0}
+.card h3{margin:9px 0 5px}
+.card p,.muted{font-size:13px;color:var(--muted);line-height:1.6}
+.icon{font-size:28px}
+.stat small{font-size:10px;color:var(--muted)}
+.stat strong{display:block;font-size:27px;margin:8px 0}
+.badge{display:inline-block;border-radius:20px;padding:5px 9px;background:#42d99a18;color:var(--green);font-size:10px}
+.section-title{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:26px 0 13px}
+.section-title h2{font-size:17px;margin:0}
+.section-title span,.small{font-size:10px;color:var(--muted)}
+.field{margin:14px 0}
+.field label{display:block;margin-bottom:7px;font-size:13px}
+input,select,textarea{width:100%;padding:12px;background:#0d121e;border:1px solid var(--line);border-radius:9px;color:#fff}
+input:focus,select:focus,textarea:focus{outline:1px solid var(--purple)}
+.row{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line);font-size:13px}
+.result{white-space:pre-wrap;line-height:1.7;background:#0c111c;padding:15px;border-radius:9px;overflow-wrap:anywhere}
+.progress{height:6px;background:#30384b;border-radius:8px;overflow:hidden}
+.progress div{height:100%;background:linear-gradient(90deg,var(--purple),var(--cyan));width:0}
+.footer{text-align:center;border-top:1px solid var(--line);margin-top:35px;padding:27px 12px;color:var(--muted);font-size:11px;line-height:1.9}
+.footer strong{color:var(--gold)}
+.avatar{width:58px;height:58px;border-radius:50%;border:2px solid var(--gold);display:grid;place-items:center;overflow:hidden;background:#20283a;color:var(--gold);font-weight:900}
+.avatar img{width:100%;height:100%;object-fit:cover}
+.creator{display:flex;align-items:center;gap:12px;margin-top:18px}
+.overlay{display:none;position:fixed;inset:0;background:#000a;z-index:25}
+.overlay.show{display:block}
+@media(max-width:950px){
+.sidebar{transform:translateX(-105%)}
+.sidebar.open{transform:translateX(0)}
+.main{margin-left:0}
+.menu{display:inline-block}
+.grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:600px){
+.content{padding:13px}
+.topbar{height:62px;padding:0 12px}
+.topbrand{font-size:13px}
+.status{font-size:9px}
+.grid{grid-template-columns:1fr}
+.stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+.hero{padding:21px}
+.hero h1{font-size:25px}
+.card,.panel{padding:15px}
+}
 </style>
 </head>
 <body>
 <div class="overlay" id="overlay" onclick="menuToggle()"></div>
 <aside class="sidebar" id="sidebar">
- <div class="brand">✦ GSN INFINITY<small>UNLIMITED PREMIUM</small></div>
- <nav class="nav">
-  <div class="nav-label">MAIN WORKSPACE</div>
-  <button class="active" data-page="dashboard">🏠 Dashboard</button><button data-page="wizard">🤖 Auto-Pilot Assistant</button><button data-page="projects">📁 My Projects</button>
-  <div class="nav-label">CREATIVE STUDIOS</div>
-  <button data-page="video">🎬 Video Studio</button><button data-page="image">🖼️ Image Studio</button><button data-page="poster">🎨 Poster Studio</button><button data-page="dance">💃 Dance & Music</button><button data-page="film">🎞️ Film Studio</button><button data-page="podcast">🎙️ Podcast Studio</button><button data-page="education">📚 Education Studio</button>
-  <div class="nav-label">SYSTEM CONTROL</div>
-  <button data-page="modules">🧠 50 Modules</button><button data-page="locks">🔒 15 Locks</button><button data-page="prompts">✍️ Prompt Library</button><button data-page="quality">✅ Quality Audit</button><button data-page="settings">⚙️ Settings</button>
- </nav>
+<div class="brand">✦ UPS CREATOR STUDIO<small>IMAGINE · CREATE · INNOVATE</small></div>
+<nav class="nav">
+<div class="nav-label">MAIN WORKSPACE</div>
+<button class="active" data-page="dashboard">🏠 Dashboard</button>
+<button data-page="wizard">🤖 Auto-Pilot Assistant</button>
+<button data-page="projects">📁 My Projects</button>
+<div class="nav-label">CREATIVE STUDIOS</div>
+<button data-page="video">🎬 Video Studio</button>
+<button data-page="image">🖼️ Image Studio</button>
+<button data-page="poster">🎨 Poster Studio</button>
+<button data-page="dance">💃 Dance & Music</button>
+<button data-page="film">🎞️ Film Studio</button>
+<button data-page="podcast">🎙️ Podcast Studio</button>
+<button data-page="education">📚 Education Studio</button>
+<div class="nav-label">SYSTEM TOOLS</div>
+<button data-page="modules">🧠 50 Modules</button>
+<button data-page="locks">🔒 15 Locks</button>
+<button data-page="prompts">✍️ Prompt Builder</button>
+<button data-page="quality">✅ Quality Audit</button>
+<button data-page="profile">👤 Creator Profile</button>
+<button data-page="settings">⚙️ Settings</button>
+</nav>
 </aside>
 <main class="main">
-<header class="topbar"><div style="display:flex;align-items:center;gap:12px"><button class="menu" onclick="menuToggle()">☰</button><span class="topbrand">GSN <span style="color:var(--gold)">INFINITY</span></span></div><span class="online">● LOCAL WORKSPACE</span></header>
+<header class="topbar">
+<div style="display:flex;align-items:center;gap:11px">
+<button class="menu" onclick="menuToggle()">☰</button>
+<span class="topbrand">UPS <span>CREATOR STUDIO</span></span>
+</div>
+<span class="status">● LOCAL WORKSPACE</span>
+</header>
 <div class="content">
 <section class="page active" id="dashboard">
- <div class="hero"><div class="eyebrow">ULTIMATE CREATIVE COMMAND CENTER</div><h1>Welcome to GSN INFINITY</h1><p>Your creative vision. One intelligent workspace. Plan, organize and manage your complete production workflow.</p><button class="btn" onclick="go('wizard')">✦ Start New Project</button><button class="btn secondary" onclick="go('modules')">Explore Modules</button></div>
- <div class="stats"><div class="stat"><small>CORE MODULES</small><strong>50</strong><span class="badge">Configured</span></div><div class="stat"><small>PRODUCTION LOCKS</small><strong>15</strong><span class="badge">Configured</span></div><div class="stat"><small>CREATIVE STUDIOS</small><strong>7</strong><span class="badge">Available</span></div><div class="stat"><small>MY PROJECTS</small><strong id="projectCount">0</strong><span class="badge">Saved</span></div></div>
- <div class="section-title"><h2>Creative Studios</h2><span>WORKSPACE</span></div><div class="grid" id="studioGrid"></div>
- <div class="section-title"><h2>Master Control</h2><span>SYSTEM MANAGEMENT</span></div><div class="grid">
- <div class="card"><div class="icon">🧠</div><h3>50 Modules</h3><p>Complete creative production framework.</p><button class="btn secondary" onclick="go('modules')">Open</button></div>
- <div class="card"><div class="icon">🔐</div><h3>15 Locks</h3><p>Project rules and production protection.</p><button class="btn secondary" onclick="go('locks')">Open</button></div>
- <div class="card"><div class="icon">✅</div><h3>Quality Audit</h3><p>Review project readiness and checklist.</p><button class="btn secondary" onclick="go('quality')">Open</button></div></div>
-</section>
-<section class="page" id="wizard">
- <div class="section-title"><h2>🤖 Auto-Pilot Project Wizard</h2><span>ONE QUESTION AT A TIME</span></div>
- <div class="panel"><div class="progress"><div id="progress"></div></div><p class="small" id="stepLabel">STEP 1 OF 7</p><div class="question" id="question"></div><div id="answerArea"></div><p class="small" id="recommendation"></p><button class="btn" id="nextBtn" onclick="nextStep()">Continue →</button><button class="btn secondary" onclick="resetWizard()">Restart</button></div>
- <div class="panel"><h3>Workflow Rules</h3><p class="muted">Format → Category → Activity → Subject → Specific Topic → Purpose → Dialogue/Narration.</p></div>
- <div class="panel" id="briefPanel" style="display:none"><h3>Project Brief</h3><div class="result" id="brief"></div><button class="btn" onclick="saveWizardProject()">Save Project</button><button class="btn secondary" onclick="copyText('brief')">Copy Brief</button></div>
-</section>
-<section class="page" id="video"><div class="panel"><h2>🎬 Video Studio</h2><p class="muted">Video concept, script, scenes and production prompt planning.</p><div class="field"><label>Video Topic</label><input id="videoTopic" placeholder="Enter video topic"></div><button class="btn" onclick="quickProject('Video','videoTopic')">Create Video Brief</button><div class="result" id="videoResult"></div></div></section>
-<section class="page" id="image"><div class="panel"><h2>🖼️ Image Studio</h2><p class="muted">Image concept and generation prompt planning.</p><div class="field"><label>Image Description</label><textarea id="imageTopic" rows="3"></textarea></div><button class="btn" onclick="quickProject('Image','imageTopic')">Create Image Brief</button><div class="result" id="imageResult"></div></div></section>
-<section class="page" id="poster"><div class="panel"><h2>🎨 Poster Studio</h2><p class="muted">Premium poster layout and design prompt planning.</p><div class="field"><label>Poster Topic</label><input id="posterTopic" placeholder="Poster subject"></div><button class="btn" onclick="quickProject('Poster','posterTopic')">Create Poster Brief</button><div class="result" id="posterResult"></div></div></section>
-<section class="page" id="dance"><div class="panel"><h2>💃 Dance & Music Studio</h2><div class="field"><label>Dance Type</label><select id="danceType"><option>Solo Dance</option><option>Couple Dance</option><option>Group Dance</option><option>Bollywood Dance</option><option>Classical Dance</option><option>Hip-Hop Dance</option><option>Folk Dance</option><option>Freestyle Dance</option><option>Contemporary Dance</option><option>Dance Performance</option></select></div><div class="field"><label>Song / Concept</label><input id="danceTopic"></div><button class="btn" onclick="quickDance()">Create Dance Brief</button><div class="result" id="danceResult"></div></div></section>
-<section class="page" id="film"><div class="panel"><h2>🎞️ Film Production Studio</h2><div class="field"><label>Film Story / Subject</label><textarea id="filmTopic" rows="3"></textarea></div><button class="btn" onclick="quickProject('Film','filmTopic')">Create Film Brief</button><div class="result" id="filmResult"></div></div></section>
-<section class="page" id="podcast"><div class="panel"><h2>🎙️ Podcast Studio</h2><div class="field"><label>Podcast Topic</label><input id="podcastTopic"></div><button class="btn" onclick="quickProject('Podcast','podcastTopic')">Create Podcast Brief</button><div class="result" id="podcastResult"></div></div></section>
-<section class="page" id="education"><div class="panel"><h2>📚 Education Studio</h2><div class="field"><label>Educational Topic</label><input id="educationTopic"></div><button class="btn" onclick="quickProject('Education','educationTopic')">Create Education Brief</button><div class="result" id="educationResult"></div></div></section><!-- PROJECTS -->
-<section class="page" id="projects">
- <div class="section-title"><h2>📁 My Projects</h2><span>LOCAL STORAGE</span></div>
- <div class="panel" id="projectList"></div>
- <button class="btn secondary" onclick="exportProjects()">Export Projects JSON</button>
- <button class="btn secondary" onclick="document.getElementById('importFile').click()">Import Projects JSON</button>
- <input type="file" id="importFile" accept=".json" hidden onchange="importProjects(event)">
-</section>
-
-<!-- MODULES -->
-<section class="page" id="modules">
- <div class="section-title"><h2>🧠 Module Control Center</h2><span>50 MODULES</span></div>
- <input id="moduleSearch" placeholder="Search modules..." oninput="renderModules()">
- <div class="panel" id="moduleList" style="margin-top:15px"></div>
-</section>
-
-<!-- LOCKS -->
-<section class="page" id="locks">
- <div class="section-title"><h2>🔒 Lock Control Center</h2><span>15 LOCKS</span></div>
- <p class="muted">Locks का ON/OFF नियंत्रण Project Configuration के लिए है।</p>
- <div class="panel" id="lockList"></div>
-</section>
-
-<!-- PROMPTS -->
-<section class="page" id="prompts">
- <div class="panel">
-  <h2>✍️ Prompt Builder</h2>
-  <div class="field"><label>Subject</label><input id="promptSubject"></div>
-  <div class="field"><label>Style</label>
-   <select id="promptStyle">
-    <option>Ultra Premium Cinematic</option><option>Photorealistic</option>
-    <option>Documentary</option><option>Educational</option><option>Minimal Luxury</option>
-   </select>
-  </div>
-  <div class="field"><label>Aspect Ratio</label>
-   <select id="promptRatio">
-    <option>9:16 Vertical</option><option>16:9 Landscape</option>
-    <option>1:1 Square</option><option>3:4 Portrait</option>
-   </select>
-  </div>
-  <button class="btn" onclick="buildPrompt()">Generate Prompt</button>
-  <div class="result" id="promptResult"></div>
-  <button class="btn secondary" onclick="copyText('promptResult')">Copy Prompt</button>
- </div>
-</section>
-
-<!-- QUALITY -->
-<section class="page" id="quality">
- <div class="panel">
-  <h2>✅ Quality Audit Center</h2>
-  <p class="muted">Project की तैयारी जाँचने के लिए Checklist.</p>
-  <div id="auditList"></div>
-  <button class="btn" onclick="runAudit()">Run Quality Audit</button>
-  <div class="result" id="auditResult"></div>
- </div>
-</section>
-
-<!-- SETTINGS -->
-<section class="page" id="settings">
- <div class="panel">
-  <h2>⚙️ System Settings</h2>
-  <div class="row">Cinematic Dark Theme <span class="badge">ACTIVE</span></div>
-  <div class="row">Responsive Layout <span class="badge">ACTIVE</span></div>
-  <div class="row">Local Project Storage <span class="badge">ACTIVE</span></div>
-  <div class="row">AI API <span class="tag">NOT CONNECTED</span></div>
-  <div class="row">Cloud Sync <span class="tag">NOT CONNECTED</span></div>
-  <div class="row">Real Image/Video Rendering <span class="tag">NOT CONNECTED</span></div>
-  <button class="btn secondary" onclick="backupAll()">Download Full Backup</button>
- </div>
-</section>
-
-<footer class="footer">
- GSN INFINITY · UNLIMITED PREMIUM<br>
- ULTIMATE AUTO-PILOT FILMMAKER PRO MAX<br>
- VERSION 3.0 · RESPONSIVE WORKSPACE
-</footer>
+<div class="hero">
+<div class="eyebrow">ALL-IN-ONE AI CREATIVE PRODUCTION SOFTWARE</div>
+<h1>Welcome to UPS Creator Studio</h1>
+<p>Your imagination. Your creativity. One powerful workspace. Plan, design and organize your complete creative production workflow for videos, images, posters, films, podcasts, music and educational content.</p>
+<div class="tagline">IMAGINE. CREATE. INNOVATE.</div>
+<button class="btn" onclick="go('wizard')">✦ Start New Project</button>
+<button class="btn secondary" onclick="go('modules')">Explore 50 Modules</button>
+<div class="creator">
+<div class="avatar" id="miniAvatar">UPS</div>
+<div><b>Umesh Prakash Singh</b><br><span class="small">Creator & Developer</span></div>
 </div>
-</main>
-
-<script>
-"use strict";
-
-// ======================================
-// MASTER DATA: EXACTLY 50 MODULES
-// ======================================
-
-const modules = [
-["Project Understanding","Understand the user's goal and deliverable."],
-["Category & Niche","Classify category, niche and content type."],
-["Activity Detection","Identify the activity or creative action."],
-["Subject & Topic","Separate subject from specific topic."],
-["Country & Audience","Set geography and target audience."],
-["Audience Psychology","Match tone and engagement to viewers."],
-["Language & Accent","Set language, dialect and pronunciation."],
-["Platform Selection","Optimize for selected platforms."],
-["Content Context","Organize content without profile name fields."],
-["Objective & Message","Define purpose and central message."],
-["Research & Verification","Check facts and uncertain claims."],
-["Topic Explainer","Explain meaning and intended takeaway."],
-["Idea Generator","Develop original creative concepts."],
-["Story Architecture","Build coherent narrative flow."],
-["Hook & Opening","Create an attention-grabbing opening."],
-["Welcome & Context","Add introduction when appropriate."],
-["Script & Dialogue","Write narration and on-screen wording."],
-["Emotion & Engagement","Direct emotional tone and retention."],
-["CTA & Ending","Create a suitable conclusion."],
-["Storyboard","Organize scenes and shots."],
-["Duration & Clip Math","Calculate duration and clip count."],
-["Character Design","Define characters and roles."],
-["Identity Preservation","Protect supplied identity references."],
-["Wardrobe & Props","Maintain approved clothing and props."],
-["Voice Direction","Specify voice quality and delivery."],
-["Lip-sync & Expression","Direct expressions and lip-sync."],
-["Action & Performance","Describe movement and performance."],
-["Camera & Lens","Specify framing, angle and camera movement."],
-["Lighting & Composition","Plan lighting and visual hierarchy."],
-["Background & Location","Design environments and locations."],
-["Animation & VFX","Plan animation and visual effects."],
-["Typography & Captions","Control text and subtitle readability."],
-["Music & Sound","Plan soundtrack and sound effects."],
-["Transitions & Continuity","Maintain pacing and scene continuity."],
-["Reference Asset Protection","Preserve supplied logos and images."],
-["Real UI Accuracy","Keep software tutorials faithful to real interfaces."],
-["Image Prompt Builder","Create image-generation prompts."],
-["Video Prompt Builder","Create video-generation prompts."],
-["Structured JSON Builder","Produce structured output."],
-["Tool Compatibility","Adapt prompts to selected AI tools."],
-["Multi-clip Assembly","Prepare clips and joining instructions."],
-["Editing & Finishing","Plan editing and finishing."],
-["Export Settings","Specify resolution, FPS and format."],
-["Platform Optimization","Adapt content to platform requirements."],
-["SEO & Metadata","Prepare titles and keywords."],
-["Captions & Hashtags","Create platform-ready captions."],
-["Facebook Topics & Playlists","Separate Reel Topics from playlists."],
-["Publishing Plan","Suggest distribution planning."],
-["Safety & Rights Review","Review privacy, safety and permissions."],
-["Quality Audit","Check project readiness and quality."],
-["Final Delivery","Package final production deliverables."]
-];
-
-// ======================================
-// MASTER DATA: EXACTLY 15 LOCKS
-// ======================================
-
-const locks = [
-["Project Lock","Keep the approved goal and deliverables."],
-["Theme Lock","Preserve the approved creative theme."],
-["Topic Lock","Do not silently change the topic."],
-["Script Lock","Preserve approved dialogue and script."],
-["Identity Lock","Protect supplied face and identity."],
-["Outfit Lock","Maintain approved clothing and accessories."],
-["Voice Lock","Maintain approved voice and language."],
-["Performance Lock","Preserve approved action and expression."],
-["Scene Lock","Maintain approved scene structure."],
-["Visual Accuracy Lock","Protect visual and factual accuracy."],
-["Continuity Lock","Maintain consistency between clips."],
-["Animation Lock","Preserve approved animation direction."],
-["Typography Lock","Maintain approved text and captions."],
-["Duration Lock","Respect approved clip duration."],
-["Safe-frame & Export Lock","Check crop, safe areas and export."]
-];
-
-const studios = [
-["🎬","Video Studio","Video concepts, scripts and scenes.","video"],
-["🖼️","Image Studio","Image concepts and prompts.","image"],
-["🎨","Poster Studio","Premium poster design prompts.","poster"],
-["💃","Dance & Music","Dance and music concepts.","dance"],
-["🎞️","Film Studio","Film stories and production plans.","film"],
-["🎙️","Podcast Studio","Podcast scripts and concepts.","podcast"],
-["📚","Education Studio","Educational content planning.","education"]
-];
-
-const auditItems = [
-"Project objective is clearly defined",
-"Topic and audience are selected",
-"Language and platform are selected",
-"Script and dialogue are reviewed",
-"Visual identity and references are checked",
-"Duration and aspect ratio are confirmed",
-"Safety, privacy and rights are reviewed",
-"Final output has been checked"
-];
-
-const lockState = JSON.parse(localStorage.getItem("gsnLocks") || "{}");
-
-// ======================================
-// NAVIGATION
-// ======================================
-
-function go(pageId) {
- const target = document.getElementById(pageId);
- if (!target) return;
-
- document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
- target.classList.add("active");
-
- document.querySelectorAll(".nav button").forEach(b => {
-  b.classList.toggle("active", b.dataset.page === pageId);
- });
-
- closeMenu();
- window.scrollTo({top:0,behavior:"smooth"});
-}
-
-function menuToggle() {
- document.getElementById("sidebar").classList.toggle("open");
- document.getElementById("overlay").classList.toggle("show");
-}
-
-function closeMenu() {
- document.getElementById("sidebar").classList.remove("open");
- document.getElementById("overlay").classList.remove("show");
-}
-
-document.querySelectorAll(".nav button[data-page]").forEach(button => {
- button.addEventListener("click", () => go(button.dataset.page));
-});
-
-// ======================================
-// RENDER STUDIOS
-// ======================================
-
-function renderStudios() {
- const container = document.getElementById("studioGrid");
- container.innerHTML = studios.map(s => `
-  <div class="card">
-   <div class="icon">${s[0]}</div>
-   <h3>${s[1]}</h3>
-   <p>${s[2]}</p>
-   <button class="btn secondary" onclick="go('${s[3]}')">Open Studio</button>
-  </div>
- `).join("");
-}
-
-// ======================================
-// RENDER MODULES
-// ======================================
-
-function renderModules() {
- const search = (document.getElementById("moduleSearch").value || "").toLowerCase();
- const filtered = modules.filter(m =>
-  (m[0] + " " + m[1]).toLowerCase().includes(search)
- );
-
- document.getElementById("moduleList").innerHTML =
-  `<p class="small">Showing ${filtered.length} of ${modules.length} modules</p>` +
-  filtered.map((m,i) => `
-   <div class="item">
-    <strong>${modules.indexOf(m)+1}. ${m[0]}</strong>
-    <span>${m[1]}</span>
-   </div>
-  `).join("");
-}
-
-// ======================================
-// RENDER LOCKS
-// ======================================
-
-function renderLocks() {
- document.getElementById("lockList").innerHTML = locks.map((lock,i) => {
-  const enabled = lockState[i] !== false;
-  return `
-   <div class="row">
-    <div><strong>${i+1}. ${lock[0]}</strong><br><span class="small">${lock[1]}</span></div>
-    <button class="switch ${enabled ? "on" : ""}" aria-label="Toggle ${lock[0]}" onclick="toggleLock(${i})"></button>
-   </div>
-  `;
- }).join("");
-}
-
-function toggleLock(index) {
- lockState[index] = lockState[index] === false;
- localStorage.setItem("gsnLocks",JSON.stringify(lockState));
- renderLocks();
-}// ======================================
-// AUTO-PILOT WIZARD
-// ======================================
-
-const wizardSteps = [
- {
-  question:"आप क्या बनाना चाहते हैं?",
-  key:"format",
-  options:["Video / Reel","Image","Poster","Film","Podcast","Educational Content","Dance / Music"]
- },
- {
-  question:"किस Category में बनाना चाहते हैं?",
-  key:"category",
-  options:["Motivational","Knowledge / Facts","Education / GK","Daily Life","Entertainment","Business / Interior","Festival / Event","Other"]
- },
- {
-  question:"कौन-सी Activity होगी?",
-  key:"activity",
-  options:["Explainer","Storytelling","Interview / Podcast","Tutorial","Promotion","Performance","Quiz / MCQ","Announcement"]
- },
- {
-  question:"मुख्य Subject क्या है?",
-  key:"subject",
-  type:"text",
-  placeholder:"उदाहरण: समय का महत्व"
- },
- {
-  question:"Specific Topic बताइए।",
-  key:"topic",
-  type:"text",
-  placeholder:"आप किस खास बात पर सामग्री चाहते हैं?"
- },
- {
-  question:"इस Content का उद्देश्य क्या है?",
-  key:"purpose",
-  options:["Inform / जानकारी देना","Educate / सिखाना","Entertain / मनोरंजन","Inspire / प्रेरित करना","Promote / प्रचार","Awareness / जागरूकता"]
- },
- {
-  question:"Dialogue / Narration क्या होगा?",
-  key:"dialogue",
-  type:"textarea",
-  placeholder:"अपना संवाद लिखें या खाली छोड़ें।"
- }
-];
-
-let currentStep = 0;
-let wizardAnswers = {};
-let finalBrief = "";
-
-function renderWizard() {
- const step = wizardSteps[currentStep];
-
- document.getElementById("question").textContent = step.question;
- document.getElementById("stepLabel").textContent =
-  `STEP ${currentStep+1} OF ${wizardSteps.length}`;
-
- document.getElementById("progress").style.width =
-  ((currentStep+1)/wizardSteps.length*100)+"%";
-
- const area = document.getElementById("answerArea");
-
- if(step.options) {
-  area.innerHTML = step.options.map(option => `
-   <button type="button"
-    class="choice ${wizardAnswers[step.key]===option?"selected":""}"
-    onclick="selectWizardOption('${step.key}',this)"
-    data-value="${option.replace(/"/g,"&quot;")}">
-    ${option}
-   </button>
-  `).join("");
- } else {
-  const tag = step.type === "textarea" ? "textarea" : "input";
-  area.innerHTML = `
-   <${tag} id="wizardInput"
-    placeholder="${step.placeholder}"
-    ${tag==="textarea"?'rows="4"':""}
-   >${tag==="textarea"?(wizardAnswers[step.key]||""):""}</${tag}>
-  `;
-
-  if(tag==="input") {
-   document.getElementById("wizardInput").value =
-    wizardAnswers[step.key] || "";
-  }
- }
-
- document.getElementById("nextBtn").textContent =
-  currentStep === wizardSteps.length-1
-  ? "Generate Project Brief →"
-  : "Continue →";
-
- document.getElementById("recommendation").textContent =
-  "🟢 RECOMMENDED: अपने विषय के अनुसार स्पष्ट विकल्प चुनें।";
-
- document.getElementById("briefPanel").style.display = "none";
-}
-
-function selectWizardOption(key,button) {
- wizardAnswers[key] = button.dataset.value;
-
- document.querySelectorAll(".choice").forEach(item =>
-  item.classList.remove("selected")
- );
-
- button.classList.add("selected");
-}
-
-function nextStep() {
- const step = wizardSteps[currentStep];
-
- if(!step.options) {
-  const value = document.getElementById("wizardInput").value.trim();
-
-  if(step.key !== "dialogue" && !value) {
-   alert("कृपया उत्तर भरें।");
-   return;
-  }
-
-  wizardAnswers[step.key] = value;
- }
-
- if(step.options && !wizardAnswers[step.key]) {
-  alert("कृपया एक विकल्प चुनें।");
-  return;
- }
-
- if(currentStep < wizardSteps.length-1) {
-  currentStep++;
-  renderWizard();
- } else {
-  generateProjectBrief();
- }
-}
-
-function generateProjectBrief() {
- const a = wizardAnswers;
-
- finalBrief =
-`GSN INFINITY — PROJECT BRIEF
-
-FORMAT: ${a.format || ""}
-CATEGORY: ${a.category || ""}
-ACTIVITY: ${a.activity || ""}
-SUBJECT: ${a.subject || ""}
-SPECIFIC TOPIC: ${a.topic || ""}
-PURPOSE: ${a.purpose || ""}
-
-DIALOGUE / NARRATION:
-${a.dialogue || "इस विषय के लिए उपयुक्त मौलिक संवाद तैयार करें।"}
-
-PRODUCTION DIRECTION:
-Create a strong opening, clear storytelling,
-appropriate visuals, accurate information,
-readable captions, consistent scenes and
-a meaningful ending.
-
-SYSTEM:
-GSN INFINITY — Creative Planning Workspace.
-
-Note: This application prepares project briefs
-and prompts. External AI media generation
-is not connected yet.`;
-
- document.getElementById("brief").textContent = finalBrief;
- document.getElementById("briefPanel").style.display = "block";
- document.getElementById("progress").style.width = "100%";
- document.getElementById("nextBtn").textContent = "Brief Generated";
-
- document.getElementById("briefPanel").scrollIntoView({
-  behavior:"smooth",
-  block:"start"
- });
-}
-
-function resetWizard() {
- currentStep = 0;
- wizardAnswers = {};
- finalBrief = "";
- renderWizard();
-}
-
-// ======================================
-// PROJECT STORAGE
-// ======================================
-
-function getProjects() {
- try {
-  return JSON.parse(localStorage.getItem("gsnProjects") || "[]");
- } catch(error) {
-  return [];
- }
-}
-
-function saveProject(type,title,content) {
- const projects = getProjects();
-
- projects.unshift({
-  id:Date.now(),
-  type:type,
-  title:title,
-  content:content,
-  created:new Date().toLocaleString()
- });
-
- try {
-  localStorage.setItem("gsnProjects",JSON.stringify(projects));
-  updateProjectCount();
-  renderProjects();
-  alert("Project सफलतापूर्वक सेव हो गया।");
- } catch(error) {
-  alert("Storage उपलब्ध नहीं है। कृपया Backup Export करें।");
- }
-}
-
-function saveWizardProject() {
- if(!finalBrief) {
-  alert("पहले Project Brief बनाएँ।");
-  return;
- }
-
- saveProject(
-  wizardAnswers.format || "Project",
-  wizardAnswers.topic || wizardAnswers.subject || "New Project",
-  finalBrief
- );
-}
-
-function quickProject(type,inputId) {
- const input = document.getElementById(inputId);
- const topic = input.value.trim();
-
- if(!topic) {
-  alert("कृपया Topic भरें।");
-  input.focus();
-  return;
- }
-
- const content =
-`${type.toUpperCase()} PROJECT BRIEF
-
-TOPIC: ${topic}
-
-STYLE:
-Ultra Premium Cinematic
-
-PRODUCTION:
-Create a clear concept, strong opening,
-suitable visual direction, readable text,
-consistent scenes and a meaningful ending.
-
-NOTE:
-Planning and prompt generation only.
-AI media rendering is not connected.`;
-
- const output = document.getElementById(
-  type.toLowerCase()+"Result"
- );
-
- if(output) output.textContent = content;
-
- saveProject(type,topic,content);
-}
-
-function quickDance() {
- const danceType = document.getElementById("danceType").value;
- const topic = document.getElementById("danceTopic").value.trim();
-
- if(!topic) {
-  alert("कृपया Song / Concept भरें।");
-  return;
- }
-
- const content =
-`DANCE & MUSIC PROJECT
-
-DANCE TYPE: ${danceType}
-SONG / CONCEPT: ${topic}
-
-DIRECTION:
-Plan suitable choreography, rhythm,
-camera framing, transitions and ending.
-
-NOTE:
-Planning only. Video rendering is not connected.`;
-
- document.getElementById("danceResult").textContent = content;
-
- saveProject("Dance",topic,content);
-}
-
-function updateProjectCount() {
- document.getElementById("projectCount").textContent =
-  getProjects().length;
-}
-
-function renderProjects() {
- const projects = getProjects();
- const container = document.getElementById("projectList");
-
- if(!projects.length) {
-  container.innerHTML =
-   "<p class='muted'>अभी कोई Project सेव नहीं है।</p>";
-  updateProjectCount();
-  return;
- }
-
- container.innerHTML = projects.map(project => `
-  <div class="item">
-   <strong>${escapeHTML(project.title)}</strong>
-   <span>${escapeHTML(project.type)} · ${escapeHTML(project.created)}</span>
-   <div class="result">${escapeHTML(project.content)}</div>
-   <button class="btn secondary"
-    onclick="copyProject(${project.id})">Copy</button>
-   <button class="btn danger"
-    onclick="deleteProject(${project.id})">Delete</button>
-  </div>
- `).join("");
-
- updateProjectCount();
-}
-
-function copyProject(id) {
- const project = getProjects().find(p => p.id === id);
- if(project) copyTextValue(project.content);
-}
-
-function deleteProject(id) {
- if(!confirm("क्या आप यह Project हटाना चाहते हैं?")) return;
-
- const projects = getProjects().filter(p => p.id !== id);
-
- localStorage.setItem("gsnProjects",JSON.stringify(projects));
-
- renderProjects();
-}
-
-// ======================================
-// IMPORT / EXPORT
-// ======================================
-
-function downloadFile(filename,content) {
- const blob = new Blob([content],{
-  type:"application/json"
- });
-
- const url = URL.createObjectURL(blob);
- const link = document.createElement("a");
-
- link.href = url;
- link.download = filename;
- document.body.appendChild(link);
- link.click();
- link.remove();
-
- URL.revokeObjectURL(url);
-}
-
-function exportProjects() {
- downloadFile(
-  "gsn-infinity-projects.json",
-  JSON.stringify(getProjects(),null,2)
- );
-}
-
-function importProjects(event) {
- const file = event.target.files[0];
-
- if(!file) return;
-
- const reader = new FileReader();
-
- reader.onload = function() {
-  try {
-   const imported = JSON.parse(reader.result);
-
-   if(!Array.isArray(imported)) {
-    throw new Error("Invalid data");
-   }
-
-   const combined = [...imported,...getProjects()];
-
-   localStorage.setItem(
-    "gsnProjects",
-    JSON.stringify(combined)
-   );
-
-   renderProjects();
-   alert("Projects Import हो गए।");
-
-  } catch(error) {
-   alert("यह वैध Projects JSON फाइल नहीं है।");
-  }
-
-  event.target.value = "";
- };
-
- reader.readAsText(file);
-}
-
-// ======================================
-// PROMPT BUILDER
-// ======================================
-
-function buildPrompt() {
- const subject =
-  document.getElementById("promptSubject").value.trim();
-
- if(!subject) {
-  alert("कृपया Subject भरें।");
-  return;
- }
-
- const style = document.getElementById("promptStyle").value;
- const ratio = document.getElementById("promptRatio").value;
-
- const prompt =
-`Create ${subject}.
-
-STYLE: ${style}
-ASPECT RATIO: ${ratio}
-
-QUALITY:
-Professional composition,
-premium lighting, clean visual hierarchy,
-accurate details, readable typography,
-consistent elements and polished finishing.
-
-AVOID:
-Distorted text, unwanted artifacts,
-inconsistent objects and poor composition.`;
-
- document.getElementById("promptResult").textContent = prompt;
-}
-
-// ======================================
-// COPY TEXT
-// ======================================
-
-async function copyText(id) {
- const element = document.getElementById(id);
-
- if(!element || !element.textContent.trim()) {
-  alert("कॉपी करने के लिए टेक्स्ट उपलब्ध नहीं है।");
-  return;
- }
-
- copyTextValue(element.textContent);
-}
-
-async function copyTextValue(text) {
- try {
-  await navigator.clipboard.writeText(text);
-  alert("Text copied successfully.");
- } catch(error) {
-  const area = document.createElement("textarea");
-  area.value = text;
-  document.body.appendChild(area);
-  area.select();
-
-  try {
-   document.execCommand("copy");
-   alert("Text copied.");
-  } catch(e) {
-   alert("Copy नहीं हो पाया। कृपया manually copy करें।");
-  }
-
-  area.remove();
- }
-}
-
-// ======================================
-// QUALITY AUDIT
-// ======================================
-
-function renderAuditList() {
- document.getElementById("auditList").innerHTML =
- auditItems.map((item,index) => `
-  <label class="row">
-   <span>${item}</span>
-   <input type="checkbox" class="auditCheck"
-    id="audit${index}"
-    style="width:20px;height:20px">
-  </label>
- `).join("");
-}
-
-function runAudit() {
- const checks = [...document.querySelectorAll(".auditCheck")];
-
- const passed = checks.filter(check => check.checked).length;
-
- const report =
-`GSN INFINITY — QUALITY AUDIT
-
-PASS: ${passed}/${checks.length}
-PENDING: ${checks.length-passed}/${checks.length}
-
-${checks.map((check,index) =>
- (check.checked ? "PASS" : "PENDING") +
- " — " + auditItems[index]
- ).join("\n")}
-
-STATUS:
-${passed === checks.length
- ? "READY FOR NEXT PRODUCTION STEP"
- : "REVIEW PENDING ITEMS BEFORE DELIVERY"}`;
-
- document.getElementById("auditResult").textContent = report;
-}
-
-// ======================================
-// FULL BACKUP
-// ======================================
-
-function backupAll() {
- const backup = {
-  app:"GSN INFINITY",
-  version:"3.0",
-  created:new Date().toISOString(),
-  projects:getProjects(),
-  locks:lockState
- };
-
- downloadFile(
-  "gsn-infinity-full-backup.json",
-  JSON.stringify(backup,null,2)
- );
-}
-
-// ======================================
-// SECURITY / HTML TEXT ESCAPING
-// ======================================
-
-function escapeHTML(value) {
- return String(value ?? "").replace(/[&<>"']/g,function(char) {
-  return {
-   "&":"&amp;",
-   "<":"&lt;",
-   ">":"&gt;",
-   '"':"&quot;",
-   "'":"&#39;"
-  }[char];
- });
-}
-
-// ======================================
-// APPLICATION INITIALIZATION
-// ======================================
-
-function initializeGSN() {
- renderStudios();
- renderWizard();
- renderModules();
- renderLocks();
- renderProjects();
- renderAuditList();
-
- updateProjectCount();
-
- console.log("GSN INFINITY initialized successfully.");
-}
-
-document.addEventListener(
- "DOMContentLoaded",
- initializeGSN
-);
-
-</script>
-</body>
-</html>
+</div>
+<div class="stats">
+<div class="stat"><small>CORE MODULES</small><strong>50</strong><span class="badge">Listed</span></div>
+<div class="stat"><small>PRODUCTION LOCKS</small><strong>15</strong><span class="badge">Listed</span></div>
+<div class="stat"><small>CREATIVE STUDIOS</small><strong>7</strong><span class="badge">Available</span></div>
+<div class="stat"><small>SAVED PROJECTS</small><strong id="projectCount">0</strong><span class="badge">This browser</span></div>
+</div>
+<div class="section-title"><h2>Creative Studios</h2><span>WORKSPACE</span></div>
+<div class="grid" id="studioGrid"></div>
