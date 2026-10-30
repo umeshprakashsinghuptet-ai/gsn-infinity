@@ -3,251 +3,213 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#10152b">
+<meta name="theme-color" content="#080d1c">
 <title>UPS Creator Studio</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
+
 <style>
 :root{
-  --bg:#0b1020;
-  --panel:#151d35;
-  --panel2:#1b2745;
-  --text:#f4f6ff;
-  --muted:#aab5d0;
-  --accent:#7c6cff;
-  --accent2:#16c6b2;
-  --border:rgba(255,255,255,.1);
-  --success:#37d996;
-  --warning:#ffc766;
+  --bg:#080d1c;
+  --panel:#111a2e;
+  --panel2:#17233c;
+  --text:#f4f7ff;
+  --muted:#9aa9c5;
+  --primary:#8067ff;
+  --cyan:#20d5e8;
+  --green:#36d69a;
+  --border:rgba(255,255,255,.10);
+  --shadow:0 15px 40px rgba(0,0,0,.25);
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{
   margin:0;
-  font-family:Arial,"Noto Sans Devanagari",sans-serif;
   background:var(--bg);
   color:var(--text);
+  font-family:Inter,"Noto Sans Devanagari",sans-serif;
 }
-button,input,select,textarea{font:inherit}
+button,input,textarea,select{font:inherit}
 button{cursor:pointer}
-.app{display:flex;min-height:100vh}
+.app{min-height:100vh;display:flex}
 .sidebar{
   width:250px;
-  background:#10172c;
+  background:#0d1528;
   border-right:1px solid var(--border);
-  padding:22px 14px;
+  padding:22px 15px;
   position:fixed;
   inset:0 auto 0 0;
   overflow-y:auto;
-  z-index:10;
+  z-index:20;
 }
-.brand{
-  padding:10px 12px 22px;
-  border-bottom:1px solid var(--border);
-  margin-bottom:18px;
-}
-.brand-mark{
-  width:42px;height:42px;
+.brand{padding:5px 10px 24px}
+.brand-logo{
+  width:45px;height:45px;border-radius:14px;
   display:grid;place-items:center;
-  border-radius:13px;
-  background:linear-gradient(135deg,var(--accent),var(--accent2));
-  font-weight:900;font-size:19px;
+  background:linear-gradient(135deg,var(--primary),var(--cyan));
+  color:white;font-size:21px;font-weight:800;
   margin-bottom:12px;
 }
 .brand h2{font-size:17px;margin:0 0 5px}
 .brand p{font-size:11px;color:var(--muted);margin:0}
 .nav-label{
-  font-size:10px;
-  color:#7785a7;
-  letter-spacing:1.5px;
-  padding:12px;
+  color:#72819f;font-size:10px;font-weight:800;
+  letter-spacing:1.5px;padding:17px 11px 8px;
 }
-.nav button{
-  display:flex;
-  align-items:center;
-  gap:11px;
-  width:100%;
-  text-align:left;
-  border:0;
-  background:transparent;
-  color:var(--muted);
-  padding:12px;
-  border-radius:10px;
-  margin:3px 0;
-  font-size:13px;
+.nav-btn{
+  display:flex;align-items:center;gap:11px;
+  width:100%;padding:12px 13px;margin:3px 0;
+  color:#b7c4dd;background:transparent;
+  border:0;border-radius:11px;text-align:left;
+  font-size:13px;transition:.2s;
 }
-.nav button:hover,.nav button.active{
-  color:white;
-  background:linear-gradient(90deg,rgba(124,108,255,.25),rgba(22,198,178,.08));
+.nav-btn:hover,.nav-btn.active{
+  color:white;background:linear-gradient(90deg,#7659ef55,#20d5e822);
 }
+.nav-icon{width:20px;text-align:center;font-size:16px}
 .main{
-  width:calc(100% - 250px);
-  margin-left:250px;
-  padding:25px;
+  margin-left:250px;width:calc(100% - 250px);
+  min-height:100vh;padding:25px 30px 50px;
 }
 .topbar{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:15px;
-  margin-bottom:25px;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:15px;margin-bottom:28px;
 }
 .topbar h1{font-size:22px;margin:0 0 5px}
 .topbar p{color:var(--muted);font-size:12px;margin:0}
-.status{
-  background:rgba(55,217,150,.12);
-  color:var(--success);
-  border:1px solid rgba(55,217,150,.25);
-  border-radius:30px;
-  padding:8px 13px;
-  font-size:11px;
+.top-actions{display:flex;gap:10px;align-items:center}
+.status-pill{
+  padding:8px 12px;border:1px solid #36d69a55;
+  border-radius:30px;color:var(--green);font-size:11px;
 }
-.page{display:none}
-.page.active{display:block}
+.profile-mini{
+  width:38px;height:38px;border-radius:50%;
+  background:linear-gradient(135deg,var(--primary),var(--cyan));
+  display:grid;place-items:center;font-weight:800;
+}
 .hero{
-  padding:30px;
-  border:1px solid var(--border);
-  border-radius:20px;
-  background:linear-gradient(120deg,#252052,#142c46);
-  margin-bottom:22px;
+  position:relative;overflow:hidden;
+  padding:32px;border-radius:22px;
+  background:linear-gradient(115deg,#30236c,#172d55 65%,#124354);
+  border:1px solid #ffffff20;
+  box-shadow:var(--shadow);margin-bottom:25px;
 }
-.hero-tag{
-  display:inline-block;
-  padding:6px 10px;
-  border-radius:20px;
-  background:rgba(255,255,255,.1);
-  font-size:11px;
+.hero:after{
+  content:"";position:absolute;width:260px;height:260px;
+  right:-70px;top:-100px;border-radius:50%;
+  background:#20d5e822;filter:blur(5px);
 }
-.hero h2{font-size:28px;margin:17px 0 8px}
-.hero p{color:#d1d8ee;line-height:1.7;max-width:650px}
-.hero strong{color:#8ff4dc}
-.grid{
-  display:grid;
-  grid-template-columns:repeat(3,minmax(0,1fr));
-  gap:15px;
+.hero-content{position:relative;z-index:1}
+.eyebrow{
+  color:#a9eafa;font-size:11px;font-weight:800;
+  letter-spacing:2px;text-transform:uppercase;
 }
-.card{
-  background:var(--panel);
-  border:1px solid var(--border);
-  border-radius:15px;
-  padding:18px;
-  min-width:0;
+.hero h2{font-size:clamp(25px,4vw,38px);margin:13px 0 10px}
+.hero p{max-width:650px;color:#d1d9f0;font-size:13px;line-height:1.8}
+.primary-btn,.secondary-btn{
+  border:0;border-radius:10px;padding:12px 18px;
+  font-weight:700;font-size:12px;
 }
-.card h3{font-size:15px;margin:0 0 9px}
-.card p{font-size:12px;color:var(--muted);line-height:1.6}
-.stat-number{font-size:27px;font-weight:800;margin:8px 0}
-.section-title{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:10px;
-  margin:25px 0 14px;
+.primary-btn{
+  color:white;background:linear-gradient(100deg,var(--primary),#4d9bff);
 }
-.section-title h2{font-size:18px;margin:0}
-.muted{color:var(--muted);font-size:12px}
-.btn{
-  border:0;
-  border-radius:9px;
-  padding:10px 15px;
-  font-weight:700;
-  font-size:12px;
+.secondary-btn{
+  color:#dce5ff;background:#ffffff12;border:1px solid var(--border);
 }
-.btn.primary{
-  background:linear-gradient(135deg,var(--accent),#5b9cff);
-  color:white;
+.hero .primary-btn{margin-top:10px}
+.section-heading{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:12px;margin:27px 0 15px;
 }
-.btn.secondary{
-  background:var(--panel2);
-  border:1px solid var(--border);
-  color:white;
+.section-heading h2{font-size:17px;margin:0}
+.section-heading p{font-size:11px;color:var(--muted);margin:5px 0 0}
+.stats-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:13px;margin-bottom:25px;
 }
-.btn:hover{filter:brightness(1.12)}
-.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:15px}
-label{
-  display:block;
-  font-size:12px;
-  color:#cbd4ec;
-  margin:13px 0 7px;
+.stat-card,.studio-card,.content-card{
+  background:var(--panel);border:1px solid var(--border);
+  border-radius:15px;padding:18px;
 }
-input,select,textarea{
-  width:100%;
-  background:#0e162b;
-  color:white;
-  border:1px solid var(--border);
-  border-radius:9px;
-  padding:12px;
-  outline:none;
+.stat-card small{color:var(--muted);font-size:11px}
+.stat-card strong{display:block;font-size:25px;margin-top:9px}
+.stat-card span{font-size:11px;color:var(--green)}
+.studio-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:14px;
 }
-input:focus,select:focus,textarea:focus{
-  border-color:var(--accent);
+.studio-card{transition:.2s;position:relative;overflow:hidden}
+.studio-card:hover{
+  transform:translateY(-3px);border-color:#8067ff99;
+  box-shadow:var(--shadow);
 }
-textarea{min-height:110px;resize:vertical}
-.form-grid{
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:12px;
+.studio-icon{
+  width:43px;height:43px;border-radius:13px;
+  display:grid;place-items:center;font-size:21px;
+  background:#8067ff25;margin-bottom:14px;
 }
-.full{grid-column:1/-1}
-.output{
-  margin-top:18px;
-  padding:17px;
-  border:1px solid rgba(22,198,178,.3);
-  background:#0e1d2b;
-  border-radius:12px;
-  white-space:pre-wrap;
-  overflow-wrap:anywhere;
-  line-height:1.7;
-  font-size:13px;
+.studio-card h3{font-size:14px;margin:0 0 7px}
+.studio-card p{font-size:11px;color:var(--muted);line-height:1.7;min-height:38px}
+.studio-card button{
+  margin-top:9px;width:100%;padding:10px;
+  border-radius:9px;border:1px solid var(--border);
+  background:#ffffff0b;color:#e8edff;font-size:11px;
 }
-.profile-box{
-  display:flex;
-  align-items:center;
-  gap:18px;
-  flex-wrap:wrap;
+.page{display:none;animation:fadeIn .25s ease}
+.page.active{display:block}
+@keyframes fadeIn{
+  from{opacity:0;transform:translateY(5px)}
+  to{opacity:1;transform:translateY(0)}
 }
-.profile-box img{
-  width:90px;height:90px;
-  object-fit:cover;
-  border-radius:50%;
-  border:2px solid var(--accent);
-  background:var(--panel2);
+.content-card{margin-bottom:17px}
+.content-card h3{font-size:15px;margin:0 0 12px}
+.field{margin:13px 0}
+.field label{display:block;font-size:12px;color:#cbd6ed;margin-bottom:7px}
+.field input,.field textarea,.field select{
+  width:100%;padding:12px;border-radius:9px;
+  border:1px solid var(--border);outline:none;
+  background:#091225;color:white;font-size:12px;
 }
-footer{
-  text-align:center;
-  color:#7785a7;
-  font-size:11px;
-  padding:30px 10px;
+.field textarea{min-height:110px;resize:vertical}
+.field input:focus,.field textarea:focus,.field select:focus{
+  border-color:var(--primary);
 }
-@media(max-width:900px){
-  .sidebar{width:210px}
-  .main{width:calc(100% - 210px);margin-left:210px;padding:18px}
-  .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+.muted{color:var(--muted);font-size:11px;line-height:1.7}
+.tag{
+  display:inline-block;padding:6px 9px;margin:3px;
+  background:#8067ff20;border:1px solid #8067ff55;
+  border-radius:20px;color:#cfc4ff;font-size:10px;
 }
-@media(max-width:650px){
-  .app{display:block}
+.mobile-menu{display:none}
+.ups-footer{
+  margin-top:40px;padding:25px;
+  background:#0d1528;border:1px solid var(--border);
+  border-radius:17px;text-align:center;
+}
+.ups-footer h3{margin:0 0 8px}
+.ups-footer p{color:var(--muted);font-size:11px;line-height:1.8}
+.ups-footer a{color:#9eafff;text-decoration:none}
+.footer-links{display:flex;justify-content:center;flex-wrap:wrap;gap:15px;margin:15px 0}
+.footer-credit{border-top:1px solid var(--border);padding-top:15px;margin-top:15px}
+
+@media(max-width:1000px){
+  .stats-grid{grid-template-columns:repeat(2,1fr)}
+  .studio-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:700px){
   .sidebar{
-    position:relative;
-    width:100%;
-    height:auto;
-    padding:12px;
+    transform:translateX(-100%);transition:.25s;
+    box-shadow:var(--shadow);
   }
-  .brand{padding:8px;margin-bottom:8px}
-  .brand-mark{display:none}
-  .nav{
-    display:flex;
-    overflow-x:auto;
-    gap:5px;
-  }
-  .nav-label{display:none}
-  .nav button{
-    width:auto;
-    white-space:nowrap;
-    padding:10px;
-  }
-  .main{width:100%;margin:0;padding:15px}
-  .grid{grid-template-columns:1fr}
-  .form-grid{grid-template-columns:1fr}
-  .hero{padding:22px}
-  .hero h2{font-size:23px}
-  .topbar h1{font-size:18px}
+  .sidebar.open{transform:translateX(0)}
+  .main{margin-left:0;width:100%;padding:18px 14px 35px}
+  .mobile-menu{display:block}
+  .topbar h1{font-size:17px}
+  .topbar{align-items:flex-start}
+  .status-pill{display:none}
+  .hero{padding:23px 19px}
+  .stats-grid{gap:9px}
+  .stat-card{padding:13px}
+  .stat-card strong{font-size:21px}
+  .studio-grid{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -255,732 +217,1004 @@ footer{
 <body>
 <div class="app">
 
-<aside class="sidebar">
+<aside class="sidebar" id="sidebar">
   <div class="brand">
-    <div class="brand-mark">UPS</div>
+    <div class="brand-logo">UPS</div>
     <h2>UPS Creator Studio</h2>
-    <p>Imagine. Create. Innovate.</p>
+    <p>All-in-One AI Creative Production</p>
   </div>
 
-  <div class="nav">
-    <div class="nav-label">MAIN WORKSPACE</div>
-    <button class="active" data-page="dashboard">🏠 Dashboard</button>
-    <button data-page="wizard">⚡ Auto-Pilot Wizard</button>
-    <button data-page="projects">📁 My Projects</button>
+  <div class="nav-label">MAIN WORKSPACE</div>
+  <button class="nav-btn active" onclick="showPage('dashboard',this)">
+    <span class="nav-icon">⌂</span> Dashboard
+  </button>
+  <button class="nav-btn" onclick="showPage('wizard',this)">
+    <span class="nav-icon">✦</span> Auto-Pilot Wizard
+  </button>
 
-    <div class="nav-label">CREATIVE STUDIOS</div>
-    <button data-page="video">🎬 Video Studio</button>
-    <button data-page="image">🖼️ Image Studio</button>
-    <button data-page="poster">🎨 Poster Designer</button>
-    <button data-page="dance">💃 Dance Studio</button>
-    <button data-page="film">🎥 Film Maker</button>
-    <button data-page="podcast">🎙️ Podcast Studio</button>
-    <button data-page="education">📚 Education Studio</button>
+  <div class="nav-label">CREATIVE STUDIOS</div>
+  <button class="nav-btn" onclick="showPage('videoStudio',this)">🎬 Video Studio</button>
+  <button class="nav-btn" onclick="showPage('imageStudio',this)">🖼️ Image Studio</button>
+  <button class="nav-btn" onclick="showPage('posterStudio',this)">🎨 Poster Studio</button>
+  <button class="nav-btn" onclick="showPage('danceStudio',this)">💃 Dance Studio</button>
+  <button class="nav-btn" onclick="showPage('filmStudio',this)">🎥 Film Maker</button>
+  <button class="nav-btn" onclick="showPage('podcastStudio',this)">🎙️ Podcast Studio</button>
+  <button class="nav-btn" onclick="showPage('educationStudio',this)">📚 Education Studio</button>
 
-    <div class="nav-label">SYSTEM</div>
-    <button data-page="modules">🧩 50 Modules</button>
-    <button data-page="locks">🔒 15 Locks</button>
-    <button data-page="prompts">📝 Prompt Library</button>
-    <button data-page="quality">✅ Quality Audit</button>
-    <button data-page="profile">👤 Profile & Branding</button>
-    <button data-page="settings">⚙️ Settings & Access</button>
-  </div>
+  <div class="nav-label">MANAGEMENT</div>
+  <button class="nav-btn" onclick="showPage('projects',this)">📁 My Projects</button>
+  <button class="nav-btn" onclick="showPage('profile',this)">👤 Profile & Branding</button>
+  <button class="nav-btn" onclick="showPage('modules',this)">⚙️ Modules & Locks</button>
+  <button class="nav-btn" onclick="showPage('accessInformation',this)">🔐 Access Information</button>
 </aside>
 
 <main class="main">
-  <header class="topbar">
+
+<header class="topbar">
+  <div style="display:flex;align-items:center;gap:12px">
+    <button class="secondary-btn mobile-menu" onclick="toggleSidebar()">☰</button>
     <div>
-      <h1>UPS Creator Studio</h1>
-      <p>All-in-One AI Creative Production Software</p>
+      <h1>Creator Dashboard</h1>
+      <p>Imagine. Create. Innovate.</p>
     </div>
-    <div class="status">● FRONTEND PROTOTYPE</div>
-  </header>
+  </div>
+  <div class="top-actions">
+    <span class="status-pill">● CREATIVE WORKSPACE</span>
+    <div class="profile-mini">U</div>
+  </div>
+</header>
 
-  <section class="page active" id="dashboard">
-    <div class="hero">
-      <span class="hero-tag">CREATIVE COMMAND CENTER</span>
-      <h2>Imagine. Create. <strong>Innovate.</strong></h2>
+<!-- DASHBOARD -->
+<section class="page active" id="dashboard">
+
+  <div class="hero">
+    <div class="hero-content">
+      <div class="eyebrow">WELCOME TO YOUR CREATIVE WORLD</div>
+      <h2>UPS Creator Studio</h2>
       <p>
-        एक ही workspace में अपने creative ideas को व्यवस्थित करें।
-        Video, Image, Poster, Podcast और Educational content के लिए
-        prompts और production plans तैयार करें।
+        एक ही Workspace में अपने Video, Image, Poster, Dance,
+        Film, Podcast और Education Content की Planning और Prompt Creation करें।
       </p>
-      <div class="actions">
-        <button class="btn primary" onclick="showPage('wizard')">Start Auto-Pilot</button>
-        <button class="btn secondary" onclick="showPage('video')">Open Video Studio</button>
-      </div>
+      <button class="primary-btn" onclick="showPage('wizard')">
+        ✦ START AUTO-PILOT
+      </button>
     </div>
+  </div>
 
-    <div class="grid">
-      <div class="card">
-        <p>CREATIVE MODULES</p>
-        <div class="stat-number">50</div>
-        <span class="muted">Production workflow modules</span>
-      </div>
-      <div class="card">
-        <p>PRODUCTION LOCKS</p>
-        <div class="stat-number">15</div>
-        <span class="muted">Quality and consistency checks</span>
-      </div>
-      <div class="card">
-        <p>CREATIVE STUDIOS</p>
-        <div class="stat-number">7</div>
-        <span class="muted">Specialized creative workspaces</span>
-      </div>
+  <div class="stats-grid">
+    <div class="stat-card">
+      <small>CREATIVE STUDIOS</small>
+      <strong>07</strong>
+      <span>Available Workspaces</span>
     </div>
+    <div class="stat-card">
+      <small>CORE MODULES</small>
+      <strong>50</strong>
+      <span>Planned Modules</span>
+    </div>
+    <div class="stat-card">
+      <small>WORKFLOW LOCKS</small>
+      <strong>15</strong>
+      <span>Quality Framework</span>
+    </div>
+    <div class="stat-card">
+      <small>WORKSPACE MODE</small>
+      <strong>PRO</strong>
+      <span>Creative Dashboard</span>
+    </div>
+  </div>
 
-    <div class="section-title">
+  <div class="section-heading">
+    <div>
       <h2>Creative Studios</h2>
-      <span class="muted">Choose a workspace</span>
+      <p>अपना अगला Creative Project शुरू करें।</p>
+    </div>
+    <span class="tag">7 STUDIOS</span>
+  </div>
+
+  <div class="studio-grid">
+
+    <div class="studio-card">
+      <div class="studio-icon">🎬</div>
+      <h3>Video Studio</h3>
+      <p>Reels, Shorts, video scripts और AI video prompts.</p>
+      <button onclick="showPage('videoStudio')">Open Video Studio →</button>
     </div>
 
-    <div class="grid" id="studioGrid">
-      <div class="card">
-        <h3>🎬 Video Studio</h3>
-        <p>Video concepts, scenes, dialogues और production prompts।</p>
-        <button class="btn primary" onclick="showPage('video')">Open Studio</button>
-      </div>
-      <div class="card">
-        <h3>🖼️ Image Studio</h3>
-        <p>Image generation के लिए creative prompts तैयार करें।</p>
-        <button class="btn primary" onclick="showPage('image')">Open Studio</button>
-      </div>
-      <div class="card">
-        <h3>🎨 Poster Designer</h3>
-        <p>Social media posters और promotional designs के prompts।</p>
-        <button class="btn primary" onclick="showPage('poster')">Open Studio</button>
-      </div>
-      <div class="card">
-        <h3>💃 Dance Studio</h3>
-        <p>Dance concepts और choreography prompts।</p>
-        <button class="btn primary" onclick="showPage('dance')">Open Studio</button>
-      </div>
-      <div class="card">
-        <h3>🎥 Film Maker</h3>
-        <p>Film ideas, story structure और scene planning।</p>
-        <button class="btn primary" onclick="showPage('film')">Open Studio</button>
-      </div>
-    <div class="section-title">
-      <h2>Production Overview</h2>
-      <span class="muted">Your creative workspace</span>
+    <div class="studio-card">
+      <div class="studio-icon">🖼️</div>
+      <h3>Image Studio</h3>
+      <p>Creative images, portraits और visual concepts.</p>
+      <button onclick="showPage('imageStudio')">Open Image Studio →</button>
     </div>
-    <div class="grid">
-      <div class="card">
-        <h3>⚡ Auto-Pilot Workflow</h3>
-        <p>Topic से लेकर production prompt तक अपना workflow तैयार करें।</p>
-        <button class="btn primary" onclick="showPage('wizard')">Start Workflow</button>
-      </div>
-      <div class="card">
-        <h3>📁 Saved Projects</h3>
-        <p>इस browser में सेव किए गए projects देखें।</p>
-        <button class="btn secondary" onclick="showPage('projects')">View Projects</button>
-      </div>
-      <div class="card">
-        <h3>✅ Quality Control</h3>
-        <p>अपने creative prompt की basic checklist जाँचें।</p>
-        <button class="btn secondary" onclick="showPage('quality')">Run Audit</button>
-      </div>
+
+    <div class="studio-card">
+      <div class="studio-icon">🎨</div>
+      <h3>Poster Studio</h3>
+      <p>Promotional posters, social graphics और campaigns.</p>
+      <button onclick="showPage('posterStudio')">Open Poster Studio →</button>
     </div>
-  </section>
 
-  <section class="page" id="wizard">
-    <div class="section-title"><h2>Auto-Pilot Wizard</h2></div>
-    <div class="card">
-      <div class="form-grid">
-        <div><label>Country</label><select id="country"><option>India</option><option>United States</option><option>United Kingdom</option><option>Other</option></select></div>
-        <div><label>Target Audience</label><select id="audience"><option>General Audience</option><option>Students</option><option>Creators</option><option>Professionals</option><option>Families</option></select></div>
-        <div><label>Language</label><select id="language"><option>Hindi + English</option><option>Hindi</option><option>English</option></select></div>
-        <div><label>Platform</label><select id="platform"><option>Multi-platform</option><option>YouTube</option><option>Facebook</option><option>Instagram</option></select></div>
-        <div><label>Content Format</label><select id="format"><option>Video / Reel</option><option>Image Poster</option><option>Carousel</option><option>Podcast</option><option>Script</option></select></div>
-        <div><label>Category</label><select id="category"><option>Auto Select</option><option>Education</option><option>Motivation</option><option>Entertainment</option><option>Personal Brand</option><option>Business</option><option>News & Facts</option></select></div>
-        <div class="full"><label>Topic / Subject</label><input id="topic" placeholder="Enter your topic"></div>
-        <div><label>Duration</label><select id="duration"><option>10 seconds</option><option>20 seconds</option><option>30 seconds</option><option>60 seconds</option></select></div>
-        <div><label>Aspect Ratio</label><select id="ratio"><option>9:16 Vertical</option><option>1:1 Square</option><option>16:9 Landscape</option><option>3:4 Portrait</option></select></div>
-      </div>
-      <div class="actions">
-        <button class="btn primary" onclick="generatePlan()">Generate Creative Plan</button>
-        <button class="btn secondary" onclick="resetWizard()">Reset</button>
-      </div>
-      <div id="planOutput" class="output" style="display:none"></div>
+    <div class="studio-card">
+      <div class="studio-icon">💃</div>
+      <h3>Dance Studio</h3>
+      <p>Dance concepts, scene planning और video prompts.</p>
+      <button onclick="showPage('danceStudio')">Open Dance Studio →</button>
     </div>
-  </section>
 
-  <section class="page" id="video">
-    <div class="section-title"><h2>Video Studio</h2></div>
-    <div class="card">
-      <label>Video Topic</label><input id="videoTopic" placeholder="Enter video topic">
-      <label>Number of Clips</label><select id="videoClips"><option>1</option><option selected>3</option><option>4</option><option>5</option></select>
-      <label>Duration per Clip</label><select id="videoDuration"><option>10 seconds</option><option>5 seconds</option><option>15 seconds</option></select>
-      <label>Visual Style</label><select id="videoStyle"><option>Premium Cinematic Realistic</option><option>Documentary</option><option>Educational</option><option>Animated</option></select>
-      <div class="actions"><button class="btn primary" onclick="makeVideoPrompt()">Create Video Prompt</button></div>
-      <div id="videoOutput" class="output" style="display:none"></div>
+    <div class="studio-card">
+      <div class="studio-icon">🎥</div>
+      <h3>Film Maker</h3>
+      <p>Story, screenplay, scenes और cinematic direction.</p>
+      <button onclick="showPage('filmStudio')">Open Film Maker →</button>
     </div>
-  </section>
 
-  <section class="page" id="image">
-    <div class="section-title"><h2>Image Studio</h2></div>
-    <div class="card">
-      <label>Image Topic</label><input id="imageTopic" placeholder="Enter image topic">
-      <label>Design Type</label><select id="imageType"><option>Premium Cinematic Image</option><option>Educational Image</option><option>Festival Design</option><option>Business Promotion</option><option>Thumbnail</option></select>
-      <label>Aspect Ratio</label><select id="imageRatio"><option>9:16</option><option>3:4</option><option>1:1</option><option>16:9</option></select>
-      <label>Text Language</label><select id="imageLanguage"><option>Hindi + English</option><option>Hindi</option><option>English</option></select>
-      <div class="actions"><button class="btn primary" onclick="makeImagePrompt()">Create Image Prompt</button></div>
-      <div id="imageOutput" class="output" style="display:none"></div>
+    <div class="studio-card">
+      <div class="studio-icon">🎙️</div>
+      <h3>Podcast Studio</h3>
+      <p>Podcast topics, dialogue, scripts और studio concepts.</p>
+      <button onclick="showPage('podcastStudio')">Open Podcast Studio →</button>
     </div>
-  </section>
 
-  <section class="page" id="poster">
-    <div class="section-title"><h2>Poster Designer</h2></div>
-    <div class="card">
-      <label>Brand Name</label><input id="posterBrand" value="UPS Creator Studio">
-      <label>Poster Headline</label><input id="posterHeadline" placeholder="Enter headline">
-      <label>Supporting Message</label><textarea id="posterMessage" placeholder="Enter supporting message"></textarea>
-      <div class="actions"><button class="btn primary" onclick="makePosterPrompt()">Generate Poster Prompt</button></div>
-      <div id="posterOutput" class="output" style="display:none"></div>
+    <div class="studio-card">
+      <div class="studio-icon">📚</div>
+      <h3>Education Studio</h3>
+      <p>GK, MCQ, learning content और educational videos.</p>
+      <button onclick="showPage('educationStudio')">Open Education Studio →</button>
     </div>
-  </section>
 
-  <section class="page" id="dance">
-    <div class="section-title"><h2>Dance Studio</h2></div>
-    <div class="card">
-      <label>Dance Theme</label><input id="danceTopic" placeholder="Enter dance theme">
-      <label>Dance Style</label><select id="danceType"><option>Bollywood</option><option>Classical</option><option>Hip Hop</option><option>Folk</option><option>Contemporary</option></select>
-      <div class="actions"><button class="btn primary" onclick="quickDance()">Create Dance Prompt</button></div>
-      <div id="danceOutput" class="output" style="display:none"></div>
+  </div>
+
+</section>
+<!-- AUTO-PILOT WIZARD -->
+<section class="page" id="wizard">
+  <div class="section-heading">
+    <div>
+      <h2>✦ Auto-Pilot Creative Wizard</h2>
+      <p>अपने प्रोजेक्ट की जानकारी भरें और AI Prompt तैयार करें।</p>
     </div>
-  </section>
+    <span class="tag">AUTO-PILOT</span>
+  </div>
 
-  <section class="page" id="film">
-    <div class="section-title"><h2>Film Maker Studio</h2></div>
-    <div class="card">
-      <label>Film Idea</label><textarea id="filmTopic" placeholder="Describe your film idea"></textarea>
-      <label>Film Genre</label><select id="filmGenre"><option>Drama</option><option>Documentary</option><option>Motivational</option><option>Comedy</option><option>Educational</option></select>
-      <label>Target Duration</label><select id="filmDuration"><option>30 seconds</option><option>1 minute</option><option>3 minutes</option><option>5 minutes</option></select>
-      <div class="actions"><button class="btn primary" onclick="makeFilmPrompt()">Create Film Plan</button></div>
-      <div id="filmOutput" class="output" style="display:none"></div>
+  <div class="content-card">
+    <div class="field">
+      <label>Country</label>
+      <select id="country">
+        <option>India</option>
+        <option>United States</option>
+        <option>United Kingdom</option>
+        <option>Other</option>
+      </select>
     </div>
-  </section>
 
-  <section class="page" id="podcast">
-    <div class="section-title"><h2>Podcast Studio</h2></div>
-    <div class="card">
-      <label>Podcast Topic</label><input id="podcastTopic" placeholder="Enter podcast topic">
-      <label>Podcast Format</label><select id="podcastFormat"><option>Solo Host</option><option>Two-person Conversation</option><option>Interview</option><option>Educational Explainer</option></select>
-      <div class="actions"><button class="btn primary" onclick="makePodcastPrompt()">Create Podcast Script</button></div>
-      <div id="podcastOutput" class="output" style="display:none"></div>
+    <div class="field">
+      <label>Target Audience</label>
+      <select id="audience">
+        <option>General Audience</option>
+        <option>Students</option>
+        <option>Creators</option>
+        <option>Families</option>
+        <option>Professional Audience</option>
+      </select>
     </div>
-  </section>
 
-  <section class="page" id="education">
-    <div class="section-title"><h2>Education Studio</h2></div>
-    <div class="card">
-      <label>Subject / Topic</label><input id="educationTopic" placeholder="Enter educational topic">
-      <label>Content Type</label><select id="educationType"><option>MCQ Quiz</option><option>Explainer</option><option>Study Notes</option><option>Fact Video</option><option>Question & Answer</option></select>
-      <label>Learning Level</label><select id="educationLevel"><option>General</option><option>Primary</option><option>Middle School</option><option>Secondary</option><option>Competitive Exam</option></select>
-      <div class="actions"><button class="btn primary" onclick="makeEducationPrompt()">Create Learning Content</button></div>
-      <div id="educationOutput" class="output" style="display:none"></div>
+    <div class="field">
+      <label>Language</label>
+      <select id="language">
+        <option>Hindi + English</option>
+        <option>Hindi</option>
+        <option>English</option>
+      </select>
     </div>
-  </section>
 
-  <section class="page" id="projects">
-    <div class="section-title"><h2>My Projects</h2><span class="muted">Saved in this browser</span></div>
-    <div class="card"><div id="projectList"></div></div>
-  </section>
-
-  <section class="page" id="modules">
-    <div class="section-title"><h2>50 Creative Modules</h2></div>
-    <div class="card">
-      <input id="moduleSearch" placeholder="Search modules..." oninput="renderModules()">
-      <div id="moduleList" class="grid" style="margin-top:15px"></div>
+    <div class="field">
+      <label>Platform</label>
+      <select id="platform">
+        <option>YouTube + Facebook + Instagram</option>
+        <option>YouTube</option>
+        <option>Facebook</option>
+        <option>Instagram</option>
+      </select>
     </div>
-  </section>
 
-  <section class="page" id="locks">
-    <div class="section-title"><h2>15 Production Locks</h2></div>
-    <div class="grid" id="lockList"></div>
-  </section>
-
-  <section class="page" id="prompts">
-    <div class="section-title"><h2>Prompt Library</h2></div>
-    <div id="promptList"></div>
-  </section>
-
-  <section class="page" id="quality">
-    <div class="section-title"><h2>Quality Audit</h2></div>
-    <div class="card">
-      <label>Prompt / Content to Audit</label>
-      <textarea id="auditText" placeholder="Paste your prompt or content here"></textarea>
-      <div class="actions"><button class="btn primary" onclick="runAudit()">Run Quality Audit</button></div>
-      <div id="auditOutput" class="output" style="display:none"></div>
+    <div class="field">
+      <label>Creative Studio</label>
+      <select id="creativeType">
+        <option>Video Studio</option>
+        <option>Image Studio</option>
+        <option>Poster Studio</option>
+        <option>Dance Studio</option>
+        <option>Film Maker</option>
+        <option>Podcast Studio</option>
+        <option>Education Studio</option>
+      </select>
     </div>
-  </section>
 
-  <section class="page" id="profile">
-    <div class="section-title"><h2>Profile & Branding</h2></div>
-    <div class="card">
-      <div class="profile-box">
-        <img id="profilePreview" alt="Profile photo">
-        <div>
-          <h3>Umesh Prakash Singh</h3>
-          <p class="muted">UPS Creator Studio</p>
-          <label>Upload Profile Photo</label>
-          <input type="file" id="profileUpload" accept="image/*" onchange="saveProfilePhoto(event)">
-        </div>
-      </div>
-      <p class="muted">Photo is saved only in this browser on this device.</p>
+    <div class="field">
+      <label>Category</label>
+      <select id="category">
+        <option>Motivational</option>
+        <option>Educational</option>
+        <option>General Knowledge</option>
+        <option>Entertainment</option>
+        <option>Daily Life</option>
+        <option>Business & Marketing</option>
+        <option>Festival & Events</option>
+        <option>Personal Branding</option>
+      </select>
     </div>
-  </section>
 
-  <section class="page" id="settings">
-    <div class="section-title"><h2>Settings & Access</h2></div>
-    <div class="card">
-      <h3>Prototype Access Notice</h3>
-      <p class="muted">Real OTP login, secure admin permissions, online payments, cloud sync and AI generation require a connected backend and service providers. This frontend prototype does not perform those services.</p>
-      <label>Display Name</label><input id="displayName" value="Umesh Prakash Singh">
-      <label>Studio Name</label><input id="studioName" value="UPS Creator Studio">
-      <div class="actions"><button class="btn primary" onclick="saveSettings()">Save Settings</button></div>
+    <div class="field">
+      <label>Project Topic</label>
+      <input id="topic" type="text" placeholder="अपना टॉपिक लिखें">
     </div>
-  </section>
 
-  <footer>
-    UPS Creator Studio · Imagine. Create. Innovate.<br>
-    Created &amp; Developed by Umesh Prakash Singh
-  </footer>
+    <div class="field">
+      <label>Aspect Ratio</label>
+      <select id="ratio">
+        <option>9:16 Vertical Reel</option>
+        <option>16:9 Landscape</option>
+        <option>1:1 Square</option>
+        <option>3:4 Portrait</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label>Target Duration</label>
+      <select id="duration">
+        <option>10 Seconds</option>
+        <option>15 Seconds</option>
+        <option>30 Seconds</option>
+        <option>60 Seconds</option>
+        <option>3 Minutes</option>
+      </select>
+    </div>
+
+    <button class="primary-btn" onclick="generatePrompt()">
+      ✦ GENERATE CREATIVE PROMPT
+    </button>
+  </div>
+
+  <div class="content-card">
+    <h3>Generated Prompt</h3>
+    <textarea id="generatedPrompt" placeholder="आपका तैयार Prompt यहाँ दिखाई देगा..."></textarea>
+    <button class="secondary-btn" onclick="copyPrompt()">Copy Prompt</button>
+    <button class="secondary-btn" onclick="saveProject()">Save Project</button>
+  </div>
+</section>
+
+<!-- VIDEO STUDIO -->
+<section class="page" id="videoStudio">
+  <div class="section-heading">
+    <div>
+      <h2>🎬 Video Studio</h2>
+      <p>Reels, Shorts और cinematic video prompts.</p>
+    </div>
+  </div>
+  <div class="content-card">
+    <div class="field">
+      <label>Video Topic</label>
+      <input id="videoTopic" placeholder="वीडियो का विषय लिखें">
+    </div>
+    <div class="field">
+      <label>Video Style</label>
+      <select id="videoStyle">
+        <option>Ultra Realistic Cinematic</option>
+        <option>Educational Explainer</option>
+        <option>Motivational</option>
+        <option>Documentary</option>
+        <option>Podcast Style</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>Number of Clips</label>
+      <select id="videoClips">
+        <option>1 Clip</option>
+        <option>2 Clips</option>
+        <option>3 Clips</option>
+        <option>4 Clips</option>
+        <option>5 Clips</option>
+      </select>
+    </div>
+    <button class="primary-btn" onclick="generateStudioPrompt('video')">Generate Video Prompt</button>
+    <textarea id="videoOutput" placeholder="Video prompt यहाँ बनेगा..."></textarea>
+    <button class="secondary-btn" onclick="copyText('videoOutput')">Copy</button>
+  </div>
+</section>
+
+<!-- IMAGE STUDIO -->
+<section class="page" id="imageStudio">
+  <div class="section-heading">
+    <h2>🖼️ Image Studio</h2>
+  </div>
+  <div class="content-card">
+    <div class="field">
+      <label>Image Subject</label>
+      <input id="imageTopic" placeholder="Image का विषय">
+    </div>
+    <div class="field">
+      <label>Visual Style</label>
+      <select id="imageStyle">
+        <option>Photorealistic</option>
+        <option>Cinematic</option>
+        <option>Luxury Editorial</option>
+        <option>3D Illustration</option>
+        <option>Minimal Professional</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>Aspect Ratio</label>
+      <select id="imageRatio">
+        <option>9:16</option>
+        <option>1:1</option>
+        <option>16:9</option>
+        <option>3:4</option>
+      </select>
+    </div>
+    <button class="primary-btn" onclick="generateStudioPrompt('image')">Generate Image Prompt</button>
+    <textarea id="imageOutput" placeholder="Image prompt यहाँ बनेगा..."></textarea>
+    <button class="secondary-btn" onclick="copyText('imageOutput')">Copy</button>
+  </div>
+</section>
+
+<!-- POSTER STUDIO -->
+<section class="page" id="posterStudio">
+  <div class="section-heading">
+    <h2>🎨 Poster Studio</h2>
+  </div>
+  <div class="content-card">
+    <div class="field">
+      <label>Poster Title</label>
+      <input id="posterTitle" placeholder="पोस्टर का मुख्य शीर्षक">
+    </div>
+    <div class="field">
+      <label>Poster Purpose</label>
+      <select id="posterPurpose">
+        <option>Social Media Promotion</option>
+        <option>Educational Awareness</option>
+        <option>Business Advertisement</option>
+        <option>Festival Greeting</option>
+        <option>Event Announcement</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>Poster Ratio</label>
+      <select id="posterRatio">
+        <option>9:16</option>
+        <option>3:4</option>
+        <option>1:1</option>
+        <option>16:9</option>
+      </select>
+    </div>
+    <button class="primary-btn" onclick="generateStudioPrompt('poster')">Generate Poster Prompt</button>
+    <textarea id="posterOutput" placeholder="Poster prompt यहाँ बनेगा..."></textarea>
+    <button class="secondary-btn" onclick="copyText('posterOutput')">Copy</button>
+  </div>
+</section>
+
+<!-- DANCE STUDIO -->
+<section class="page" id="danceStudio">
+  <div class="section-heading">
+    <h2>💃 Dance Studio</h2>
+  </div>
+  <div class="content-card">
+    <div class="field">
+      <label>Dance Concept</label>
+      <input id="danceTopic" placeholder="Dance का विषय">
+    </div>
+    <div class="field">
+      <label>Dance Style</label>
+      <select id="danceStyle">
+        <option>Bollywood</option>
+        <option>Classical</option>
+        <option>Contemporary</option>
+        <option>Folk Dance</option>
+        <option>Freestyle</option>
+      </select>
+    </div>
+    <button class="primary-btn" onclick="generateStudioPrompt('dance')">Generate Dance Prompt</button>
+    <textarea id="danceOutput" placeholder="Dance prompt यहाँ बनेगा..."></textarea>
+    <button class="secondary-btn" onclick="copyText('danceOutput')">Copy</button>
+  </div>
+</section>
+
+<!-- FILM MAKER -->
+<section class="page" id="filmStudio">
+  <div class="section-heading">
+    <h2>🎥 Film Maker Studio</h2>
+  </div>
+  <div class="content-card">
+    <div class="field">
+      <label>Film Concept</label>
+      <input id="filmTopic" placeholder="फिल्म की कहानी या विषय">
+    </div>
+    <div class="field">
+      <label>Film Genre</label>
+      <select id="filmGenre">
+        <option>Drama</option>
+        <option>Documentary</option>
+        <option>Comedy</option>
+        <option>Adventure</option>
+        <option>Inspirational</option>
+        <option>Educational</option>
+      </select>
+    </div>
+    <button class="primary-btn" onclick="generateStudioPrompt('film')">Generate Film Plan</button>
+    <textarea id="filmOutput" placeholder="Film plan यहाँ बनेगा..."></textarea>
+    <button class="secondary-btn" onclick="copyText('filmOutput')">Copy</button>
+  </div>
+</section>
+
+<!-- PODCAST STUDIO -->
+<section class="page" id="podcastStudio">
+  <div class="section-heading">
+    <h2>🎙️ Podcast Studio</h2>
+  </div>
+  <div class="content-card">
+    <div class="field">
+      <label>Podcast Topic</label>
+      <input id="podcastTopic" placeholder="Podcast का विषय">
+    </div>
+    <div class="field">
+      <label>Podcast Format</label>
+      <select id="podcastFormat">
+        <option>Solo Podcast</option>
+        <option>Interview</option>
+        <option>Two Person Conversation</option>
+        <option>Educational Podcast</option>
+      </select>
+    </div>
+    <button class="primary-btn" onclick="generateStudioPrompt('podcast')">Generate Podcast Script</button>
+    <textarea id="podcastOutput" placeholder="Podcast script यहाँ बनेगी..."></textarea>
+    <button class="secondary-btn" onclick="copyText('podcastOutput')">Copy</button>
+  </div>
+</section>
+
+<!-- EDUCATION STUDIO -->
+<section class="page" id="educationStudio">
+  <div class="section-heading">
+    <h2>📚 Education Studio</h2>
+  </div>
+  <div class="content-card">
+    <div class="field">
+      <label>Educational Topic</label>
+      <input id="educationTopic" placeholder="शैक्षिक विषय">
+    </div>
+    <div class="field">
+      <label>Content Format</label>
+      <select id="educationFormat">
+        <option>GK Questions</option>
+        <option>MCQ Quiz</option>
+        <option>Explainer Lesson</option>
+        <option>Current Affairs</option>
+        <option>Study Notes</option>
+      </select>
+    </div>
+    <button class="primary-btn" onclick="generateStudioPrompt('education')">Generate Education Content</button>
+    <textarea id="educationOutput" placeholder="Education content यहाँ बनेगा..."></textarea>
+    <button class="secondary-btn" onclick="copyText('educationOutput')">Copy</button>
+  </div>
+</section>
+
+<!-- MY PROJECTS -->
+<section class="page" id="projects">
+  <div class="section-heading">
+    <div>
+      <h2>📁 My Projects</h2>
+      <p>इस ब्राउज़र में सेव किए गए प्रोजेक्ट।</p>
+    </div>
+  </div>
+  <div class="content-card">
+    <h3>Saved Projects</h3>
+    <div id="projectList" class="muted">अभी कोई प्रोजेक्ट सेव नहीं है।</div>
+  </div>
+  <p class="muted">ध्यान दें: अभी प्रोजेक्ट इसी ब्राउज़र में सेव होंगे। दूसरे डिवाइस पर अपने-आप उपलब्ध नहीं होंगे।</p>
+</section>
+
+<!-- PROFILE & BRANDING -->
+<section class="page" id="profile">
+  <div class="section-heading">
+    <h2>👤 Profile & Branding</h2>
+  </div>
+  <div class="content-card">
+    <h3>Creator Profile</h3>
+    <div class="field">
+      <label>Creator Name</label>
+      <input id="creatorName" value="Umesh Prakash Singh">
+    </div>
+    <div class="field">
+      <label>Brand / Studio Name</label>
+      <input id="brandName" value="UPS Creator Studio">
+    </div>
+    <div class="field">
+      <label>Tagline</label>
+      <input id="brandTagline" value="Imagine. Create. Innovate.">
+    </div>
+    <div class="field">
+      <label>Upload Profile Photo</label>
+      <input type="file" id="profilePhoto" accept="image/*" onchange="previewProfilePhoto(event)">
+    </div>
+    <img id="profilePreview" alt="Profile Preview" style="display:none;width:110px;height:110px;object-fit:cover;border-radius:50%;border:2px solid #8067ff">
+    <p class="muted">फोटो इस ब्राउज़र में सेव होगी। यह अभी किसी ऑनलाइन सर्वर पर अपलोड नहीं होती।</p>
+    <button class="primary-btn" onclick="saveProfile()">Save Profile</button>
+  </div>
+</section>
+
+<!-- MODULES & LOCKS -->
+<section class="page" id="modules">
+  <div class="section-heading">
+    <h2>⚙️ Modules & Workflow Locks</h2>
+  </div>
+  <div class="content-card">
+    <h3>50 Core Modules</h3>
+    <div id="moduleList"></div>
+  </div>
+  <div class="content-card">
+    <h3>15 Workflow Locks</h3>
+    <div id="lockList"></div>
+  </div>
+</section>
+
+<!-- ACCESS INFORMATION -->
+<section class="page" id="accessInformation">
+  <div class="section-heading">
+    <h2>🔐 Access & Security Information</h2>
+  </div>
+  <div class="content-card">
+    <h3>Workspace Access Roles</h3>
+    <p class="muted">
+      <b>Super Admin:</b> मालिक के लिए पूर्ण नियंत्रण।<br><br>
+      <b>Office Editor:</b> केवल अनुमति प्राप्त Creative Tools का उपयोग।<br><br>
+      <b>Tester:</b> सीमित परीक्षण सुविधाएँ।
+    </p>
+  </div>
+  <div class="content-card">
+    <h3>महत्वपूर्ण सुरक्षा सूचना</h3>
+    <p class="muted">
+      यह GitHub Pages पर चलने वाला Frontend है। इसमें वास्तविक Gmail Login,
+      OTP Verification, Payment Verification और सुरक्षित Admin Permissions अभी
+      लागू नहीं हैं। इसके लिए अलग Backend, Database और Server-side Access Control
+      आवश्यक होंगे। केवल इस पेज के UI या Browser Storage पर निजी डेटा की सुरक्षा
+      निर्भर न करें।
+    </p>
+  </div>
+</section>
+<!-- PREMIUM FOOTER -->
+<footer class="ups-footer">
+  <h3>UPS Creator Studio</h3>
+  <p>All-in-One AI Creative Production Software</p>
+  <p>Imagine. Create. Innovate.</p>
+
+  <div class="footer-links">
+    <a href="#" onclick="showPage('dashboard');return false;">Dashboard</a>
+    <a href="#" onclick="showPage('wizard');return false;">Auto-Pilot</a>
+    <a href="#" onclick="showPage('projects');return false;">My Projects</a>
+    <a href="#" onclick="showPage('profile');return false;">Profile</a>
+  </div>
+
+  <p>
+    <b>Contact:</b><br>
+    <a href="tel:+919971158047">9971158047</a>
+    &nbsp; | &nbsp;
+    <a href="tel:+919193587489">9193587489</a>
+  </p>
+
+  <p>
+    <a href="https://wa.me/919971158047" target="_blank" rel="noopener">
+      WhatsApp Support
+    </a>
+  </p>
+
+  <div class="footer-credit">
+    <p>Created &amp; Developed by <b>Umesh Prakash Singh</b></p>
+    <p>© <span id="copyrightYear"></span> UPS Creator Studio. All Rights Reserved.</p>
+  </div>
+</footer>
+
 </main>
 </div>
 
+<!-- ADDITIONAL INTERFACE STYLES -->
+<style>
+.auth-screen,.role-panel{
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:15px;
+  padding:20px;
+  margin:15px 0;
+}
+.auth-screen h2,.role-panel h3{margin-top:0}
+.role-panel{display:none}
+.profile-preview{max-width:100%}
+</style>
+
+<!-- APPLICATION JAVASCRIPT -->
 <script>
-const modules=[
-"Project Understanding","Theme Selection","Audience Research","Content Strategy","Script Writing",
-"Hook Generator","Story Development","Dialogue Writing","Scene Planning","Storyboard Creation",
-"Character Identity","Face Consistency","Voice Direction","Pronunciation Check","Lip Sync Planning",
-"Cinematography","Camera Movement","Lighting Design","Background Design","Visual Composition",
-"Image Prompt Builder","Poster Design","Thumbnail Design","Video Prompt Builder","Animation Planning",
-"Transition Design","Music Selection","Sound Effects","Subtitle Generation","Hindi Text Accuracy",
-"Brand Identity","Logo Placement","Platform Optimization","Facebook Reel Topics","Playlist Suggestions",
-"YouTube SEO","Instagram Caption","Hashtag Generator","Quality Audit","Continuity Check",
-"Privacy Check","Safe Content Review","Export Settings","Duration Control","Aspect Ratio Check",
-"Performance Review","Project Saving","Prompt Library","Final Production Check","Creative Innovation"
-];
+"use strict";
 
-const locks=[
-"Theme Lock","Dialogue Lock","Identity Lock","Performance Lock","UI Lock",
-"Continuity Lock","Production Lock","Transitions Lock","Quality Assurance Lock","Final Output Lock",
-"Duration Lock","Voice Lock","Logic Lock","Safe-Frame Lock","Export Lock"
-];
+/* NAVIGATION */
+function showPage(pageId,button){
+  document.querySelectorAll(".page").forEach(page=>{
+    page.classList.remove("active");
+  });
 
-const $=id=>document.getElementById(id);
-
-function showPage(id){
-  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
-  const page=$(id);
-  if(page)page.classList.add("active");
-  document.querySelectorAll(".nav button[data-page]").forEach(b=>b.classList.remove("active"));
-  const nav=document.querySelector('.nav button[data-page="'+id+'"]');
-  if(nav)nav.classList.add("active");
-  if(id==="projects")loadProjects();
-  if(id==="modules")renderModules();
-  if(id==="locks")renderLocks();
-  if(id==="prompts")renderPrompts();
-  window.scrollTo({top:0,behavior:"smooth"});
-}
-
-document.querySelectorAll(".nav button[data-page]").forEach(btn=>{
-  btn.addEventListener("click",()=>showPage(btn.dataset.page));
-});
-
-function saveProject(title,content,type="Prompt"){
-  const projects=JSON.parse(localStorage.getItem("ups_projects")||"[]");
-  projects.unshift({id:Date.now(),title,content,type,date:new Date().toLocaleString()});
-  localStorage.setItem("ups_projects",JSON.stringify(projects.slice(0,100)));
-}
-
-function savePrompt(title,content){
-  const prompts=JSON.parse(localStorage.getItem("ups_prompts")||"[]");
-  prompts.unshift({title,content,date:new Date().toLocaleString()});
-  localStorage.setItem("ups_prompts",JSON.stringify(prompts.slice(0,100)));
-}
-
-function showOutput(id,text){
-  const box=$(id);
-  box.style.display="block";
-  box.textContent=text;
-}
-
-function copyText(text){
-  if(navigator.clipboard&&window.isSecureContext){
-    navigator.clipboard.writeText(text).then(()=>alert("Copied successfully!"))
-    .catch(()=>fallbackCopy(text));
-  }else fallbackCopy(text);
-}
-
-function fallbackCopy(text){
-  const area=document.createElement("textarea");
-  area.value=text;
-  document.body.appendChild(area);
-  area.select();
-  try{document.execCommand("copy");alert("Copied successfully!");}
-  catch(e){alert("कृपया टेक्स्ट manually copy करें।");}
-  area.remove();
-}
-
-function outputWithCopy(id,text){
-  showOutput(id,text);
-  const button=document.createElement("button");
-  button.className="btn secondary";
-  button.textContent="Copy Prompt";
-  button.style.marginTop="12px";
-  button.onclick=()=>copyText(text);
-  $(id).appendChild(button);
-}
-
-function generatePlan(){
-  const topic=$("topic").value.trim()||"Fresh creative topic";
-  const result=`UPS CREATOR STUDIO — CREATIVE PLAN
-
-Country: ${$("country").value}
-Audience: ${$("audience").value}
-Language: ${$("language").value}
-Platform: ${$("platform").value}
-Format: ${$("format").value}
-Category: ${$("category").value}
-Topic: ${topic}
-Duration: ${$("duration").value}
-Aspect Ratio: ${$("ratio").value}
-
-CREATIVE DIRECTION:
-Create original, engaging and audience-focused content.
-Start with a strong hook. Use a clear message and logical sequence.
-Maintain visual consistency and verify facts before publishing.
-
-FINAL CHECK:
-✓ Topic clarity
-✓ Audience relevance
-✓ Language accuracy
-✓ Visual consistency
-✓ Platform suitability
-✓ Quality review`;
-  outputWithCopy("planOutput",result);
-  saveProject(topic,result,"Creative Plan");
-  savePrompt(topic,result);
-}
-
-function resetWizard(){
-  ["topic"].forEach(id=>$(id).value="");
-  $("planOutput").style.display="none";
-}
-
-function makeVideoPrompt(){
-  const topic=$("videoTopic").value.trim();
-  if(!topic){alert("कृपया Video Topic लिखें।");return;}
-  const clips=Number($("videoClips").value);
-  let scenes="";
-  for(let i=1;i<=clips;i++){
-    scenes+=`\nCLIP ${i}:
-Visual: Show a clear visual sequence related to "${topic}".
-Camera: Smooth cinematic camera movement.
-Dialogue: Natural Hindi dialogue relevant to this scene.
-On-screen Text: Short and correctly spelled.
-Audio: Suitable music and sound effects.
-Continuity: Keep character and scene identity consistent.
-Duration: ${$("videoDuration").value}\n`;
+  const selected=document.getElementById(pageId);
+  if(selected){
+    selected.classList.add("active");
+    window.scrollTo({top:0,behavior:"smooth"});
   }
-  const result=`VIDEO PRODUCTION PROMPT
+
+  document.querySelectorAll(".nav-btn").forEach(btn=>{
+    btn.classList.remove("active");
+  });
+
+  if(button) button.classList.add("active");
+
+  const sidebar=document.getElementById("sidebar");
+  if(sidebar) sidebar.classList.remove("open");
+
+  if(pageId==="projects") renderProjects();
+  if(pageId==="modules") renderModules();
+}
+
+function toggleSidebar(){
+  document.getElementById("sidebar").classList.toggle("open");
+}
+
+/* PROMPT GENERATOR */
+function generatePrompt(){
+  const value=id=>document.getElementById(id)?.value || "";
+
+  const topic=value("topic").trim() || "Automatically select a suitable fresh topic";
+
+  const prompt=
+`Create a professional ${value("creativeType")} project.
+
+Country: ${value("country")}
+Target Audience: ${value("audience")}
+Language: ${value("language")}
+Platform: ${value("platform")}
+Category: ${value("category")}
 Topic: ${topic}
-Style: ${$("videoStyle").value}
-Total Clips: ${clips}
-${scenes}
-FINAL QA: Check dialogue, spelling, continuity, duration and aspect ratio.`;
-  outputWithCopy("videoOutput",result);
-  saveProject(topic,result,"Video Prompt");
-  savePrompt(topic,result);
+Aspect Ratio: ${value("ratio")}
+Duration: ${value("duration")}
+
+PRODUCTION REQUIREMENTS:
+1. Create a strong opening hook.
+2. Keep the content relevant to the selected audience.
+3. Use clear and natural language.
+4. Provide a structured scene or visual plan.
+5. Include suitable dialogue or text where relevant.
+6. Maintain visual and creative consistency.
+7. Avoid invented facts and misleading information.
+8. Provide a polished, platform-ready final prompt.
+
+Output: Complete professional creative production prompt.`;
+
+  document.getElementById("generatedPrompt").value=prompt;
 }
 
-function makeImagePrompt(){
-  const topic=$("imageTopic").value.trim();
-  if(!topic){alert("कृपया Image Topic लिखें।");return;}
-  const result=`IMAGE GENERATION PROMPT
-Topic: ${topic}
-Design Type: ${$("imageType").value}
-Aspect Ratio: ${$("imageRatio").value}
-Text Language: ${$("imageLanguage").value}
+/* STUDIO PROMPT GENERATOR */
+function generateStudioPrompt(type){
+  let output="";
+  const get=id=>document.getElementById(id)?.value || "";
 
-Create a premium professional design.
-Use clear visual hierarchy, balanced composition and readable typography.
-Keep all text accurate. Avoid clutter and unwanted watermarks.`;
-  outputWithCopy("imageOutput",result);
-  saveProject(topic,result,"Image Prompt");
-  savePrompt(topic,result);
+  if(type==="video"){
+    output=`Create a professional video.
+
+Topic: ${get("videoTopic") || "Select a suitable topic"}
+Style: ${get("videoStyle")}
+Clips: ${get("videoClips")}
+
+Include:
+- Opening hook
+- Scene-by-scene visual direction
+- Hindi/English dialogue as appropriate
+- Camera movement
+- Lighting and background
+- Natural transitions
+- Suitable sound design
+- Consistent visual continuity
+- Final closing scene`;
+    document.getElementById("videoOutput").value=output;
+  }
+
+  if(type==="image"){
+    output=`Create a high-quality ${get("imageStyle")} image.
+
+Subject: ${get("imageTopic") || "Select a suitable subject"}
+Aspect Ratio: ${get("imageRatio")}
+
+Requirements:
+Professional composition, accurate details,
+balanced lighting, clear subject, polished visual
+quality and no unwanted text or watermark.`;
+    document.getElementById("imageOutput").value=output;
+  }
+
+  if(type==="poster"){
+    output=`Design a premium professional poster.
+
+Title: ${get("posterTitle") || "Create a suitable title"}
+Purpose: ${get("posterPurpose")}
+Aspect Ratio: ${get("posterRatio")}
+
+Requirements:
+Strong visual hierarchy, readable typography,
+balanced layout, suitable background, clear message,
+professional branding and accurate Hindi text.`;
+    document.getElementById("posterOutput").value=output;
+  }
+
+  if(type==="dance"){
+    output=`Create a dance video concept.
+
+Topic: ${get("danceTopic") || "Select a suitable concept"}
+Dance Style: ${get("danceStyle")}
+
+Include music direction, choreography concept,
+scene planning, camera framing, natural movement
+and smooth transitions.`;
+    document.getElementById("danceOutput").value=output;
+  }
+
+  if(type==="film"){
+    output=`Develop a professional film concept.
+
+Topic: ${get("filmTopic") || "Select a suitable story"}
+Genre: ${get("filmGenre")}
+
+Include logline, story concept, characters,
+scene breakdown, dialogue direction, cinematography,
+sound design and ending.`;
+    document.getElementById("filmOutput").value=output;
+  }
+
+  if(type==="podcast"){
+    output=`Write a professional podcast script.
+
+Topic: ${get("podcastTopic") || "Select a suitable topic"}
+Format: ${get("podcastFormat")}
+
+Include opening, introduction, main discussion,
+natural dialogue, useful examples and closing.`;
+    document.getElementById("podcastOutput").value=output;
+  }
+
+  if(type==="education"){
+    output=`Create educational content.
+
+Topic: ${get("educationTopic") || "Select a suitable topic"}
+Format: ${get("educationFormat")}
+
+Use accurate information, simple explanations,
+well-structured learning points and suitable examples.
+For MCQs, include options and the correct answer.`;
+    document.getElementById("educationOutput").value=output;
+  }
 }
 
-function makePosterPrompt(){
-  const headline=$("posterHeadline").value.trim();
-  if(!headline){alert("कृपया Poster Headline लिखें।");return;}
-  const result=`PREMIUM POSTER DESIGN PROMPT
-Brand: ${$("posterBrand").value}
-Headline: ${headline}
-Supporting Message: ${$("posterMessage").value}
+/* COPY FUNCTIONS */
+async function copyText(elementId){
+  const element=document.getElementById(elementId);
+  if(!element || !element.value.trim()){
+    alert("पहले Prompt तैयार करें।");
+    return;
+  }
 
-Create a premium cinematic social media poster.
-Use professional typography, balanced layout and high-quality visuals.
-Keep the headline prominent and text correctly spelled.
-Preserve the brand name exactly.`;
-  outputWithCopy("posterOutput",result);
-  saveProject(headline,result,"Poster Prompt");
-  savePrompt(headline,result);
+  try{
+    await navigator.clipboard.writeText(element.value);
+    alert("Prompt copied successfully!");
+  }catch(error){
+    element.select();
+    document.execCommand("copy");
+    alert("Copy करने का प्रयास पूरा हुआ।");
+  }
 }
 
-function quickDance(){
-  const topic=$("danceTopic").value.trim();
-  if(!topic){alert("कृपया Dance Theme लिखें।");return;}
-  const result=`DANCE VIDEO PROMPT
-Theme: ${topic}
-Dance Style: ${$("danceType").value}
-
-Create a coordinated dance performance with natural movement.
-Use suitable choreography, rhythm synchronization and smooth camera work.
-Maintain scene continuity and professional lighting.`;
-  outputWithCopy("danceOutput",result);
-  saveProject(topic,result,"Dance Prompt");
-  savePrompt(topic,result);
+function copyPrompt(){
+  copyText("generatedPrompt");
 }
 
-function makeFilmPrompt(){
-  const topic=$("filmTopic").value.trim();
-  if(!topic){alert("कृपया Film Idea लिखें।");return;}
-  const result=`FILM PRODUCTION PLAN
-Film Idea: ${topic}
-Genre: ${$("filmGenre").value}
-Duration: ${$("filmDuration").value}
-
-Create an original film concept with:
-1. Strong opening hook
-2. Clear story premise
-3. Main characters
-4. Scene-by-scene breakdown
-5. Natural dialogues
-6. Camera and lighting direction
-7. Music direction
-8. Strong conclusion
-
-Maintain story continuity and realistic performance.`;
-  outputWithCopy("filmOutput",result);
-  saveProject(topic,result,"Film Plan");
-  savePrompt(topic,result);
+/* PROJECT LIBRARY */
+function getProjects(){
+  try{
+    return JSON.parse(localStorage.getItem("upsProjects") || "[]");
+  }catch(error){
+    return [];
+  }
 }
 
-function makePodcastPrompt(){
-  const topic=$("podcastTopic").value.trim();
-  if(!topic){alert("कृपया Podcast Topic लिखें।");return;}
-  const result=`PODCAST SCRIPT
-Topic: ${topic}
-Format: ${$("podcastFormat").value}
+function saveProject(){
+  const prompt=document.getElementById("generatedPrompt").value.trim();
 
-Create a complete podcast script with:
-1. Attention-grabbing opening
-2. Host introduction
-3. Topic explanation
-4. Main discussion points
-5. Natural dialogue
-6. Relevant examples
-7. Audience engagement
-8. Clear closing message
+  if(!prompt){
+    alert("पहले Auto-Pilot Prompt तैयार करें।");
+    return;
+  }
 
-Use simple Hindi and verify information before publishing.`;
-  outputWithCopy("podcastOutput",result);
-  saveProject(topic,result,"Podcast Script");
-  savePrompt(topic,result);
+  const projects=getProjects();
+
+  projects.unshift({
+    id:Date.now(),
+    title:document.getElementById("topic").value.trim() || "Creative Project",
+    prompt:prompt,
+    date:new Date().toLocaleString()
+  });
+
+  localStorage.setItem("upsProjects",JSON.stringify(projects));
+  alert("Project इस ब्राउज़र में सेव हो गया।");
+  renderProjects();
 }
 
-function makeEducationPrompt(){
-  const topic=$("educationTopic").value.trim();
-  if(!topic){alert("कृपया Educational Topic लिखें।");return;}
-  const result=`EDUCATIONAL CONTENT BUILDER
-Topic: ${topic}
-Content Type: ${$("educationType").value}
-Learning Level: ${$("educationLevel").value}
+function renderProjects(){
+  const box=document.getElementById("projectList");
+  if(!box) return;
 
-Prepare educational content with:
-1. Simple introduction
-2. Accurate explanation
-3. Important facts
-4. Suitable examples
-5. Easy language
-6. Learning summary
-7. Knowledge-check questions
+  const projects=getProjects();
 
-For MCQs, provide four options, correct answer and explanation.
-Verify factual accuracy before publishing.`;
-  outputWithCopy("educationOutput",result);
-  saveProject(topic,result,"Education Content");
-  savePrompt(topic,result);
-}
-
-function loadProjects(){
-  const projects=JSON.parse(localStorage.getItem("ups_projects")||"[]");
-  const box=$("projectList");
-  box.innerHTML="";
   if(!projects.length){
-    box.textContent="अभी कोई project save नहीं है।";
+    box.textContent="अभी कोई प्रोजेक्ट सेव नहीं है।";
     return;
   }
-  projects.forEach(p=>{
-    const card=document.createElement("div");
-    card.className="card";
-    const title=document.createElement("h3");
-    title.textContent=p.title;
-    const info=document.createElement("p");
-    info.className="muted";
-    info.textContent=p.type+" · "+p.date;
-    const preview=document.createElement("p");
-    preview.textContent=p.content.slice(0,180)+"...";
-    const button=document.createElement("button");
-    button.className="btn secondary";
-    button.textContent="Copy Project";
-    button.onclick=()=>copyText(p.content);
-    card.append(title,info,preview,button);
-    box.appendChild(card);
-  });
-}
 
-function renderModules(){
-  const search=($("moduleSearch")?.value||"").toLowerCase();
-  const box=$("moduleList");
-  if(!box)return;
   box.innerHTML="";
-  modules.filter(m=>m.toLowerCase().includes(search)).forEach((m,i)=>{
-    const card=document.createElement("div");
-    card.className="card";
-    const name=document.createElement("p");
-    name.textContent=String(i+1).padStart(2,"0")+" · "+m;
-    card.appendChild(name);
-    box.appendChild(card);
-  });
-}
 
-function renderLocks(){
-  const box=$("lockList");
-  if(!box)return;
-  box.innerHTML="";
-  locks.forEach((lock,i)=>{
+  projects.forEach(project=>{
     const card=document.createElement("div");
-    card.className="card";
-    const title=document.createElement("h3");
-    title.textContent="🔒 "+lock;
-    const detail=document.createElement("p");
-    detail.className="muted";
-    detail.textContent="Production checklist item "+(i+1);
-    card.append(title,detail);
-    box.appendChild(card);
-  });
-}
+    card.className="content-card";
 
-function renderPrompts(){
-  const prompts=JSON.parse(localStorage.getItem("ups_prompts")||"[]");
-  const box=$("promptList");
-  box.innerHTML="";
-  if(!prompts.length){
-    box.textContent="अभी कोई prompt save नहीं है।";
-    return;
-  }
-  prompts.forEach(p=>{
-    const card=document.createElement("div");
-    card.className="card";
     const title=document.createElement("h3");
-    title.textContent=p.title;
+    title.textContent=project.title;
+
     const date=document.createElement("p");
     date.className="muted";
-    date.textContent=p.date;
-    const button=document.createElement("button");
-    button.className="btn secondary";
-    button.textContent="Copy Prompt";
-    button.onclick=()=>copyText(p.content);
-    card.append(title,date,button);
+    date.textContent=project.date;
+
+    const content=document.createElement("p");
+    content.className="muted";
+    content.textContent=project.prompt;
+
+    const copy=document.createElement("button");
+    copy.className="secondary-btn";
+    copy.textContent="Copy Prompt";
+    copy.onclick=()=>{
+      navigator.clipboard.writeText(project.prompt)
+        .then(()=>alert("Copied!"))
+        .catch(()=>alert("Copy उपलब्ध नहीं हुआ।"));
+    };
+
+    const remove=document.createElement("button");
+    remove.className="secondary-btn";
+    remove.textContent="Delete";
+    remove.style.marginLeft="8px";
+    remove.onclick=()=>{
+      if(confirm("क्या यह Project हटाना चाहते हैं?")){
+        const updated=getProjects().filter(item=>item.id!==project.id);
+        localStorage.setItem("upsProjects",JSON.stringify(updated));
+        renderProjects();
+      }
+    };
+
+    card.append(title,date,content,copy,remove);
     box.appendChild(card);
   });
 }
 
-function runAudit(){
-  const content=$("auditText").value.trim();
-  if(!content){
-    alert("कृपया Audit के लिए content लिखें।");
-    return;
-  }
-
-  const checks=[
-    ["Content present",content.length>20],
-    ["Clear structure",/intro|introduction|hook|opening/i.test(content)],
-    ["Visual direction",/visual|scene|camera|image/i.test(content)],
-    ["Audio or dialogue",/audio|voice|dialogue|music/i.test(content)],
-    ["Quality review",/quality|check|review|final/i.test(content)],
-    ["Safety review",/safe|safety|privacy/i.test(content)]
-  ];
-
-  let result="UPS CREATOR STUDIO — BASIC QUALITY AUDIT\n\n";
-  checks.forEach(([name,passed])=>{
-    result+=(passed?"✓ PASS":"○ REVIEW NEEDED")+" — "+name+"\n";
-  });
-  result+="\nयह basic text checklist है, AI fact-check या professional certification नहीं।";
-  showOutput("auditOutput",result);
-}
-
-function saveProfilePhoto(event){
-  const file=event.target.files[0];
-  if(!file)return;
+/* PROFILE AND PHOTO */
+function previewProfilePhoto(event){
+  const file=event.target.files?.[0];
+  if(!file) return;
 
   if(!file.type.startsWith("image/")){
-    alert("कृपया image file चुनें।");
+    alert("कृपया Image File चुनें।");
     return;
   }
 
   if(file.size>2*1024*1024){
-    alert("कृपया 2 MB से छोटी image चुनें।");
+    alert("कृपया 2 MB से छोटी फोटो चुनें।");
     return;
   }
 
   const reader=new FileReader();
-  reader.onload=()=>{
-    localStorage.setItem("ups_profile_photo",reader.result);
-    $("profilePreview").src=reader.result;
+
+  reader.onload=function(){
+    const preview=document.getElementById("profilePreview");
+    preview.src=reader.result;
+    preview.style.display="block";
+    localStorage.setItem("upsProfilePhoto",reader.result);
   };
+
   reader.readAsDataURL(file);
 }
 
-function saveSettings(){
-  localStorage.setItem("ups_display_name",$("displayName").value);
-  localStorage.setItem("ups_studio_name",$("studioName").value);
-  alert("Settings saved in this browser.");
+function saveProfile(){
+  const profile={
+    creatorName:document.getElementById("creatorName").value,
+    brandName:document.getElementById("brandName").value,
+    tagline:document.getElementById("brandTagline").value
+  };
+
+  localStorage.setItem("upsProfile",JSON.stringify(profile));
+  alert("Profile इस ब्राउज़र में सेव हो गई।");
 }
 
-function loadSettings(){
-  const name=localStorage.getItem("ups_display_name");
-  const studio=localStorage.getItem("ups_studio_name");
-  const photo=localStorage.getItem("ups_profile_photo");
+function loadProfile(){
+  try{
+    const profile=JSON.parse(localStorage.getItem("upsProfile") || "{}");
 
-  if(name)$("displayName").value=name;
-  if(studio)$("studioName").value=studio;
-  if(photo)$("profilePreview").src=photo;
+    if(profile.creatorName)
+      document.getElementById("creatorName").value=profile.creatorName;
+
+    if(profile.brandName)
+      document.getElementById("brandName").value=profile.brandName;
+
+    if(profile.tagline)
+      document.getElementById("brandTagline").value=profile.tagline;
+
+    const photo=localStorage.getItem("upsProfilePhoto");
+    if(photo){
+      const preview=document.getElementById("profilePreview");
+      preview.src=photo;
+      preview.style.display="block";
+    }
+  }catch(error){
+    console.warn("Profile could not be loaded.");
+  }
 }
 
-function initializeApp(){
+/* 50 MODULES */
+const modules=[
+"Theme Engine","Story Engine","Identity Engine","Performance Engine",
+"Scene Engine","Cinematic Engine","Accuracy Engine","Quality Assurance Engine",
+"Script Generator","Dialogue Generator","Hook Generator","Audience Analyzer",
+"Platform Analyzer","Language Engine","Category Engine","Topic Engine",
+"Visual Planning","Camera Direction","Lighting Direction","Background Design",
+"Voice Direction","Pronunciation Review","Lip Sync Planning","Music Planning",
+"Sound Effects Planning","Caption Generator","Subtitle Planning","Typography Engine",
+"Brand Identity","Logo Reference","Image Prompt Engine","Video Prompt Engine",
+"Poster Prompt Engine","Dance Planning","Film Planning","Podcast Planning",
+"Education Content","MCQ Generator","Project Library","Profile Manager",
+"Export Planning","Duration Check","Aspect Ratio Check","Continuity Check",
+"Fact Review","Privacy Review","Accessibility Review","Error Review",
+"Final Quality Audit","Production Report"
+];
+
+/* 15 WORKFLOW LOCKS */
+const locks=[
+"Theme Lock","Dialogue Lock","Identity Lock","Performance Lock",
+"UI Lock","Continuity Lock","Production Lock","Transition Lock",
+"Quality Assurance Lock","Final Output Lock","Duration Lock",
+"Voice Lock","Logic Lock","Safe Frame Lock","Export Lock"
+];
+
+function renderModules(){
+  const moduleBox=document.getElementById("moduleList");
+  const lockBox=document.getElementById("lockList");
+
+  if(moduleBox){
+    moduleBox.innerHTML=modules.map((item,index)=>
+      `<span class="tag">${index+1}. ${item}</span>`
+    ).join("");
+  }
+
+  if(lockBox){
+    lockBox.innerHTML=locks.map((item,index)=>
+      `<span class="tag">${index+1}. ${item}</span>`
+    ).join("");
+  }
+}
+
+/* INITIALIZE */
+document.addEventListener("DOMContentLoaded",()=>{
+  document.getElementById("copyrightYear").textContent=
+    new Date().getFullYear();
+
+  loadProfile();
+  renderProjects();
   renderModules();
-  renderLocks();
-  loadProjects();
-  loadSettings();
-}
-
-initializeApp();
+});
 </script>
+
 </body>
 </html>
-      <div class="card">
-        <h3>🎙️ Podcast Studio</h3>
-        <p>Podcast topics, scripts और discussion planning।</p>
-        <button class="btn primary" onclick="showPage('podcast')">Open Studio</button>
-      </div>
-      <div class="card">
-        <h3>📚 Education Studio</h3>
-        <p>MCQ, explainers और learning content prompts।</p>
-        <button class="btn primary" onclick="showPage('education')">Open Studio</button>
-      </div>
-    </div>
