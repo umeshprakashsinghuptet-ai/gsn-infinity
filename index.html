@@ -294,4 +294,516 @@ input:focus,select:focus,textarea:focus{outline:1px solid var(--purple)}
 </div>
 
 <script>
-const modules=[
+const modules=["Project Understanding","Theme Selection","Audience Research","Content Strategy","Script Writing",
+"Hook Generator","Story Development","Dialogue Writing","Scene Planning","Storyboard Creation",
+"Character Identity","Face Consistency","Voice Direction","Pronunciation Check","Lip Sync Planning",
+"Cinematography","Camera Movement","Lighting Design","Background Design","Visual Composition",
+"Image Prompt Builder","Poster Design","Thumbnail Design","Video Prompt Builder","Animation Planning",
+"Transition Design","Music Selection","Sound Effects","Subtitle Generation","Hindi Text Accuracy",
+"Brand Identity","Logo Placement","Platform Optimization","Facebook Reel Topics","Playlist Suggestions",
+"YouTube SEO","Instagram Caption","Hashtag Generator","Quality Audit","Continuity Check",
+"Privacy Check","Safe Content Review","Export Settings","Duration Control","Aspect Ratio Check",
+"Performance Review","Project Saving","Prompt Library","Final Production Check","Creative Innovation"
+];
+
+const locks=[
+"Theme Lock","Dialogue Lock","Identity Lock","Performance Lock","UI Lock",
+"Continuity Lock","Production Lock","Transitions Lock","Quality Assurance Lock","Final Output Lock",
+"Duration Lock","Voice Lock","Logic Lock","Safe-Frame Lock","Export Lock"
+];
+
+const $=id=>document.getElementById(id);
+
+function showPage(id){
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  const page=$(id);
+  if(page) page.classList.add("active");
+  document.querySelectorAll(".nav button").forEach(b=>b.classList.remove("active"));
+  const nav=document.querySelector('.nav button[data-page="'+id+'"]');
+  if(nav) nav.classList.add("active");
+  if(id==="projects") loadProjects();
+  if(id==="modules") renderModules();
+  if(id==="locks") renderLocks();
+  if(id==="prompts") renderPrompts();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+document.querySelectorAll(".nav button[data-page]").forEach(btn=>{
+  btn.addEventListener("click",()=>showPage(btn.dataset.page));
+});
+
+function openStudio(id){showPage(id);}
+
+function saveProject(title,content,type="Prompt"){
+  const projects=JSON.parse(localStorage.getItem("ups_projects")||"[]");
+  projects.unshift({
+    id:Date.now(),
+    title,
+    content,
+    type,
+    date:new Date().toLocaleString()
+  });
+  localStorage.setItem("ups_projects",JSON.stringify(projects.slice(0,100)));
+}
+
+function savePrompt(title,content){
+  const prompts=JSON.parse(localStorage.getItem("ups_prompts")||"[]");
+  prompts.unshift({title,content,date:new Date().toLocaleString()});
+  localStorage.setItem("ups_prompts",JSON.stringify(prompts.slice(0,100)));
+}
+
+function showOutput(id,text){
+  const box=$(id);
+  if(!box)return;
+  box.style.display="block";
+  box.textContent=text;
+}
+
+function copyText(text){
+  if(navigator.clipboard && window.isSecureContext){
+    navigator.clipboard.writeText(text).then(()=>{
+      alert("Copied successfully!");
+    }).catch(()=>fallbackCopy(text));
+  }else{
+    fallbackCopy(text);
+  }
+}
+
+function fallbackCopy(text){
+  const area=document.createElement("textarea");
+  area.value=text;
+  document.body.appendChild(area);
+  area.select();
+  try{
+    document.execCommand("copy");
+    alert("Copied successfully!");
+  }catch(e){
+    alert("Copy नहीं हो पाया। कृपया टेक्स्ट manually copy करें।");
+  }
+  area.remove();
+}
+
+function outputWithCopy(id,text){
+  showOutput(id,text);
+  const box=$(id);
+  const button=document.createElement("button");
+  button.className="btn secondary";
+  button.textContent="Copy Prompt";
+  button.style.marginTop="12px";
+  button.onclick=()=>copyText(text);
+  box.appendChild(button);
+}
+
+function generatePlan(){
+  const country=$("country").value;
+  const audience=$("audience").value;
+  const language=$("language").value;
+  const platform=$("platform").value;
+  const format=$("format").value;
+  const category=$("category").value;
+  const topic=$("topic").value.trim()||"AI suggested fresh topic";
+  const duration=$("duration").value;
+  const ratio=$("ratio").value;
+
+  const result=
+`UPS CREATOR STUDIO — CREATIVE PLAN
+
+Country: ${country}
+Target Audience: ${audience}
+Language: ${language}
+Platform: ${platform}
+Format: ${format}
+Category: ${category}
+Topic: ${topic}
+Duration: ${duration}
+Aspect Ratio: ${ratio}
+
+CREATIVE DIRECTION:
+Create original, engaging and audience-focused content.
+Start with a strong hook.
+Use a clear message and logical sequence.
+Keep visuals, dialogue and on-screen text synchronized.
+Maintain brand consistency and verify all facts before publishing.
+
+FINAL CHECK:
+✓ Topic clarity
+✓ Audience relevance
+✓ Language accuracy
+✓ Visual consistency
+✓ Platform suitability
+✓ Quality review`;
+
+  outputWithCopy("planOutput",result);
+  saveProject(topic,result,"Creative Plan");
+  savePrompt(topic,result);
+}
+
+function resetWizard(){
+  ["topic"].forEach(id=>$(id).value="");
+  $("planOutput").style.display="none";
+  $("country").selectedIndex=0;
+  $("audience").selectedIndex=0;
+  $("language").selectedIndex=0;
+  $("platform").selectedIndex=0;
+  $("format").selectedIndex=0;
+  $("category").selectedIndex=0;
+  $("duration").selectedIndex=0;
+  $("ratio").selectedIndex=0;
+}
+
+function makeVideoPrompt(){
+  const topic=$("videoTopic").value.trim();
+  if(!topic){alert("कृपया Video Topic लिखें।");return;}
+  const clips=Number($("videoClips").value);
+  const duration=$("videoDuration").value;
+  const style=$("videoStyle").value;
+
+  let scenes="";
+  for(let i=1;i<=clips;i++){
+    scenes+=`
+CLIP ${i}:
+Visual: Show a clear visual sequence related to "${topic}".
+Camera: Smooth cinematic camera movement.
+Dialogue: Write natural Hindi dialogue relevant to this scene.
+On-screen Text: Short, readable and correctly spelled.
+Audio: Suitable background music and sound effects.
+Continuity: Keep character, clothing, location and visual identity consistent.
+Duration: ${duration}
+`;
+  }
+
+  const result=`VIDEO PRODUCTION PROMPT
+Topic: ${topic}
+Style: ${style}
+Total Clips: ${clips}
+
+Create a realistic, professional video sequence.
+Maintain natural movement, accurate lip-sync and consistent visual identity.
+${scenes}
+FINAL QA: Check dialogue, spelling, continuity, duration and aspect ratio before export.`;
+
+  outputWithCopy("videoOutput",result);
+  saveProject(topic,result,"Video Prompt");
+  savePrompt(topic,result);
+}
+
+function makeImagePrompt(){
+  const topic=$("imageTopic").value.trim();
+  if(!topic){alert("कृपया Poster Topic लिखें।");return;}
+  const type=$("imageType").value;
+  const ratio=$("imageRatio").value;
+  const language=$("imageLanguage").value;
+
+  const result=`IMAGE GENERATION PROMPT
+
+Topic: ${topic}
+Design Type: ${type}
+Aspect Ratio: ${ratio}
+Text Language: ${language}
+
+Create a premium, professional, visually attractive design.
+Use a clear visual hierarchy, balanced composition and suitable typography.
+Keep all text readable and correctly spelled.
+Use realistic lighting, detailed visual elements and a polished finish.
+Avoid unnecessary text, distorted objects and unwanted watermarks.
+Make the design suitable for social media publishing.`;
+
+  outputWithCopy("imageOutput",result);
+  saveProject(topic,result,"Image Prompt");
+  savePrompt(topic,result);
+}
+
+function makePosterPrompt(){
+  const brand=$("posterBrand").value.trim()||"UPS Creator Studio";
+  const headline=$("posterHeadline").value.trim();
+  const message=$("posterMessage").value.trim();
+  if(!headline){alert("कृपया Poster Headline लिखें।");return;}
+
+  const result=`PREMIUM POSTER DESIGN PROMPT
+
+Brand: ${brand}
+Headline: ${headline}
+Supporting Message: ${message||"Create a suitable supporting message."}
+
+Create a premium cinematic social media poster.
+Use professional typography, balanced layout and high-quality visuals.
+Make the headline the main visual focus.
+Keep Hindi and English text accurate and readable.
+Preserve the brand name exactly as provided.
+Avoid clutter, spelling errors and unwanted watermarks.`;
+
+  outputWithCopy("posterOutput",result);
+  saveProject(headline,result,"Poster Prompt");
+  savePrompt(headline,result);
+}
+
+function quickDance(){
+  const topic=$("danceTopic").value.trim();
+  if(!topic){alert("कृपया Dance Theme लिखें।");return;}
+  const style=$("danceType").value;
+
+  const result=`DANCE VIDEO PROMPT
+
+Theme: ${topic}
+Dance Style: ${style}
+
+Create a coordinated dance performance with natural body movement.
+Use suitable choreography, rhythm synchronization and smooth camera work.
+Maintain consistent clothing, character identity and scene continuity.
+Use appropriate music timing and professional lighting.
+Avoid unnatural movement and visual distortion.`;
+
+  outputWithCopy("danceOutput",result);
+  saveProject(topic,result,"Dance Prompt");
+  savePrompt(topic,result);
+}
+
+function makeFilmPrompt(){
+  const topic=$("filmTopic").value.trim();
+  if(!topic){alert("कृपया Film Idea लिखें।");return;}
+  const genre=$("filmGenre").value;
+  const duration=$("filmDuration").value;
+
+  const result=`FILM PRODUCTION PLAN
+
+Film Idea: ${topic}
+Genre: ${genre}
+Duration: ${duration}
+
+Develop an original film concept with:
+1. Strong opening hook
+2. Clear story premise
+3. Main characters
+4. Scene-by-scene breakdown
+5. Natural dialogues
+6. Camera and lighting direction
+7. Background music direction
+8. Strong conclusion
+
+Maintain story continuity, realistic performance and professional visual quality.`;
+
+  outputWithCopy("filmOutput",result);
+  saveProject(topic,result,"Film Plan");
+  savePrompt(topic,result);
+}
+
+function makePodcastPrompt(){
+  const topic=$("podcastTopic").value.trim();
+  if(!topic){alert("कृपया Podcast Topic लिखें।");return;}
+  const format=$("podcastFormat").value;
+
+  const result=`PODCAST SCRIPT
+
+Topic: ${topic}
+Format: ${format}
+
+Create a complete podcast script with:
+1. Attention-grabbing opening
+2. Host introduction
+3. Topic explanation
+4. Main discussion points
+5. Natural conversational dialogue
+6. Relevant examples
+7. Audience engagement
+8. Clear closing message
+
+Voice: Natural, confident and conversational.
+Language: Simple Hindi with relevant English terms where needed.
+Keep the information accurate and easy to understand.`;
+
+  outputWithCopy("podcastOutput",result);
+  saveProject(topic,result,"Podcast Script");
+  savePrompt(topic,result);
+}
+
+function makeEducationPrompt(){
+  const topic=$("educationTopic").value.trim();
+  if(!topic){alert("कृपया Educational Topic लिखें।");return;}
+  const type=$("educationType").value;
+  const level=$("educationLevel").value;
+
+  const result=`EDUCATIONAL CONTENT BUILDER
+
+Topic: ${topic}
+Content Type: ${type}
+Learning Level: ${level}
+
+Prepare educational content with:
+1. Simple introduction
+2. Accurate explanation
+3. Important facts
+4. Suitable examples
+5. Easy-to-understand language
+6. Learning summary
+7. Knowledge-check questions
+
+For MCQ content, provide four options and clearly identify the correct answer with an explanation.
+Verify factual accuracy before publishing.`;
+
+  outputWithCopy("educationOutput",result);
+  saveProject(topic,result,"Education Content");
+  savePrompt(topic,result);
+}
+
+function loadProjects(){
+  const projects=JSON.parse(localStorage.getItem("ups_projects")||"[]");
+  const box=$("projectList");
+  if(!projects.length){
+    box.innerHTML='<p class="muted">अभी कोई project save नहीं है।</p>';
+    return;
+  }
+  box.innerHTML="";
+  projects.forEach(p=>{
+    const card=document.createElement("div");
+    card.className="card";
+    const title=document.createElement("h3");
+    title.textContent=p.title;
+    const info=document.createElement("p");
+    info.className="muted";
+    info.textContent=p.type+" · "+p.date;
+    const preview=document.createElement("p");
+    preview.textContent=p.content.slice(0,180)+"...";
+    const button=document.createElement("button");
+    button.className="btn secondary";
+    button.textContent="Copy Project";
+    button.onclick=()=>copyText(p.content);
+    card.append(title,info,preview,button);
+    box.appendChild(card);
+  });
+}
+
+function renderModules(){
+  const search=($("moduleSearch")?.value||"").toLowerCase();
+  const box=$("moduleList");
+  if(!box)return;
+  box.innerHTML="";
+  modules.filter(m=>m.toLowerCase().includes(search)).forEach((m,i)=>{
+    const card=document.createElement("div");
+    card.className="card";
+    card.innerHTML="<strong>"+String(i+1).padStart(2,"0")+"</strong>";
+    const name=document.createElement("p");
+    name.textContent=m;
+    card.appendChild(name);
+    box.appendChild(card);
+  });
+}
+
+function renderLocks(){
+  const box=$("lockList");
+  if(!box)return;
+  box.innerHTML="";
+  locks.forEach((lock,i)=>{
+    const card=document.createElement("div");
+    card.className="card";
+    const title=document.createElement("h3");
+    title.textContent="🔒 "+lock;
+    const detail=document.createElement("p");
+    detail.className="muted";
+    detail.textContent="Production checklist item "+(i+1);
+    card.append(title,detail);
+    box.appendChild(card);
+  });
+}
+
+function renderPrompts(){
+  const prompts=JSON.parse(localStorage.getItem("ups_prompts")||"[]");
+  const box=$("promptList");
+  if(!prompts.length){
+    box.innerHTML='<p class="muted">अभी कोई prompt save नहीं है।</p>';
+    return;
+  }
+  box.innerHTML="";
+  prompts.forEach(p=>{
+    const card=document.createElement("div");
+    card.className="card";
+    const title=document.createElement("h3");
+    title.textContent=p.title;
+    const date=document.createElement("p");
+    date.className="muted";
+    date.textContent=p.date;
+    const button=document.createElement("button");
+    button.className="btn secondary";
+    button.textContent="Copy Prompt";
+    button.onclick=()=>copyText(p.content);
+    card.append(title,date,button);
+    box.appendChild(card);
+  });
+}
+
+function runAudit(){
+  const content=$("auditText").value.trim();
+  if(!content){alert("कृपया Audit के लिए content लिखें।");return;}
+
+  const checks=[
+    ["Content present",content.length>20],
+    ["Clear structure",/intro|introduction|hook|opening/i.test(content)],
+    ["Visual direction",/visual|scene|camera|image/i.test(content)],
+    ["Audio or dialogue",/audio|voice|dialogue|music/i.test(content)],
+    ["Quality review",/quality|check|review|final/i.test(content)],
+    ["Safety review",/safe|safety|privacy/i.test(content)]
+  ];
+
+  let result="UPS CREATOR STUDIO — QUALITY AUDIT\n\n";
+  checks.forEach(([name,passed])=>{
+    result+=(passed?"✓ PASS":"○ REVIEW NEEDED")+" — "+name+"\n";
+  });
+  result+="\nNote: This is a basic text checklist, not an AI fact-checking or professional safety certification.";
+
+  showOutput("auditOutput",result);
+}
+
+function saveProfilePhoto(event){
+  const file=event.target.files[0];
+  if(!file)return;
+  if(!file.type.startsWith("image/")){
+    alert("कृपया image file चुनें।");
+    return;
+  }
+  if(file.size>2*1024*1024){
+    alert("कृपया 2 MB से छोटी image चुनें।");
+    return;
+  }
+
+  const reader=new FileReader();
+  reader.onload=()=>{
+    localStorage.setItem("ups_profile_photo",reader.result);
+    $("profilePreview").src=reader.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function saveSettings(){
+  localStorage.setItem("ups_display_name",$("displayName").value);
+  localStorage.setItem("ups_studio_name",$("studioName").value);
+  alert("Settings saved in this browser.");
+}
+
+function loadSettings(){
+  const name=localStorage.getItem("ups_display_name");
+  const studio=localStorage.getItem("ups_studio_name");
+  const photo=localStorage.getItem("ups_profile_photo");
+  if(name)$("displayName").value=name;
+  if(studio)$("studioName").value=studio;
+  if(photo)$("profilePreview").src=photo;
+}
+
+function updateClock(){
+  const clock=$("liveClock");
+  if(clock){
+    clock.textContent=new Date().toLocaleString();
+  }
+}
+
+function initializeApp(){
+  renderModules();
+  renderLocks();
+  loadProjects();
+  loadSettings();
+  updateClock();
+  setInterval(updateClock,1000);
+}
+
+initializeApp();
+</script>
+</body>
+</html>
