@@ -137,3 +137,161 @@ input:focus,select:focus,textarea:focus{outline:1px solid var(--purple)}
 </div>
 <div class="section-title"><h2>Creative Studios</h2><span>WORKSPACE</span></div>
 <div class="grid" id="studioGrid"></div>
+<div class="section-title"><h2>Production Control</h2><span class="muted">Creative workflow controls</span></div>
+<div class="grid">
+  <div class="card"><h3>🎬 Video Production</h3><p class="muted">Script, scenes, dialogue और video prompts तैयार करें।</p><button class="btn primary" onclick="openStudio('video')">Open Video Studio</button></div>
+  <div class="card"><h3>🖼️ Image & Poster</h3><p class="muted">Poster, thumbnail और image prompts बनाएं।</p><button class="btn primary" onclick="openStudio('image')">Open Image Studio</button></div>
+  <div class="card"><h3>🎙️ Podcast & Voice</h3><p class="muted">Podcast scripts और voice direction तैयार करें।</p><button class="btn primary" onclick="openStudio('podcast')">Open Podcast Studio</button></div>
+</div>
+</section>
+
+<section class="page" id="wizard">
+  <div class="section-title"><h2>Auto-Pilot Wizard</h2><span class="muted">Step-by-step creative setup</span></div>
+  <div class="card">
+    <div class="form-grid">
+      <div><label>Country</label><select id="country"><option>India</option><option>United States</option><option>United Kingdom</option><option>Other</option></select></div>
+      <div><label>Target Audience</label><select id="audience"><option>General Audience</option><option>Students</option><option>Creators</option><option>Professionals</option><option>Families</option></select></div>
+      <div><label>Language</label><select id="language"><option>Hindi + English</option><option>Hindi</option><option>English</option><option>Other</option></select></div>
+      <div><label>Platform</label><select id="platform"><option>Multi-platform</option><option>YouTube</option><option>Facebook</option><option>Instagram</option></select></div>
+      <div><label>Content Format</label><select id="format"><option>Video / Reel</option><option>Image Poster</option><option>Carousel</option><option>Podcast</option><option>Script</option></select></div>
+      <div><label>Category</label><select id="category"><option>Auto Select</option><option>Education</option><option>Motivation</option><option>Entertainment</option><option>Personal Brand</option><option>Business</option><option>News & Facts</option></select></div>
+      <div class="full"><label>Topic / Subject</label><input id="topic" placeholder="Enter topic or leave blank for auto suggestion"></div>
+      <div><label>Duration</label><select id="duration"><option>10 seconds</option><option>20 seconds</option><option>30 seconds</option><option>60 seconds</option><option>Custom</option></select></div>
+      <div><label>Aspect Ratio</label><select id="ratio"><option>9:16 Vertical</option><option>1:1 Square</option><option>16:9 Landscape</option><option>3:4 Portrait</option></select></div>
+    </div>
+    <div class="actions"><button class="btn primary" onclick="generatePlan()">Generate Creative Plan</button><button class="btn secondary" onclick="resetWizard()">Reset</button></div>
+    <div id="planOutput" class="output" style="display:none"></div>
+  </div>
+</section>
+
+<section class="page" id="video">
+  <div class="section-title"><h2>Video Studio</h2><span class="muted">Script and scene prompt builder</span></div>
+  <div class="card">
+    <label>Video Topic</label><input id="videoTopic" placeholder="Enter video topic">
+    <label>Number of Clips</label><select id="videoClips"><option>1</option><option selected>3</option><option>4</option><option>5</option></select>
+    <label>Clip Duration</label><select id="videoDuration"><option>10 seconds</option><option>5 seconds</option><option>15 seconds</option></select>
+    <label>Visual Style</label><select id="videoStyle"><option>Premium Cinematic Realistic</option><option>Documentary</option><option>Educational</option><option>Animated</option></select>
+    <div class="actions"><button class="btn primary" onclick="makeVideoPrompt()">Create Video Prompt</button></div>
+    <div id="videoOutput" class="output" style="display:none"></div>
+  </div>
+</section>
+
+<section class="page" id="image">
+  <div class="section-title"><h2>Image & Poster Studio</h2></div>
+  <div class="card">
+    <label>Poster Topic</label><input id="imageTopic" placeholder="Enter poster topic">
+    <label>Poster Type</label><select id="imageType"><option>Premium Cinematic Poster</option><option>Educational Poster</option><option>Festival Poster</option><option>Business Promotion</option><option>Social Media Thumbnail</option></select>
+    <label>Aspect Ratio</label><select id="imageRatio"><option>9:16</option><option>3:4</option><option>1:1</option><option>16:9</option></select>
+    <label>Text Language</label><select id="imageLanguage"><option>Hindi + English</option><option>Hindi</option><option>English</option></select>
+    <div class="actions"><button class="btn primary" onclick="makeImagePrompt()">Create Image Prompt</button></div>
+    <div id="imageOutput" class="output" style="display:none"></div>
+  </div>
+</section>
+
+<section class="page" id="poster">
+  <div class="section-title"><h2>Poster Designer</h2></div>
+  <div class="card">
+    <label>Brand / Page Name</label><input id="posterBrand" value="UPS Creator Studio">
+    <label>Poster Headline</label><input id="posterHeadline" placeholder="Enter headline">
+    <label>Supporting Message</label><textarea id="posterMessage" placeholder="Enter supporting message"></textarea>
+    <div class="actions"><button class="btn primary" onclick="makePosterPrompt()">Generate Poster Prompt</button></div>
+    <div id="posterOutput" class="output" style="display:none"></div>
+  </div>
+</section>
+
+<section class="page" id="dance">
+  <div class="section-title"><h2>Dance Studio</h2></div>
+  <div class="card">
+    <label>Dance Theme / Song Mood</label><input id="danceTopic" placeholder="Enter dance theme or mood">
+    <label>Dance Style</label><select id="danceType"><option>Bollywood</option><option>Classical</option><option>Hip Hop</option><option>Folk</option><option>Contemporary</option></select>
+    <div class="actions"><button class="btn primary" onclick="quickDance()">Create Dance Prompt</button></div>
+    <div id="danceOutput" class="output" style="display:none"></div>
+  </div>
+</section>
+
+<section class="page" id="film">
+  <div class="section-title"><h2>Film Maker Studio</h2></div>
+  <div class="card">
+    <label>Film Idea</label><textarea id="filmTopic" placeholder="Describe your film idea"></textarea>
+    <label>Film Genre</label><select id="filmGenre"><option>Drama</option><option>Documentary</option><option>Motivational</option><option>Comedy</option><option>Educational</option><option>Adventure</option></select>
+    <label>Target Duration</label><select id="filmDuration"><option>30 seconds</option><option>1 minute</option><option>3 minutes</option><option>5 minutes</option></select>
+    <div class="actions"><button class="btn primary" onclick="makeFilmPrompt()">Create Film Plan</button></div>
+    <div id="filmOutput" class="output" style="display:none"></div>
+  </div>
+</section>
+
+<section class="page" id="podcast">
+  <div class="section-title"><h2>Podcast Studio</h2></div>
+  <div class="card">
+    <label>Podcast Topic</label><input id="podcastTopic" placeholder="Enter podcast topic">
+    <label>Podcast Format</label><select id="podcastFormat"><option>Solo Host</option><option>Two-person Conversation</option><option>Interview</option><option>Educational Explainer</option></select>
+    <div class="actions"><button class="btn primary" onclick="makePodcastPrompt()">Create Podcast Script</button></div>
+    <div id="podcastOutput" class="output" style="display:none"></div>
+  </div>
+</section>
+
+<section class="page" id="education">
+  <div class="section-title"><h2>Education Studio</h2></div>
+  <div class="card">
+    <label>Subject / Topic</label><input id="educationTopic" placeholder="Enter educational topic">
+    <label>Content Type</label><select id="educationType"><option>MCQ Quiz</option><option>Explainer</option><option>Study Notes</option><option>Fact Video</option><option>Question & Answer</option></select>
+    <label>Class / Level</label><select id="educationLevel"><option>General</option><option>Primary</option><option>Middle School</option><option>Secondary</option><option>Competitive Exam</option></select>
+    <div class="actions"><button class="btn primary" onclick="makeEducationPrompt()">Create Learning Content</button></div>
+    <div id="educationOutput" class="output" style="display:none"></div>
+  </div>
+</section>
+
+<section class="page" id="projects">
+  <div class="section-title"><h2>My Projects</h2><span class="muted">Saved in this browser</span></div>
+  <div class="card"><div class="actions"><button class="btn secondary" onclick="loadProjects()">Refresh Projects</button></div><div id="projectList"></div></div>
+</section>
+
+<section class="page" id="modules">
+  <div class="section-title"><h2>50 Creative Modules</h2></div>
+  <div class="card"><input id="moduleSearch" placeholder="Search modules..." oninput="renderModules()"><div id="moduleList" class="grid"></div></div>
+</section>
+
+<section class="page" id="locks">
+  <div class="section-title"><h2>15 Production Locks</h2></div>
+  <div class="grid" id="lockList"></div>
+</section>
+
+<section class="page" id="prompts">
+  <div class="section-title"><h2>Prompt Library</h2></div>
+  <div class="card"><p class="muted">Generated prompts are saved locally in this browser.</p><div id="promptList"></div></div>
+</section>
+
+<section class="page" id="quality">
+  <div class="section-title"><h2>Quality Audit</h2></div>
+  <div class="card">
+    <label>Prompt / Content to Audit</label><textarea id="auditText" placeholder="Paste your prompt or content here"></textarea>
+    <div class="actions"><button class="btn primary" onclick="runAudit()">Run Quality Audit</button></div>
+    <div id="auditOutput" class="output" style="display:none"></div>
+  </div>
+</section>
+
+<section class="page" id="profile">
+  <div class="section-title"><h2>Profile & Branding</h2></div>
+  <div class="card">
+    <div class="profile-box"><img id="profilePreview" alt="Profile photo"><div><h3>Umesh Prakash Singh</h3><p class="muted">UPS Creator Studio</p><label>Upload Profile Photo</label><input type="file" id="profileUpload" accept="image/*" onchange="saveProfilePhoto(event)"></div></div>
+    <p class="muted">Profile photo is stored only in this browser on this device.</p>
+  </div>
+</section>
+
+<section class="page" id="settings">
+  <div class="section-title"><h2>Settings & Access</h2></div>
+  <div class="card">
+    <h3>Prototype Access Notice</h3>
+    <p class="muted">This GitHub Pages version is a frontend prototype. Real OTP login, secure admin permissions, online payments, cloud sync and AI generation require a connected backend and service providers.</p>
+    <label>Display Name</label><input id="displayName" value="Umesh Prakash Singh">
+    <label>Studio Name</label><input id="studioName" value="UPS Creator Studio">
+    <div class="actions"><button class="btn primary" onclick="saveSettings()">Save Settings</button></div>
+  </div>
+</section>
+
+<footer>UPS Creator Studio · Imagine. Create. Innovate. · Created &amp; Developed by Umesh Prakash Singh</footer>
+</main>
+</div>
+
+<script>
+const modules=[
