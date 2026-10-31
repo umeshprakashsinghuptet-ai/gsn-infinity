@@ -1270,4 +1270,331 @@ getElement("wizardSkip")?.addEventListener(
 
 /* =========================================
    END OF PART 4D
+   ========================================= 
+/* =========================================
+   PART 4E — CREATIVE BRIEF ENGINE
+   ========================================= */
+
+/* 1. AUTO TOPIC SUGGESTIONS */
+
+const TOPIC_SUGGESTIONS = {
+  Motivational: [
+    "छोटी शुरुआत, बड़ी सफलता",
+    "समय की कीमत समझिए",
+    "आत्मविश्वास की ताकत"
+  ],
+
+  Educational: [
+    "आज का महत्वपूर्ण सामान्य ज्ञान",
+    "विज्ञान के रोचक तथ्य",
+    "भारत का इतिहास"
+  ],
+
+  Entertainment: [
+    "रोजमर्रा की जिंदगी के मजेदार पल",
+    "एक दिलचस्प कहानी",
+    "मनोरंजन की दुनिया"
+  ],
+
+  Facts: [
+    "दुनिया के 5 रोचक तथ्य",
+    "अंतरिक्ष के अनोखे रहस्य",
+    "प्रकृति के अद्भुत तथ्य"
+  ],
+
+  Podcast: [
+    "सफलता और संघर्ष पर बातचीत",
+    "जीवन के अनुभव",
+    "समाज और बदलती सोच"
+  ],
+
+  Music: [
+    "संगीत की यादगार धुनें",
+    "संगीत का भावनात्मक प्रभाव"
+  ],
+
+  Dance: [
+    "ऊर्जावान डांस परफॉर्मेंस",
+    "क्लासिकल और मॉडर्न डांस"
+  ],
+
+  Vlog: [
+    "एक दिन की खास यात्रा",
+    "मेरी दिनचर्या के खास पल"
+  ],
+
+  Business: [
+    "बिजनेस शुरू करने की बुनियादी बातें",
+    "ग्राहकों से बेहतर संवाद"
+  ],
+
+  "Auto-Detect": [
+    "आज का नया और उपयोगी विषय",
+    "एक रोचक जानकारी जो हर किसी को जाननी चाहिए",
+    "सीखने योग्य एक महत्वपूर्ण बात"
+  ]
+};
+
+/* 2. SELECT AUTO TOPIC */
+
+function getAutoTopic(category) {
+
+  const topics =
+    TOPIC_SUGGESTIONS[category] ||
+    TOPIC_SUGGESTIONS["Auto-Detect"];
+
+  const index = Math.floor(
+    Math.random() * topics.length
+  );
+
+  return topics[index];
+
+}
+
+/* 3. RECOMMEND ASPECT RATIO */
+
+function recommendAspectRatio(platform) {
+
+  const recommendations = {
+    "YouTube": "16:9",
+    "Facebook": "9:16",
+    "Instagram": "9:16",
+    "Multi-platform": "9:16"
+  };
+
+  return recommendations[platform] || "9:16";
+
+}
+
+/* 4. BUILD CREATIVE BRIEF */
+
+function buildCreativeBrief() {
+
+  const answers = APP_STATE.wizard.answers;
+
+  const category =
+    answers.category || "Auto-Detect";
+
+  let topic = answers.topic;
+
+  if (!topic) {
+    topic = getAutoTopic(category);
+    answers.topic = topic;
+  }
+
+  const platform =
+    answers.platform || "Multi-platform";
+
+  const output =
+    answers.output || "Video";
+
+  const ratio =
+    answers.aspectRatio ||
+    recommendAspectRatio(platform);
+
+  const studio =
+    APP_STATE.currentStudio?.name || "Creative Studio";
+
+  return {
+
+    studio,
+    platform,
+    output,
+    audience: answers.audience || "India",
+    language: answers.language || "Hindi + English",
+    category,
+    topic,
+    duration: answers.duration || "Not applicable",
+    aspectRatio: ratio,
+    mode: answers.mode || APP_STATE.wizard.mode,
+    createdAt: new Date().toISOString()
+
+  };
+
+}
+
+/* 5. RENDER CREATIVE BRIEF */
+
+function renderCreativeBrief(brief) {
+
+  const area = getElement("questionArea");
+
+  if (!area) return;
+
+  const rows = [
+    ["Studio", brief.studio],
+    ["Platform", brief.platform],
+    ["Output", brief.output],
+    ["Audience", brief.audience],
+    ["Language", brief.language],
+    ["Category", brief.category],
+    ["Topic", brief.topic],
+    ["Duration", brief.duration],
+    ["Aspect Ratio", brief.aspectRatio],
+    ["Creation Mode", brief.mode]
+  ];
+
+  area.innerHTML = `
+
+    <div class="recommendation">
+
+      <h2>✨ Your Creative Brief</h2>
+
+      <p>
+        आपकी चुनी हुई जानकारी के आधार पर
+        Production Brief तैयार है।
+      </p>
+
+      <div class="brief-details">
+
+        ${rows.map(([label, value]) => `
+          <div class="brief-row">
+            <strong>${escapeHTML(label)}</strong>
+            <span>${escapeHTML(value)}</span>
+          </div>
+        `).join("")}
+
+      </div>
+
+      <div class="wizard-controls">
+
+        <button
+          class="btn btn-secondary"
+          id="editBrief"
+          type="button"
+        >
+          ← Edit Answers
+        </button>
+
+        <button
+          class="btn btn-primary"
+          id="copyBrief"
+          type="button"
+        >
+          Copy Brief
+        </button>
+
+        <button
+          class="btn btn-secondary"
+          id="downloadBrief"
+          type="button"
+        >
+          Download TXT
+        </button>
+
+      </div>
+
+    </div>
+
+  `;
+
+  getElement("editBrief")?.addEventListener(
+    "click",
+    () => {
+      APP_STATE.wizard.step = 0;
+      APP_STATE.wizard.completed = false;
+      renderWizardQuestion();
+    }
+  );
+
+  getElement("copyBrief")?.addEventListener(
+    "click",
+    async () => {
+
+      try {
+
+        await navigator.clipboard.writeText(
+          formatBriefText(brief)
+        );
+
+        showToast("Creative Brief copied!", "success");
+
+      } catch {
+
+        showToast(
+          "Copy सुविधा उपलब्ध नहीं है।",
+          "error"
+        );
+
+      }
+
+    }
+  );
+
+  getElement("downloadBrief")?.addEventListener(
+    "click",
+    () => downloadBriefText(brief)
+  );
+
+}
+
+/* 6. FORMAT BRIEF TEXT */
+
+function formatBriefText(brief) {
+
+  return [
+    "UPS CREATOR STUDIO",
+    "CREATIVE PRODUCTION BRIEF",
+    "",
+    `Studio: ${brief.studio}`,
+    `Platform: ${brief.platform}`,
+    `Output: ${brief.output}`,
+    `Audience: ${brief.audience}`,
+    `Language: ${brief.language}`,
+    `Category: ${brief.category}`,
+    `Topic: ${brief.topic}`,
+    `Duration: ${brief.duration}`,
+    `Aspect Ratio: ${brief.aspectRatio}`,
+    `Mode: ${brief.mode}`,
+    "",
+    "Imagine. Create. Innovate."
+  ].join("\n");
+
+}
+
+/* 7. DOWNLOAD BRIEF */
+
+function downloadBriefText(brief) {
+
+  const blob = new Blob(
+    [formatBriefText(brief)],
+    { type: "text/plain;charset=utf-8" }
+  );
+
+  const url = URL.createObjectURL(blob);
+
+  const link = document.createElement("a");
+
+  link.href = url;
+  link.download = "UPS-Creative-Brief.txt";
+
+  document.body.appendChild(link);
+
+  link.click();
+  link.remove();
+
+  URL.revokeObjectURL(url);
+
+  showToast("Brief downloaded!", "success");
+
+}
+
+/* 8. FINISH WIZARD */
+
+function finishWizard() {
+
+  if (APP_STATE.wizard.completed) return;
+
+  APP_STATE.wizard.completed = true;
+
+  const brief = buildCreativeBrief();
+
+  APP_STATE.wizard.brief = brief;
+
+  renderCreativeBrief(brief);
+
+}
+
+/* =========================================
+   END OF PART 4E
    ========================================= */
