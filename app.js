@@ -4916,8 +4916,7 @@ renderGeneratedPrompt = function(result) {
 
 /* Add Prompt Library to Projects Page */
 
-const previousProjectsRender = renderProjects;
-
+const previousProjectsRender = renderDashboardProjects;
 if (typeof previousProjectsRender === "function") {
   renderProjects = function() {
     previousProjectsRender();
