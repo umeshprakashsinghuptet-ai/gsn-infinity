@@ -3581,4 +3581,359 @@ initializeWorkflowLocks();
 
 /* =========================================
    END OF PART 4J
+   ========================================= 
+/* =========================================
+   PART 4K — SUPER ADMIN CONSOLE
    ========================================= */
+
+/* 1. CHECK ADMIN PERMISSION */
+
+function isSuperAdmin() {
+
+  return (
+    APP_STATE.user &&
+    APP_STATE.profile?.role === "super_admin"
+  );
+
+}
+
+/* 2. ADMIN ACCESS GUARD */
+
+function requireAdminAccess() {
+
+  if (!APP_STATE.user) {
+
+    showToast(
+      "Admin access के लिए Login करें।",
+      "error"
+    );
+
+    openAuthModal("login");
+
+    return false;
+  }
+
+  if (!isSuperAdmin()) {
+
+    showToast(
+      "आपके Account को Super Admin अनुमति नहीं है।",
+      "error"
+    );
+
+    return false;
+  }
+
+  return true;
+
+}
+
+/* 3. ADMIN SYSTEM STATISTICS */
+
+function getAdminStatistics() {
+
+  return {
+
+    totalProjects:
+      APP_STATE.projects.length,
+
+    totalStudios:
+      STUDIO_DATA.length,
+
+    totalModules:
+      CORE_MODULES.length,
+
+    totalLocks:
+      WORKFLOW_LOCKS.length,
+
+    currentRole:
+      APP_STATE.profile?.role || "tester",
+
+    applicationVersion:
+      APP_CONFIG.VERSION
+
+  };
+
+}
+
+/* 4. RENDER ADMIN DASHBOARD */
+
+function renderAdminDashboard() {
+
+  const container = getElement("page-admin");
+
+  if (!container) return;
+
+  if (!isSuperAdmin()) {
+
+    container.innerHTML = `
+
+      <div class="panel admin-notice">
+
+        <h2>🔒 Restricted Area</h2>
+
+        <p>
+          यह क्षेत्र केवल अधिकृत Super Admin के लिए है।
+        </p>
+
+        <p>
+          आपके Account को Super Admin अनुमति नहीं मिली है।
+        </p>
+
+      </div>
+
+    `;
+
+    return;
+  }
+
+  const stats = getAdminStatistics();
+
+  container.innerHTML = `
+
+    <section class="admin-console">
+
+      <div class="dashboard-banner panel">
+
+        <span class="tag">
+          SUPER ADMIN
+        </span>
+
+        <h2>Admin Control Center</h2>
+
+        <p>
+          UPS Creator Studio System Overview
+        </p>
+
+      </div>
+
+      <div class="dashboard-stats">
+
+        <div class="metric-card panel">
+
+          <span class="metric-label">
+            Total Local Projects
+          </span>
+
+          <strong class="metric-value">
+            ${stats.totalProjects}
+          </strong>
+
+        </div>
+
+        <div class="metric-card panel">
+
+          <span class="metric-label">
+            Creative Studios
+          </span>
+
+          <strong class="metric-value">
+            ${stats.totalStudios}
+          </strong>
+
+        </div>
+
+        <div class="metric-card panel">
+
+          <span class="metric-label">
+            Core Modules
+          </span>
+
+          <strong class="metric-value">
+            ${stats.totalModules}
+          </strong>
+
+        </div>
+
+        <div class="metric-card panel">
+
+          <span class="metric-label">
+            Workflow Locks
+          </span>
+
+          <strong class="metric-value">
+            ${stats.totalLocks}
+          </strong>
+
+        </div>
+
+      </div>
+
+      <div class="panel admin-section">
+
+        <h3>Account Information</h3>
+
+        <p>
+          Role:
+          <strong>
+            ${escapeHTML(stats.currentRole)}
+          </strong>
+        </p>
+
+        <p>
+          Application Version:
+          <strong>
+            ${escapeHTML(stats.applicationVersion)}
+          </strong>
+        </p>
+
+      </div>
+
+      <div class="panel admin-section">
+
+        <h3>System Health</h3>
+
+        <p>
+          Authentication:
+          ${supabase ? "Configured" : "Not Configured"}
+        </p>
+
+        <p>
+          Core Modules:
+          ${validateCoreModules().valid
+            ? "Count Validated"
+            : "Validation Required"}
+        </p>
+
+        <p>
+          Workflow Locks:
+          ${validateLockCount().valid
+            ? "Count Validated"
+            : "Validation Required"}
+        </p>
+
+      </div>
+
+      <div class="panel admin-section">
+
+        <h3>Management Availability</h3>
+
+        <ul>
+
+          <li>
+            Dashboard Overview — Available
+          </li>
+
+          <li>
+            Local Project Monitoring — Available
+          </li>
+
+          <li>
+            User Management — Pending Secure Backend
+          </li>
+
+          <li>
+            Role Management — Pending Secure Backend
+          </li>
+
+          <li>
+            Cloud Storage Management — Pending
+          </li>
+
+          <li>
+            Audit Logs — Pending
+          </li>
+
+          <li>
+            Backup & Recovery — Pending
+          </li>
+
+        </ul>
+
+      </div>
+
+      <div class="panel admin-section">
+
+        <h3>Security Notice</h3>
+
+        <p>
+          Admin UI visibility is not a security boundary.
+          Sensitive operations must be verified by a
+          trusted server-side function.
+        </p>
+
+      </div>
+
+      <button
+        type="button"
+        class="btn btn-primary"
+        id="refreshAdminDashboard"
+      >
+        Refresh Admin Dashboard
+      </button>
+
+    </section>
+
+  `;
+
+  getElement("refreshAdminDashboard")
+    ?.addEventListener(
+      "click",
+      () => {
+
+        renderAdminDashboard();
+
+        showToast(
+          "Admin dashboard refreshed.",
+          "success"
+        );
+
+      }
+    );
+
+}
+
+/* 5. ADMIN NAVIGATION */
+
+getElement("adminNav")?.addEventListener(
+  "click",
+  (event) => {
+
+    if (!requireAdminAccess()) {
+
+      event.preventDefault();
+
+      return;
+    }
+
+    renderAdminDashboard();
+
+  }
+);
+
+/* 6. ADMIN PAGE ACCESS */
+
+document.addEventListener("click", event => {
+
+  const navItem = event.target.closest(
+    '[data-page="admin"]'
+  );
+
+  if (!navItem) return;
+
+  if (!requireAdminAccess()) {
+
+    event.preventDefault();
+
+    showPage("dashboard");
+
+    return;
+  }
+
+  renderAdminDashboard();
+
+});
+
+/* 7. ADMIN UI REFRESH */
+
+function refreshAdminConsole() {
+
+  if (!isSuperAdmin()) return;
+
+  renderAdminDashboard();
+
+}
+
+/* =========================================
+   END OF PART 4K
+   ========================================= */
+
