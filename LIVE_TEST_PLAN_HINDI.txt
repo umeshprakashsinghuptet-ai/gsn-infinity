@@ -1,0 +1,50 @@
+UPS CREATOR STUDIO v1.3 — LIVE TEST PLAN (Hindi)
+
+A. GitHub
+1. Backup current repository ZIP.
+2. Extract this package; upload the contents to the repository root.
+3. Commit and open Actions.
+4. Confirm the JavaScript check workflow is green.
+5. Open GitHub Pages in a private/incognito browser window.
+
+B. Supabase
+1. Open SQL Editor and inspect SUPABASE_SECURITY_HARDENING.sql.
+2. Run it once as project owner.
+3. Confirm creator_projects has id, user_id, project_name, project_data, created_at, updated_at.
+4. Settings > API: confirm Data API is enabled for public schema and required tables are exposed.
+5. Storage > Buckets: owner-private-profile must be Private.
+6. Check bucket size cap. The app also rejects profile images larger than 5 MB.
+7. Do not share service_role key.
+
+C. Auth test (use two test accounts)
+1. Sign up/login as Test User A.
+2. Sign out; sign up/login as Test User B.
+3. Confirm each user sees only their own projects and profile.
+4. Try changing own role from browser/API as a normal user; database trigger must reject it / force tester on insert.
+5. Confirm logout clears private app state.
+
+D. Profile photo
+1. Upload JPG/PNG/WebP <= 5 MB.
+2. Confirm object path starts with the logged-in user's UUID folder.
+3. Refresh; confirm signed private URL loads.
+4. Replace photo; confirm new photo works and old photo cleanup is attempted.
+5. Delete photo; confirm profile photo_path is null and object is removed.
+6. Try >5 MB and unsupported file type; app must reject it.
+7. Confirm anonymous user cannot list/read private bucket files.
+
+E. Projects
+1. Create and save a project while logged in.
+2. Refresh and load projects.
+3. Update a project and verify the saved data (the existing UI may create a new record rather than update; verify before relying on edit history).
+4. Delete a project and confirm it is gone.
+5. With User B, verify User A's project cannot be read, updated or deleted.
+
+F. AI / Rendering honesty
+1. Prompt generation is local.
+2. Gemini prompt text generation is not the same as Gemini API image/video generation.
+3. MP4 rendering is not included until a real rendering provider is configured.
+4. Do not mark AI generation or rendering as PASS unless a real provider job and output file have been tested.
+
+G. Record the result
+For every test write PASS / FAIL / NOT TESTED, browser, date and error text.
+Do not claim 100/100 or production certification until all applicable live tests and a security review pass.

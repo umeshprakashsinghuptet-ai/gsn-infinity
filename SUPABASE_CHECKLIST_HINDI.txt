@@ -1,0 +1,7 @@
+SUPABASE CHECKLIST
+1. Run SUPABASE_SECURITY_HARDENING.sql once after reviewing it.
+2. Confirm Data API is enabled in Dashboard > Settings > API.
+3. Confirm profiles and creator_projects are exposed in public schema.
+4. Confirm owner-private-profile bucket is Private.
+5. Never put service_role key in frontend.
+6. Run LIVE_TEST_PLAN_HINDI.txt using two separate test accounts.
