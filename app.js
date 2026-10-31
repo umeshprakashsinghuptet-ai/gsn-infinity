@@ -5231,9 +5231,9 @@ if (typeof renderWorkflowLocks === "function") {
   renderWorkflowLocks();
 }
 
-    if (typeof renderProjects === "function") {
-      renderProjects();
-    }
+if (typeof renderDashboardProjects === "function") {
+  renderDashboardProjects();
+}
 
     if (typeof renderPromptLibrary === "function") {
       renderPromptLibrary();
