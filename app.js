@@ -4503,4 +4503,986 @@ function getProfilePhotoStatus() {
 
 /* =========================================
    END OF PART 4M
+   ========================================= 
+/* =========================================
+   PART 4N — PROMPT GENERATION ENGINE
    ========================================= */
+
+/* 1. PROMPT GENERATION RULES */
+
+const PROMPT_RULES = {
+
+  video: [
+    "Create a clear visual sequence.",
+    "Include an engaging opening hook.",
+    "Define camera movement and scene composition.",
+    "Maintain visual continuity.",
+    "Specify aspect ratio and duration.",
+    "Include suitable audio and caption requirements."
+  ],
+
+  image: [
+    "Create a detailed visual composition.",
+    "Define subject, background and lighting.",
+    "Specify visual style and framing.",
+    "Maintain text and visual accuracy.",
+    "Specify the required aspect ratio."
+  ],
+
+  poster: [
+    "Create a professional poster layout.",
+    "Use a clear visual hierarchy.",
+    "Keep headline and supporting text readable.",
+    "Use balanced typography and spacing.",
+    "Preserve brand identity and spelling accuracy."
+  ],
+
+  dance: [
+    "Describe the dance performance concept.",
+    "Define movement style and energy.",
+    "Plan camera framing and scene continuity.",
+    "Specify music synchronization requirements.",
+    "Avoid unnatural or inconsistent movement."
+  ],
+
+  film: [
+    "Develop a cinematic scene concept.",
+    "Define characters and scene setting.",
+    "Plan camera angles and lighting.",
+    "Maintain character and scene continuity.",
+    "Include a clear beginning, middle and ending."
+  ],
+
+  podcast: [
+    "Create a natural conversation structure.",
+    "Include opening and introduction.",
+    "Develop meaningful discussion points.",
+    "Include examples and a closing.",
+    "Use clear speaker labels and natural dialogue."
+  ],
+
+  education: [
+    "Present information in a clear learning sequence.",
+    "Use accurate and understandable explanations.",
+    "Include relevant examples.",
+    "Keep educational language age-appropriate.",
+    "Add a short learning summary."
+  ]
+
+};
+
+/* 2. GET STUDIO PROMPT CATEGORY */
+
+function getPromptCategory(studioId) {
+
+  const mapping = {
+    video: "video",
+    image: "image",
+    poster: "poster",
+    dance: "dance",
+    film: "film",
+    podcast: "podcast",
+    education: "education"
+  };
+
+  return mapping[studioId] || "video";
+
+}
+
+/* 3. BUILD PRODUCTION PROMPT */
+
+function buildProductionPrompt(brief) {
+
+  if (!brief) {
+    throw new Error("Creative Brief उपलब्ध नहीं है।");
+  }
+
+  const studioId =
+    APP_STATE.currentStudio?.id ||
+    brief.studioId ||
+    "video";
+
+  const category =
+    getPromptCategory(studioId);
+
+  const rules =
+    PROMPT_RULES[category];
+
+  const prompt = `UPS CREATOR STUDIO
+PRODUCTION PROMPT
+
+PROJECT INFORMATION
+
+Studio: ${brief.studio}
+Platform: ${brief.platform}
+Output: ${brief.output}
+Target Audience: ${brief.audience}
+Language: ${brief.language}
+Category: ${brief.category}
+Topic: ${brief.topic}
+
+PRODUCTION SETTINGS
+
+Duration: ${brief.duration}
+Aspect Ratio: ${brief.aspectRatio}
+Creation Mode: ${brief.mode}
+
+CREATIVE DIRECTION
+
+Create professional, clear and engaging content
+based on the selected topic and audience.
+
+The final output should match the selected
+platform, language and content format.
+
+STUDIO-SPECIFIC INSTRUCTIONS
+
+${rules.map((rule, index) =>
+  `${index + 1}. ${rule}`
+).join("\n")}
+
+QUALITY REQUIREMENTS
+
+1. Maintain content consistency.
+2. Check spelling and language accuracy.
+3. Follow the selected aspect ratio.
+4. Review visual and audio requirements where applicable.
+5. Respect privacy and content safety.
+6. Review the final output before publishing.
+
+FINAL OUTPUT
+
+Prepare the requested ${brief.output} concept
+for ${brief.platform}.
+
+Topic: ${brief.topic}
+
+Language: ${brief.language}
+
+UPS Creator Studio
+Imagine. Create. Innovate.`;
+
+  return {
+    studio: category,
+    title: brief.topic,
+    prompt,
+    createdAt: new Date().toISOString()
+  };
+
+}
+
+/* 4. GENERATE PROMPT FROM CURRENT BRIEF */
+
+function generateCurrentPrompt() {
+
+  const brief = APP_STATE.wizard.brief;
+
+  if (!brief) {
+
+    showToast(
+      "पहले Creative Brief तैयार करें।",
+      "error"
+    );
+
+    return null;
+
+  }
+
+  try {
+
+    const result =
+      buildProductionPrompt(brief);
+
+    APP_STATE.generatedPrompt = result;
+
+    return result;
+
+  } catch (error) {
+
+    console.error(
+      "Prompt generation error:",
+      error
+    );
+
+    showToast(
+      error.message,
+      "error"
+    );
+
+    return null;
+
+  }
+
+}
+
+/* 5. RENDER GENERATED PROMPT */
+
+function renderGeneratedPrompt(result) {
+
+  const area = getElement("questionArea");
+
+  if (!area || !result) return;
+
+  area.innerHTML = `
+
+    <div class="recommendation">
+
+      <span class="tag">
+        PRODUCTION PROMPT
+      </span>
+
+      <h2>
+        ${escapeHTML(result.title)}
+      </h2>
+
+      <p>
+        Your studio-specific production prompt is ready.
+      </p>
+
+      <textarea
+        id="generatedPromptText"
+        rows="18"
+        spellcheck="true"
+      >${escapeHTML(result.prompt)}</textarea>
+
+      <div class="wizard-controls">
+
+        <button
+          type="button"
+          class="btn btn-primary"
+          id="copyGeneratedPrompt"
+        >
+          Copy Prompt
+        </button>
+
+        <button
+          type="button"
+          class="btn btn-secondary"
+          id="downloadGeneratedPrompt"
+        >
+          Download TXT
+        </button>
+
+        <button
+          type="button"
+          class="btn btn-secondary"
+          id="backToCreativeBrief"
+        >
+          Back to Brief
+        </button>
+
+      </div>
+
+    </div>
+
+  `;
+
+  getElement("copyGeneratedPrompt")
+    ?.addEventListener(
+      "click",
+      async () => {
+
+        const text =
+          getElement("generatedPromptText")?.value;
+
+        try {
+
+          await navigator.clipboard.writeText(text);
+
+          showToast(
+            "Production Prompt copied!",
+            "success"
+          );
+
+        } catch {
+
+          showToast(
+            "Prompt copy नहीं हो पाया।",
+            "error"
+          );
+
+        }
+
+      }
+    );
+
+  getElement("downloadGeneratedPrompt")
+    ?.addEventListener(
+      "click",
+      () => {
+
+        const text =
+          getElement("generatedPromptText")?.value;
+
+        const blob = new Blob(
+          [text],
+          { type: "text/plain;charset=utf-8" }
+        );
+
+        const url = URL.createObjectURL(blob);
+
+        const link = document.createElement("a");
+
+        link.href = url;
+        link.download = "UPS-Production-Prompt.txt";
+
+        document.body.appendChild(link);
+
+        link.click();
+        link.remove();
+
+        URL.revokeObjectURL(url);
+
+        showToast(
+          "Prompt downloaded!",
+          "success"
+        );
+
+      }
+    );
+
+  getElement("backToCreativeBrief")
+    ?.addEventListener(
+      "click",
+      () => renderCreativeBrief(
+        APP_STATE.wizard.brief
+      )
+    );
+
+}
+
+/* 6. ADD GENERATE BUTTON TO BRIEF */
+
+const previousPromptBriefRenderer =
+  renderCreativeBrief;
+
+renderCreativeBrief = function(brief) {
+
+  previousPromptBriefRenderer(brief);
+
+  const container = $(
+    "#questionArea .recommendation"
+  );
+
+  if (!container) return;
+
+  const button = document.createElement("button");
+
+  button.type = "button";
+  button.id = "generateProductionPrompt";
+  button.className = "btn btn-primary";
+  button.textContent = "✨ Generate Production Prompt";
+
+  container.appendChild(button);
+
+  button.addEventListener(
+    "click",
+    () => {
+
+      const result = generateCurrentPrompt();
+
+      if (result) {
+        renderGeneratedPrompt(result);
+      }
+
+    }
+  );
+
+};
+
+/* 7. PROMPT ENGINE STATUS */
+
+function getPromptEngineStatus() {
+
+  return {
+    available: true,
+    generationType: "Rule-Based Templates",
+    externalAIConnected: false,
+    supportedStudios: Object.keys(PROMPT_RULES)
+  };
+
+}
+
+/* 8. INITIAL PROMPT ENGINE CHECK */
+
+console.log(
+  "UPS Prompt Engine:",
+  getPromptEngineStatus()
+);
+
+/* =========================================
+   END OF PART 4N
+   ========================================= 
+/* =========================================
+   PART 4O — PROMPT LIBRARY & HISTORY
+========================================= */
+
+const PROMPT_LIBRARY_KEY = "ups_creator_prompt_library_v1";
+
+function getPromptLibrary() {
+  try {
+    const data = JSON.parse(
+      localStorage.getItem(PROMPT_LIBRARY_KEY) || "[]"
+    );
+
+    return Array.isArray(data) ? data : [];
+  } catch (error) {
+    console.error("Prompt Library Error:", error);
+    return [];
+  }
+}
+
+function savePromptLibrary(data) {
+  try {
+    localStorage.setItem(
+      PROMPT_LIBRARY_KEY,
+      JSON.stringify(data)
+    );
+    return true;
+  } catch (error) {
+    showToast("Prompt save नहीं हो पाया। Storage चेक करें।");
+    return false;
+  }
+}
+
+function savePromptToLibrary() {
+  const promptElement = $("generatedPromptText");
+
+  if (!promptElement) {
+    showToast("पहले Production Prompt generate करें।");
+    return;
+  }
+
+  const promptText =
+    promptElement.value ||
+    promptElement.textContent ||
+    "";
+
+  if (!promptText.trim()) {
+    showToast("कोई Prompt उपलब्ध नहीं है।");
+    return;
+  }
+
+  const library = getPromptLibrary();
+
+  const item = {
+    id: "prompt_" + Date.now(),
+    title:
+      (APP_STATE.currentStudio?.name || "Creative") +
+      " Production Prompt",
+    studio:
+      APP_STATE.currentStudio?.name || "Creative Studio",
+    prompt: promptText,
+    createdAt: new Date().toISOString()
+  };
+
+  library.unshift(item);
+
+  // अधिकतम 100 prompts सेव होंगे
+  const updatedLibrary = library.slice(0, 100);
+
+  if (savePromptLibrary(updatedLibrary)) {
+    showToast("Prompt Library में सेव हो गया!");
+    renderPromptLibrary();
+  }
+}
+
+function renderPromptLibrary() {
+  const page = $("page-projects");
+
+  if (!page) return;
+
+  let librarySection = $("promptLibrarySection");
+
+  if (!librarySection) {
+    librarySection = document.createElement("section");
+    librarySection.id = "promptLibrarySection";
+    librarySection.className = "prompt-library-section";
+
+    page.appendChild(librarySection);
+  }
+
+  const library = getPromptLibrary();
+
+  librarySection.innerHTML = `
+    <div class="section-heading">
+      <div>
+        <h2>Prompt Library</h2>
+        <p>आपके सेव किए गए Production Prompts</p>
+      </div>
+      <span class="library-count">
+        ${library.length} Saved
+      </span>
+    </div>
+
+    ${
+      library.length
+        ? library.map(item => `
+          <article class="prompt-library-card">
+            <div class="prompt-library-info">
+              <h3>${escapeHTML(item.title)}</h3>
+              <p>${escapeHTML(item.studio)}</p>
+              <small>
+                ${formatDate(item.createdAt)}
+              </small>
+            </div>
+
+            <div class="prompt-library-actions">
+              <button
+                class="btn btn-secondary"
+                data-prompt-view="${escapeHTML(item.id)}">
+                View
+              </button>
+
+              <button
+                class="btn btn-secondary"
+                data-prompt-copy="${escapeHTML(item.id)}">
+                Copy
+              </button>
+
+              <button
+                class="btn btn-danger"
+                data-prompt-delete="${escapeHTML(item.id)}">
+                Delete
+              </button>
+            </div>
+          </article>
+        `).join("")
+        : `
+          <div class="empty-state">
+            <h3>Library अभी खाली है</h3>
+            <p>Production Prompt बनाकर उसे यहाँ सेव करें।</p>
+          </div>
+        `
+    }
+  `;
+
+  librarySection.onclick = async (event) => {
+    const viewButton = event.target.closest("[data-prompt-view]");
+    const copyButton = event.target.closest("[data-prompt-copy]");
+    const deleteButton = event.target.closest("[data-prompt-delete]");
+
+    const id =
+      viewButton?.dataset.promptView ||
+      copyButton?.dataset.promptCopy ||
+      deleteButton?.dataset.promptDelete;
+
+    if (!id) return;
+
+    const items = getPromptLibrary();
+    const selected = items.find(item => item.id === id);
+
+    if (!selected) return;
+
+    if (viewButton) {
+      showSavedPrompt(selected);
+    }
+
+    if (copyButton) {
+      try {
+        await navigator.clipboard.writeText(selected.prompt);
+        showToast("Prompt Copy हो गया!");
+      } catch (error) {
+        showToast("Copy नहीं हुआ। Prompt को View करके कॉपी करें।");
+      }
+    }
+
+    if (deleteButton) {
+      const confirmed = confirm(
+        "क्या आप इस Prompt को Delete करना चाहते हैं?"
+      );
+
+      if (!confirmed) return;
+
+      const updated = items.filter(item => item.id !== id);
+
+      if (savePromptLibrary(updated)) {
+        renderPromptLibrary();
+        showToast("Prompt Delete हो गया।");
+      }
+    }
+  };
+}
+
+function showSavedPrompt(item) {
+  const oldModal = $("savedPromptModal");
+
+  if (oldModal) oldModal.remove();
+
+  const modal = document.createElement("div");
+
+  modal.id = "savedPromptModal";
+  modal.className = "auth-modal open";
+
+  modal.innerHTML = `
+    <div class="auth-modal-content prompt-view-modal">
+      <button
+        class="modal-close"
+        id="savedPromptClose">
+        ×
+      </button>
+
+      <h2>${escapeHTML(item.title)}</h2>
+      <p>${escapeHTML(item.studio)}</p>
+
+      <textarea
+        id="savedPromptContent"
+        readonly
+        rows="12">${escapeHTML(item.prompt)}</textarea>
+
+      <div class="prompt-library-actions">
+        <button
+          class="btn btn-primary"
+          id="savedPromptCopy">
+          Copy Prompt
+        </button>
+
+        <button
+          class="btn btn-secondary"
+          id="savedPromptDownload">
+          Download
+        </button>
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(modal);
+
+  $("savedPromptClose").onclick = () => modal.remove();
+
+  $("savedPromptCopy").onclick = async () => {
+    try {
+      await navigator.clipboard.writeText(item.prompt);
+      showToast("Prompt Copy हो गया!");
+    } catch (error) {
+      showToast("Copy उपलब्ध नहीं है।");
+    }
+  };
+
+  $("savedPromptDownload").onclick = () => {
+    const blob = new Blob(
+      [item.prompt],
+      { type: "text/plain;charset=utf-8" }
+    );
+
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+
+    link.href = url;
+    link.download = "UPS-Production-Prompt.txt";
+    link.click();
+
+    URL.revokeObjectURL(url);
+    showToast("Prompt Download शुरू हो गया!");
+  };
+}
+
+/* Add Save to Library button */
+
+const previousPromptRender = renderGeneratedPrompt;
+
+renderGeneratedPrompt = function(result) {
+  previousPromptRender(result);
+
+  const container = $("generatedPromptText")?.parentElement;
+
+  if (!container) return;
+
+  if ($("savePromptLibraryBtn")) return;
+
+  const button = document.createElement("button");
+
+  button.id = "savePromptLibraryBtn";
+  button.className = "btn btn-primary";
+  button.textContent = "Save to Prompt Library";
+
+  button.addEventListener("click", savePromptToLibrary);
+
+  container.appendChild(button);
+};
+
+/* Add Prompt Library to Projects Page */
+
+const previousProjectsRender = renderProjects;
+
+if (typeof previousProjectsRender === "function") {
+  renderProjects = function() {
+    previousProjectsRender();
+    renderPromptLibrary();
+  };
+}
+
+/* Initial Library Setup */
+
+document.addEventListener("DOMContentLoaded", () => {
+  renderPromptLibrary();
+});
+
+console.log("PART 4O — Prompt Library & History Loaded");
+/* =========================================
+   PART 4P — QUALITY AUDIT & PRODUCTION CHECK
+========================================= */
+
+function runQualityAudit() {
+  const checks = [];
+
+  const promptElement = $("generatedPromptText");
+
+  const promptText = promptElement
+    ? (promptElement.value || promptElement.textContent || "").trim()
+    : "";
+
+  const studio = APP_STATE.currentStudio;
+  const answers = APP_STATE.answers || {};
+
+  // 1. Studio Check
+  checks.push({
+    name: "Studio Selection",
+    passed: Boolean(studio),
+    detail: studio
+      ? "Creative Studio selected."
+      : "Studio selection अभी बाकी है।"
+  });
+
+  // 2. Production Prompt Check
+  checks.push({
+    name: "Production Prompt",
+    passed: promptText.length > 30,
+    detail: promptText.length > 30
+      ? "Production Prompt तैयार है।"
+      : "पहले Production Prompt generate करें।"
+  });
+
+  // 3. Configuration Check
+  const configResult = validateConfig();
+
+  checks.push({
+    name: "Supabase Configuration",
+    passed: Boolean(configResult.valid),
+    detail: configResult.valid
+      ? "Configuration validation passed."
+      : "Supabase URL या Publishable Key जाँचें।"
+  });
+
+  // 4. Project Information Check
+  const projectName =
+    answers.topic ||
+    answers.subject ||
+    answers.activity ||
+    "";
+
+  checks.push({
+    name: "Project Topic",
+    passed: Boolean(String(projectName).trim()),
+    detail: projectName
+      ? "Project topic उपलब्ध है।"
+      : "Project topic अभी सेट नहीं है।"
+  });
+
+  // 5. Language Check
+  const language =
+    answers.language ||
+    APP_CONFIG.DEFAULT_LANGUAGE;
+
+  checks.push({
+    name: "Language Selection",
+    passed: Boolean(language),
+    detail: language
+      ? "Language preference उपलब्ध है।"
+      : "Language select करें।"
+  });
+
+  // 6. Output Check
+  const output =
+    answers.output ||
+    answers.format ||
+    "";
+
+  checks.push({
+    name: "Output Format",
+    passed: Boolean(output),
+    detail: output
+      ? "Output format selected."
+      : "Output format select करें।"
+  });
+
+  // 7. Core Modules Count Check
+  const moduleContainer = $("moduleList");
+  const moduleCount = moduleContainer
+    ? moduleContainer.children.length
+    : 0;
+
+  checks.push({
+    name: "Core Modules Display",
+    passed: moduleCount === 50,
+    detail: moduleCount === 50
+      ? "50 Core Modules displayed."
+      : `अभी ${moduleCount} modules दिखाई दे रहे हैं।`
+  });
+
+  // 8. Workflow Locks Count Check
+  const lockContainer = $("lockList");
+  const lockCount = lockContainer
+    ? lockContainer.children.length
+    : 0;
+
+  checks.push({
+    name: "Workflow Locks Display",
+    passed: lockCount === 15,
+    detail: lockCount === 15
+      ? "15 Workflow Locks displayed."
+      : `अभी ${lockCount} locks दिखाई दे रहे हैं।`
+  });
+
+  const passed = checks.filter(item => item.passed).length;
+  const failed = checks.length - passed;
+
+  const percentage = Math.round(
+    (passed / checks.length) * 100
+  );
+
+  return {
+    checks,
+    passed,
+    failed,
+    total: checks.length,
+    percentage,
+    status: failed === 0 ? "READY" : "NEEDS ATTENTION"
+  };
+}
+
+function renderQualityAudit() {
+  const audit = runQualityAudit();
+
+  let container = $("qualityAuditSection");
+
+  if (!container) {
+    container = document.createElement("section");
+    container.id = "qualityAuditSection";
+    container.className = "quality-audit-section";
+
+    const target = $("generatedPromptText")?.parentElement;
+
+    if (target) {
+      target.appendChild(container);
+    } else {
+      const page = $("page-wizard");
+
+      if (!page) return;
+
+      page.appendChild(container);
+    }
+  }
+
+  container.innerHTML = `
+    <div class="section-heading">
+      <div>
+        <h2>Production Quality Audit</h2>
+        <p>Creative Brief और Production Readiness Check</p>
+      </div>
+
+      <span class="audit-score">
+        ${audit.percentage}%
+      </span>
+    </div>
+
+    <div class="audit-summary">
+      <div>
+        <strong>${audit.passed}</strong>
+        <span>Passed</span>
+      </div>
+
+      <div>
+        <strong>${audit.failed}</strong>
+        <span>Needs Attention</span>
+      </div>
+
+      <div>
+        <strong>${audit.total}</strong>
+        <span>Total Checks</span>
+      </div>
+    </div>
+
+    <div class="audit-status">
+      ${audit.status === "READY"
+        ? "🟢 PRODUCTION CHECK PASSED"
+        : "🟡 IMPROVEMENTS REQUIRED"}
+    </div>
+
+    <div class="audit-check-list">
+      ${audit.checks.map(check => `
+        <div class="audit-check-item">
+          <span>
+            ${check.passed ? "🟢" : "🔴"}
+          </span>
+
+          <div>
+            <strong>${escapeHTML(check.name)}</strong>
+            <p>${escapeHTML(check.detail)}</p>
+          </div>
+        </div>
+      `).join("")}
+    </div>
+
+    <button
+      type="button"
+      class="btn btn-secondary"
+      id="refreshQualityAudit">
+      Re-Run Quality Audit
+    </button>
+  `;
+
+  const refreshButton = $("refreshQualityAudit");
+
+  if (refreshButton) {
+    refreshButton.addEventListener(
+      "click",
+      renderQualityAudit
+    );
+  }
+
+  return audit;
+}
+
+/* Add Audit Button to Production Prompt */
+
+const previousAuditPromptRender = renderGeneratedPrompt;
+
+renderGeneratedPrompt = function(result) {
+  previousAuditPromptRender(result);
+
+  const container = $("generatedPromptText")?.parentElement;
+
+  if (!container) return;
+
+  if ($("runQualityAuditBtn")) return;
+
+  const button = document.createElement("button");
+
+  button.id = "runQualityAuditBtn";
+  button.type = "button";
+  button.className = "btn btn-secondary";
+  button.textContent = "Run Production Quality Audit";
+
+  button.addEventListener("click", renderQualityAudit);
+
+  container.appendChild(button);
+};
+
+/* Audit Summary Helper */
+
+function getQualityAuditSummary() {
+  const audit = runQualityAudit();
+
+  return {
+    score: audit.percentage + "%",
+    passed: audit.passed,
+    needsAttention: audit.failed,
+    totalChecks: audit.total,
+    status: audit.status
+  };
+}
+
+console.log(
+  "PART 4P — Quality Audit & Production Check Loaded"
+);
