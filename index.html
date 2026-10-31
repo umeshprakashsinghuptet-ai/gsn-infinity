@@ -506,3 +506,270 @@
       </div>
 
     </aside>
+    <!-- WORKSPACE MAIN AREA -->
+    <section class="workspace">
+
+      <!-- WORKSPACE HEADER -->
+      <header class="workspace-top">
+
+        <button class="icon-btn" id="sideToggle" aria-label="Toggle sidebar">
+          ☰
+        </button>
+
+        <div>
+          <small id="breadcrumb">
+            WORKSPACE / OVERVIEW
+          </small>
+
+          <h2 id="pageTitle">
+            Overview
+          </h2>
+        </div>
+
+        <div class="workspace-top-right">
+
+          <span class="secure-pill">
+            ● Connected workspace
+          </span>
+
+          <button class="btn btn-ghost btn-sm" id="topLogout">
+            Sign out
+          </button>
+
+        </div>
+
+      </header>
+
+
+      <!-- WORKSPACE CONTENT -->
+      <div class="workspace-content">
+
+
+        <!-- ================================= -->
+        <!-- DASHBOARD PAGE                   -->
+        <!-- ================================= -->
+
+        <section class="page active" id="page-dashboard">
+
+          <div class="welcome-banner">
+
+            <div>
+
+              <div class="eyebrow">
+                YOUR CREATIVE COMMAND CENTER
+              </div>
+
+              <h2>
+                Welcome back,
+                <span id="welcomeName">Creator</span>.
+              </h2>
+
+              <p>
+                आज आप क्या create करना चाहते हैं?
+              </p>
+
+              <button class="btn btn-primary" data-go="wizard">
+                Start a new project →
+              </button>
+
+            </div>
+
+            <div class="banner-art">
+              ✧
+            </div>
+
+          </div>
+
+
+          <!-- DASHBOARD METRICS -->
+          <div class="metric-grid">
+
+            <div class="metric-card">
+              <span>MY PROJECTS</span>
+              <b id="projectCount">0</b>
+              <small>Saved projects</small>
+            </div>
+
+            <div class="metric-card">
+              <span>CREATIVE STUDIOS</span>
+              <b>07</b>
+              <small>Creative workspaces</small>
+            </div>
+
+            <div class="metric-card">
+              <span>CORE MODULES</span>
+              <b>50</b>
+              <small>Production framework</small>
+            </div>
+
+            <div class="metric-card">
+              <span>WORKFLOW LOCKS</span>
+              <b>15</b>
+              <small>Contextual validation</small>
+            </div>
+
+          </div>
+
+
+          <!-- QUICK STUDIO ACCESS -->
+          <div class="content-heading">
+
+            <div>
+              <h3>Launch a studio</h3>
+              <p>Choose a creative workflow to get started.</p>
+            </div>
+
+            <button class="text-link" data-go="studios">
+              View all →
+            </button>
+
+          </div>
+
+          <div
+            class="studio-grid"
+            id="dashboardStudios">
+          </div>
+
+
+          <!-- RECENT PROJECTS -->
+          <div class="content-heading">
+
+            <div>
+              <h3>Recent projects</h3>
+              <p>Your latest saved work.</p>
+            </div>
+
+            <button class="text-link" data-go="projects">
+              View library →
+            </button>
+
+          </div>
+
+          <div
+            id="recentProjects"
+            class="recent-list">
+          </div>
+
+        </section>
+
+
+        <!-- ================================= -->
+        <!-- AUTO-PILOT WIZARD PAGE            -->
+        <!-- ================================= -->
+
+        <section class="page" id="page-wizard">
+
+          <div class="page-intro">
+
+            <div class="eyebrow">
+              GUIDED CREATION FLOW
+            </div>
+
+            <h2>
+              Auto-Pilot
+              <span class="gradient-text">Wizard</span>
+            </h2>
+
+            <p>
+              एक समय में एक सवाल का जवाब दें।
+              आपके जवाबों के अनुसार अगला सवाल निर्धारित होगा।
+            </p>
+
+          </div>
+
+
+          <div class="wizard-layout">
+
+
+            <!-- WIZARD MAIN PANEL -->
+            <div class="wizard-main panel">
+
+              <div class="wizard-top">
+
+                <span id="wizardStep">
+                  STEP 1
+                </span>
+
+                <span id="wizardMode">
+                  AUTO-PILOT
+                </span>
+
+              </div>
+
+
+              <!-- PROGRESS BAR -->
+              <div class="progress-track">
+                <i id="wizardProgress"></i>
+              </div>
+
+
+              <!-- DYNAMIC QUESTION AREA -->
+              <div id="questionArea"></div>
+
+
+              <!-- WIZARD CONTROLS -->
+              <div class="wizard-controls">
+
+                <button
+                  class="btn btn-ghost"
+                  id="wizardBack">
+                  ← Back
+                </button>
+
+                <div>
+
+                  <button
+                    class="btn btn-ghost"
+                    id="wizardSkip">
+                    Skip
+                  </button>
+
+                  <button
+                    class="btn btn-primary"
+                    id="wizardNext">
+                    Continue →
+                  </button>
+
+                </div>
+
+              </div>
+
+            </div>
+
+
+            <!-- PRODUCTION BRIEF PANEL -->
+            <aside class="wizard-aside panel">
+
+              <div class="eyebrow">
+                YOUR PRODUCTION BRIEF
+              </div>
+
+              <h3>Project snapshot</h3>
+
+              <div
+                id="briefSnapshot"
+                class="snapshot-empty">
+
+                आपके जवाब यहाँ दिखाई देंगे।
+
+              </div>
+
+
+              <!-- RECOMMENDATIONS -->
+              <div class="recommend-box">
+
+                <span>✦ SMART GUIDANCE</span>
+
+                <p>
+                  Recommendations को उनके वास्तविक स्रोत
+                  के अनुसार दिखाया जाएगा। Built-in rules और
+                  connected AI recommendations में अंतर स्पष्ट रहेगा।
+                </p>
+
+              </div>
+
+            </aside>
+
+          </div>
+
+        </section>
