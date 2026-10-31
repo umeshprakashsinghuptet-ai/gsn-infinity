@@ -5227,9 +5227,9 @@ console.log(
   renderCoreModules();
 }
 
-    if (typeof renderLocks === "function") {
-      renderLocks();
-    }
+if (typeof renderWorkflowLocks === "function") {
+  renderWorkflowLocks();
+}
 
     if (typeof renderProjects === "function") {
       renderProjects();
