@@ -3935,5 +3935,572 @@ function refreshAdminConsole() {
 
 /* =========================================
    END OF PART 4K
+   ========================================= 
+/* =========================================
+   PART 4L — SUPABASE CLOUD PROJECTS
    ========================================= */
 
+/* 1. CHECK CLOUD CONNECTION */
+
+function isCloudReady() {
+
+  return Boolean(
+    supabase &&
+    APP_STATE.user
+  );
+
+}
+
+/* 2. CONVERT CLOUD PROJECT */
+
+function mapCloudProject(row) {
+
+  const answers = row.answers || {};
+
+  return {
+
+    id: row.id,
+
+    title: row.title,
+
+    studio: row.studio,
+
+    output: answers.output || "Video",
+
+    platform: answers.platform || "Multi-platform",
+
+    category: answers.category || "Auto-Detect",
+
+    brief: answers.brief || null,
+
+    prompt: row.prompt,
+
+    status: "Draft",
+
+    createdAt: row.created_at,
+
+    updatedAt: row.updated_at,
+
+    source: "cloud"
+
+  };
+
+}
+
+/* 3. LOAD CLOUD PROJECTS */
+
+async function loadCloudProjects() {
+
+  if (!isCloudReady()) {
+    return [];
+  }
+
+  try {
+
+    const { data, error } = await supabase
+      .from("creator_projects")
+      .select("*")
+      .eq("user_id", APP_STATE.user.id)
+      .order("created_at", {
+        ascending: false
+      });
+
+    if (error) throw error;
+
+    const cloudProjects = (data || [])
+      .map(mapCloudProject);
+
+    APP_STATE.projects = cloudProjects;
+
+    persistLocalProjects();
+
+    renderDashboardProjects();
+
+    renderDashboard();
+
+    return cloudProjects;
+
+  } catch (error) {
+
+    console.error(
+      "Cloud project loading error:",
+      error
+    );
+
+    showToast(
+      "Cloud Projects load नहीं हुए।",
+      "error"
+    );
+
+    return [];
+
+  }
+
+}
+
+/* 4. SAVE PROJECT TO CLOUD */
+
+async function saveProjectToCloud(project) {
+
+  if (!isCloudReady()) {
+
+    showToast(
+      "Cloud save के लिए Login करें।",
+      "error"
+    );
+
+    return null;
+
+  }
+
+  try {
+
+    const { data, error } = await supabase
+      .from("creator_projects")
+      .insert({
+
+        user_id: APP_STATE.user.id,
+
+        title: project.title,
+
+        studio: project.studio,
+
+        prompt: project.brief
+          ? formatBriefText(project.brief)
+          : "",
+
+        answers: {
+          ...(project.brief || {}),
+          output: project.output,
+          platform: project.platform,
+          category: project.category,
+          brief: project.brief || null
+        }
+
+      })
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    return data;
+
+  } catch (error) {
+
+    console.error(
+      "Cloud project saving error:",
+      error
+    );
+
+    showToast(
+      error.message || "Cloud save failed.",
+      "error"
+    );
+
+    return null;
+
+  }
+
+}
+
+/* 5. CONNECT LOCAL SAVE WITH CLOUD SAVE */
+
+const previousSaveCurrentProject =
+  saveCurrentProject;
+
+saveCurrentProject = async function() {
+
+  if (!APP_STATE.user) {
+
+    showToast(
+      "पहले Login करें।",
+      "error"
+    );
+
+    return;
+
+  }
+
+  const brief = APP_STATE.wizard.brief;
+
+  if (!brief) return;
+
+  const project = createProjectFromBrief(brief);
+
+  const cloudRecord =
+    await saveProjectToCloud(project);
+
+  if (!cloudRecord) {
+
+    showToast(
+      "Project Cloud में सेव नहीं हुआ।",
+      "error"
+    );
+
+    return;
+
+  }
+
+  project.id = cloudRecord.id;
+
+  project.source = "cloud";
+
+  APP_STATE.projects.unshift(project);
+
+  persistLocalProjects();
+
+  renderDashboard();
+
+  showToast(
+    "Project Cloud में सफलतापूर्वक सेव हुआ!",
+    "success"
+  );
+
+};
+
+/* 6. DELETE CLOUD PROJECT */
+
+async function deleteCloudProject(projectId) {
+
+  if (!isCloudReady()) {
+    return false;
+  }
+
+  try {
+
+    const { error } = await supabase
+      .from("creator_projects")
+      .delete()
+      .eq("id", projectId)
+      .eq("user_id", APP_STATE.user.id);
+
+    if (error) throw error;
+
+    return true;
+
+  } catch (error) {
+
+    console.error(
+      "Cloud delete error:",
+      error
+    );
+
+    showToast(
+      "Cloud Project delete नहीं हुआ।",
+      "error"
+    );
+
+    return false;
+
+  }
+
+}
+
+/* 7. CONNECT DELETE WITH CLOUD */
+
+const previousDeleteProject =
+  deleteProject;
+
+deleteProject = async function(projectId) {
+
+  const project = APP_STATE.projects.find(
+    item => item.id === projectId
+  );
+
+  if (!project) return;
+
+  if (project.source === "cloud") {
+
+    const deleted =
+      await deleteCloudProject(projectId);
+
+    if (!deleted) return;
+
+  }
+
+  previousDeleteProject(projectId);
+
+};
+
+/* 8. CLOUD CONNECTION STATUS */
+
+function getCloudStatus() {
+
+  if (!supabase) {
+    return "Supabase Not Configured";
+  }
+
+  if (!APP_STATE.user) {
+    return "Login Required";
+  }
+
+  return "Connected";
+
+}
+
+/* 9. CLOUD STATUS DISPLAY */
+
+function renderCloudStatus() {
+
+  const status = getElement("cloudStatus");
+
+  if (!status) return;
+
+  status.textContent = getCloudStatus();
+
+}
+
+/* =========================================
+   END OF PART 4L
+   ========================================= 
+/* =========================================
+   PART 4M — PROFILE PHOTO CLOUD UPLOAD
+   ========================================= */
+
+/* 1. PROFILE PHOTO STATE */
+
+APP_STATE.profilePhotoPath = null;
+
+/* 2. GET PRIVATE PHOTO URL */
+
+async function getPrivatePhotoUrl(photoPath) {
+
+  if (!supabase || !photoPath) return null;
+
+  try {
+
+    const { data, error } = await supabase
+      .storage
+      .from(APP_CONFIG.STORAGE_BUCKET)
+      .createSignedUrl(photoPath, 3600);
+
+    if (error) throw error;
+
+    return data.signedUrl;
+
+  } catch (error) {
+
+    console.error(
+      "Private photo URL error:",
+      error
+    );
+
+    return null;
+
+  }
+
+}
+
+/* 3. SHOW PROFILE PHOTO */
+
+async function showProfilePhoto(photoPath) {
+
+  const preview =
+    getElement("profilePhotoPreview");
+
+  if (!preview || !photoPath) return;
+
+  const imageUrl =
+    await getPrivatePhotoUrl(photoPath);
+
+  if (!imageUrl) return;
+
+  if (preview.tagName === "IMG") {
+
+    preview.src = imageUrl;
+
+  } else {
+
+    preview.style.backgroundImage =
+      `url("${imageUrl}")`;
+
+  }
+
+}
+
+/* 4. UPLOAD PROFILE PHOTO */
+
+async function uploadProfilePhoto(file) {
+
+  if (!supabase || !APP_STATE.user) {
+
+    showToast(
+      "Photo Upload के लिए Login करें।",
+      "error"
+    );
+
+    return false;
+
+  }
+
+  if (!file || !file.type.startsWith("image/")) {
+
+    showToast(
+      "कृपया सही Image File चुनें।",
+      "error"
+    );
+
+    return false;
+
+  }
+
+  if (
+    file.size > APP_CONFIG.MAX_PROFILE_IMAGE_SIZE
+  ) {
+
+    showToast(
+      "Photo का Size 5 MB से कम होना चाहिए।",
+      "error"
+    );
+
+    return false;
+
+  }
+
+  const extension =
+    file.name.split(".").pop().toLowerCase();
+
+  const allowedExtensions = [
+    "jpg",
+    "jpeg",
+    "png",
+    "webp"
+  ];
+
+  if (!allowedExtensions.includes(extension)) {
+
+    showToast(
+      "केवल JPG, PNG और WEBP Images स्वीकार हैं।",
+      "error"
+    );
+
+    return false;
+
+  }
+
+  const userId = APP_STATE.user.id;
+
+  const filePath =
+    `${userId}/profile-${Date.now()}.${extension}`;
+
+  try {
+
+    showToast("Photo Upload हो रही है...");
+
+    /* UPLOAD TO PRIVATE STORAGE */
+
+    const { data: uploadData, error: uploadError } =
+      await supabase
+        .storage
+        .from(APP_CONFIG.STORAGE_BUCKET)
+        .upload(filePath, file, {
+          cacheControl: "3600",
+          upsert: false,
+          contentType: file.type
+        });
+
+    if (uploadError) throw uploadError;
+
+    /* SAVE PHOTO PATH IN PROFILE */
+
+    const { data: profileData, error: profileError } =
+      await supabase
+        .from("profiles")
+        .upsert(
+          {
+            user_id: userId,
+            photo_path: uploadData.path
+          },
+          {
+            onConflict: "user_id"
+          }
+        )
+        .select()
+        .single();
+
+    if (profileError) throw profileError;
+
+    APP_STATE.profile = profileData;
+
+    APP_STATE.profilePhotoPath =
+      uploadData.path;
+
+    /* SHOW PRIVATE IMAGE */
+
+    await showProfilePhoto(uploadData.path);
+
+    showToast(
+      "Profile Photo Cloud में सेव हो गई!",
+      "success"
+    );
+
+    return true;
+
+  } catch (error) {
+
+    console.error(
+      "Profile Photo Upload Error:",
+      error
+    );
+
+    showToast(
+      error.message ||
+      "Photo Upload नहीं हो पाई। Storage Policies जाँचें।",
+      "error"
+    );
+
+    return false;
+
+  }
+
+}
+
+/* 5. PHOTO INPUT CLOUD UPLOAD EVENT */
+
+getElement("photoInput")?.addEventListener(
+  "change",
+  async (event) => {
+
+    const file = event.target.files?.[0];
+
+    if (!file) return;
+
+    await uploadProfilePhoto(file);
+
+  }
+);
+
+/* 6. LOAD SAVED PROFILE PHOTO */
+
+async function loadSavedProfilePhoto() {
+
+  const photoPath =
+    APP_STATE.profile?.photo_path;
+
+  if (!photoPath) return;
+
+  APP_STATE.profilePhotoPath = photoPath;
+
+  await showProfilePhoto(photoPath);
+
+}
+
+/* 7. PHOTO UPLOAD STATUS */
+
+function getProfilePhotoStatus() {
+
+  if (!APP_STATE.user) {
+    return "Login Required";
+  }
+
+  if (APP_STATE.profilePhotoPath) {
+    return "Cloud Photo Available";
+  }
+
+  return "No Cloud Photo";
+
+}
+
+/* =========================================
+   END OF PART 4M
+   ========================================= */
