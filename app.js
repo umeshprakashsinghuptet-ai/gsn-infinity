@@ -3271,4 +3271,314 @@ initializeCoreModules();
 
 /* =========================================
    END OF PART 4I
+   ========================================= 
+/* =========================================
+   PART 4J — 15 WORKFLOW LOCKS ENGINE
+   ========================================= */
+
+/* 1. WORKFLOW LOCK DATABASE */
+
+const WORKFLOW_LOCKS = [
+
+  {
+    id: 1,
+    name: "Theme Lock",
+    rule: "Selected theme must remain consistent.",
+    check: brief => Boolean(brief.category)
+  },
+
+  {
+    id: 2,
+    name: "Dialogue Lock",
+    rule: "Dialogue requirements must be defined.",
+    check: brief => Boolean(brief.language)
+  },
+
+  {
+    id: 3,
+    name: "Identity Lock",
+    rule: "Identity preservation requirements must be considered.",
+    check: brief => Boolean(brief.studio)
+  },
+
+  {
+    id: 4,
+    name: "Performance Lock",
+    rule: "Performance requirements must be reviewed.",
+    check: brief => Boolean(brief.output)
+  },
+
+  {
+    id: 5,
+    name: "UI Lock",
+    rule: "Output presentation must match the selected format.",
+    check: brief => Boolean(brief.aspectRatio)
+  },
+
+  {
+    id: 6,
+    name: "Continuity Lock",
+    rule: "Scene continuity requirements must be reviewed.",
+    check: brief => Boolean(brief.topic)
+  },
+
+  {
+    id: 7,
+    name: "Production Lock",
+    rule: "Production brief must contain essential details.",
+    check: brief =>
+      Boolean(brief.studio && brief.output && brief.topic)
+  },
+
+  {
+    id: 8,
+    name: "Transitions Lock",
+    rule: "Transition requirements must be considered.",
+    check: brief => Boolean(brief.output)
+  },
+
+  {
+    id: 9,
+    name: "QA Lock",
+    rule: "Quality review must be performed.",
+    check: brief => Boolean(brief.platform)
+  },
+
+  {
+    id: 10,
+    name: "Final Lock",
+    rule: "Final production brief must be available.",
+    check: brief => Boolean(brief.createdAt)
+  },
+
+  {
+    id: 11,
+    name: "Duration Lock",
+    rule: "Video duration must be defined when applicable.",
+    check: brief => {
+
+      const videoOutputs = [
+        "Video",
+        "Reel",
+        "Short Film",
+        "Podcast"
+      ];
+
+      if (!videoOutputs.includes(brief.output)) {
+        return true;
+      }
+
+      return Boolean(brief.duration) &&
+        brief.duration !== "Not applicable";
+
+    }
+  },
+
+  {
+    id: 12,
+    name: "Voice Lock",
+    rule: "Language and voice requirements must be reviewed.",
+    check: brief => Boolean(brief.language)
+  },
+
+  {
+    id: 13,
+    name: "Logic Lock",
+    rule: "Production settings must be logically consistent.",
+    check: brief =>
+      Boolean(brief.studio && brief.platform && brief.output)
+  },
+
+  {
+    id: 14,
+    name: "Safe-Frame Lock",
+    rule: "Aspect ratio must be supported.",
+    check: brief =>
+      APP_CONFIG.SUPPORTED_ASPECT_RATIOS.includes(
+        brief.aspectRatio
+      )
+  },
+
+  {
+    id: 15,
+    name: "Export Lock",
+    rule: "Export format requirements must be reviewed.",
+    check: brief => Boolean(brief.output)
+
+  }
+
+];
+
+/* 2. VALIDATE LOCK COUNT */
+
+function validateLockCount() {
+
+  const expected =
+    APP_CONFIG.TOTAL_WORKFLOW_LOCKS;
+
+  const actual =
+    WORKFLOW_LOCKS.length;
+
+  const uniqueIds = new Set(
+    WORKFLOW_LOCKS.map(lock => lock.id)
+  );
+
+  return {
+    valid:
+      actual === expected &&
+      uniqueIds.size === expected,
+
+    expected,
+    actual,
+    unique: uniqueIds.size
+  };
+
+}
+
+/* 3. RUN WORKFLOW LOCK CHECKS */
+
+function runWorkflowLocks(brief) {
+
+  return WORKFLOW_LOCKS.map(lock => {
+
+    let passed = false;
+
+    try {
+
+      passed = Boolean(lock.check(brief));
+
+    } catch (error) {
+
+      console.error(
+        "Workflow Lock Error:",
+        lock.name,
+        error
+      );
+
+    }
+
+    return {
+      id: lock.id,
+      name: lock.name,
+      rule: lock.rule,
+      passed,
+      status: passed ? "PASS" : "REVIEW REQUIRED"
+    };
+
+  });
+
+}
+
+/* 4. RENDER WORKFLOW LOCKS */
+
+function renderWorkflowLocks(results = null) {
+
+  const container = getElement("lockList");
+
+  if (!container) return;
+
+  const lockResults = results ||
+    WORKFLOW_LOCKS.map(lock => ({
+      ...lock,
+      status: "NOT CHECKED",
+      passed: false
+    }));
+
+  container.innerHTML = lockResults.map(lock => `
+
+    <article class="lock-card panel">
+
+      <div class="lock-card-header">
+
+        <span class="lock-number">
+          ${String(lock.id).padStart(2, "0")}
+        </span>
+
+        <span class="tag">
+          ${escapeHTML(lock.status)}
+        </span>
+
+      </div>
+
+      <h3>
+        ${escapeHTML(lock.name)}
+      </h3>
+
+      <p>
+        ${escapeHTML(lock.rule)}
+      </p>
+
+    </article>
+
+  `).join("");
+
+}
+
+/* 5. LOCK VALIDATION SUMMARY */
+
+function renderLockSummary(results) {
+
+  const summary = getElement("lockSummary");
+
+  if (!summary) return;
+
+  const passed = results.filter(
+    item => item.passed
+  ).length;
+
+  const failed = results.length - passed;
+
+  summary.textContent =
+    `${passed}/15 Passed · ${failed} Need Review`;
+
+}
+
+/* 6. RUN COMPLETE QUALITY CHECK */
+
+function runCompleteLockAudit(brief) {
+
+  const countCheck = validateLockCount();
+
+  if (!countCheck.valid) {
+
+    showToast(
+      "Workflow Lock count validation failed.",
+      "error"
+    );
+
+    return [];
+
+  }
+
+  const results = runWorkflowLocks(brief);
+
+  renderWorkflowLocks(results);
+
+  renderLockSummary(results);
+
+  return results;
+
+}
+
+/* 7. INITIAL LOCK DISPLAY */
+
+function initializeWorkflowLocks() {
+
+  const countCheck = validateLockCount();
+
+  console.log(
+    "UPS Workflow Locks:",
+    countCheck
+  );
+
+  renderWorkflowLocks();
+
+}
+
+/* 8. INITIALIZE */
+
+initializeWorkflowLocks();
+
+/* =========================================
+   END OF PART 4J
    ========================================= */
