@@ -505,17 +505,17 @@ function updateAuthUI(user, profile = null) {
 
   const isLoggedIn = Boolean(user);
 
-  if (publicView) {
-  publicView.classList.toggle("hidden", isLoggedIn);
-}
+   if (publicView) {
+    publicView.classList.toggle("hidden", isLoggedIn);
+  }
 
-if (appView) {
-  appView.classList.toggle("hidden", !isLoggedIn);
-}
+  if (appView) {
+    appView.classList.toggle("hidden", !isLoggedIn);
+  }
 
+  if (!isLoggedIn) {
     APP_STATE.user = null;
     APP_STATE.profile = null;
-
     return;
   }
 
