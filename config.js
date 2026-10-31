@@ -12,9 +12,9 @@ export const APP_CONFIG = {
   SUPABASE_URL:
     "https://subhkybvlbptgzybxnth.supabase.co",
 
-  SUPABASE_PUBLISHABLE_KEY:
-    "PASTE_YOUR_SUPABASE_PUBLISHABLE_KEY_HERE",
-
+ SUPABASE_PUBLISHABLE_KEY:
+    "sb_publishable_hWveeK4qDUzdBWdAK0uROg_WTv7Pyjp",
+   
   STORAGE_BUCKET:
     "owner-private-profile",
 
