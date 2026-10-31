@@ -2120,4 +2120,460 @@ p {
 /* ==========================================
    END OF PART 2D
    NEXT: PART 2E
+========================================== /* ==========================================
+   UPS CREATOR STUDIO
+   FILE: styles.css
+   PART 2E: RESPONSIVE & FINAL STYLING
+========================================== */
+
+
+/* ==========================================
+   1. FOOTER
+========================================== */
+
+.site-footer {
+  margin-top: 90px;
+  padding: 35px 0;
+
+  background: rgba(17, 26, 46, 0.65);
+  border-top: 1px solid var(--border);
+}
+
+.footer-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 25px;
+}
+
+.footer-inner > div:first-child > p {
+  margin-top: 12px;
+  font-size: 0.78rem;
+}
+
+.footer-credit {
+  color: var(--muted);
+  font-size: 0.78rem;
+  line-height: 2;
+  text-align: right;
+}
+
+.footer-credit b {
+  color: var(--text);
+}
+
+.footer-credit span {
+  color: var(--muted);
+}
+
+
+/* ==========================================
+   2. EMPTY STATES
+========================================== */
+
+.project-grid:empty::after,
+.name-list:empty::after,
+.studio-grid:empty::after {
+  content: "अभी यहाँ कोई जानकारी उपलब्ध नहीं है।";
+
+  display: block;
+  grid-column: 1 / -1;
+
+  padding: 25px;
+
+  color: var(--muted);
+  background: var(--panel);
+
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-md);
+
+  text-align: center;
+  font-size: 0.82rem;
+}
+
+
+/* ==========================================
+   3. ACCESSIBILITY & FOCUS
+========================================== */
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--cyan);
+  outline-offset: 3px;
+}
+
+::selection {
+  color: #ffffff;
+  background: var(--primary);
+}
+
+
+/* ==========================================
+   4. SCROLLBAR
+========================================== */
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--primary) var(--bg);
+}
+
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+*::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+
+*::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 20px;
+}
+
+
+/* ==========================================
+   5. TABLET RESPONSIVE
+========================================== */
+
+@media (max-width: 1000px) {
+
+  .hero {
+    grid-template-columns: 1fr;
+    gap: 35px;
+  }
+
+  .hero-copy {
+    max-width: 750px;
+  }
+
+  .hero-visual {
+    min-height: 380px;
+  }
+
+  .feature-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .studio-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .metric-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .wizard-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .wizard-aside {
+    order: 2;
+  }
+
+  .app-shell {
+    grid-template-columns: 220px minmax(0, 1fr);
+  }
+
+  .workspace-content {
+    padding: 24px;
+  }
+
+}
+
+
+/* ==========================================
+   6. MOBILE NAVIGATION
+========================================== */
+
+@media (max-width: 760px) {
+
+  .topbar {
+    min-height: 68px;
+    padding: 10px 16px;
+  }
+
+  .topnav {
+    display: none;
+  }
+
+  .mobile-menu {
+    display: inline-flex;
+  }
+
+  .top-actions {
+    gap: 7px;
+  }
+
+  .top-actions .btn {
+    padding: 8px 11px;
+    font-size: 0.75rem;
+  }
+
+  .brand-mark {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+  }
+
+  .brand b {
+    font-size: 0.78rem;
+  }
+
+  .brand small {
+    font-size: 0.59rem;
+  }
+
+  .wrap {
+    width: calc(100% - 30px);
+  }
+
+  .hero {
+    min-height: auto;
+    padding-top: 65px;
+    padding-bottom: 50px;
+  }
+
+  .hero-copy h1 {
+    letter-spacing: -1px;
+  }
+
+  .hero-lead {
+    font-size: 0.9rem;
+  }
+
+  .hero-visual {
+    min-height: 330px;
+  }
+
+  .preview-window {
+    padding: 16px;
+  }
+
+  .preview-welcome h3 {
+    font-size: 1.55rem;
+  }
+
+  .preview-tile {
+    min-height: 85px;
+  }
+
+  .stats {
+    grid-template-columns: repeat(2, 1fr);
+    row-gap: 22px;
+  }
+
+  .stats > div:nth-child(2) {
+    border-right: none;
+  }
+
+  .stats > div:nth-child(3),
+  .stats > div:nth-child(4) {
+    padding-top: 12px;
+  }
+
+  .section {
+    padding-top: 65px;
+  }
+
+  .creator-inner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .creator-section {
+    margin-top: 65px;
+    padding: 50px 0;
+  }
+
+  /* WORKSPACE MOBILE LAYOUT */
+
+  .app-shell {
+    display: block;
+  }
+
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 300;
+
+    width: min(280px, 85vw);
+    height: 100dvh;
+
+    transform: translateX(-105%);
+    transition: transform 0.3s ease;
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+  }
+
+  .workspace-top {
+    min-height: 70px;
+    padding: 10px 14px;
+  }
+
+  .workspace-top h2 {
+    font-size: 1rem;
+  }
+
+  .workspace-top-right {
+    gap: 7px;
+  }
+
+  .secure-pill {
+    display: none;
+  }
+
+  .workspace-content {
+    padding: 18px 14px;
+  }
+
+  .welcome-banner {
+    min-height: 200px;
+    padding: 23px;
+  }
+
+  .banner-art {
+    font-size: 5rem;
+  }
+
+  .metric-grid {
+    gap: 10px;
+  }
+
+  .metric-card {
+    padding: 15px;
+  }
+
+  .metric-card b {
+    font-size: 1.6rem;
+  }
+
+  .content-heading {
+    align-items: flex-start;
+  }
+
+  .wizard-main,
+  .wizard-aside {
+    padding: 19px;
+  }
+
+  .profile-panel {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-photo-wrap {
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+}
+
+
+/* ==========================================
+   7. SMALL MOBILE
+========================================== */
+
+@media (max-width: 480px) {
+
+  body {
+    font-size: 14px;
+  }
+
+  .hero-actions {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .hero-actions .btn {
+    width: 100%;
+  }
+
+  .feature-grid,
+  .studio-grid,
+  .project-grid,
+  .two-col {
+    grid-template-columns: 1fr;
+  }
+
+  .metric-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .feature-card {
+    min-height: auto;
+  }
+
+  .studio-card {
+    min-height: 165px;
+  }
+
+  .welcome-banner {
+    align-items: flex-start;
+  }
+
+  .banner-art {
+    display: none;
+  }
+
+  .name-list {
+    grid-template-columns: 1fr;
+  }
+
+  .wizard-controls {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .wizard-controls > div {
+    justify-content: flex-end;
+  }
+
+  .workspace-top-right .btn {
+    padding: 6px 8px;
+    font-size: 0.68rem;
+  }
+
+  .auth-modal {
+    padding: 25px 20px;
+  }
+
+  .footer-inner {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .footer-credit {
+    text-align: left;
+  }
+
+}
+
+
+/* ==========================================
+   8. REDUCED MOTION
+========================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+}
+
+
+/* ==========================================
+   END OF FILE 2: styles.css
 ========================================== */
