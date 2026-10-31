@@ -401,4 +401,557 @@ p {
 /* ==========================================
    END OF PART 2A
    NEXT: PART 2B
+=========================================
+/* ==========================================
+   UPS CREATOR STUDIO
+   FILE: styles.css
+   PART 2B: PUBLIC WEBSITE DESIGN
+========================================== */
+
+
+/* ==========================================
+   1. TOP HEADER
+========================================== */
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+
+  width: 100%;
+  min-height: 76px;
+  padding: 12px max(20px, calc((100% - 1180px) / 2));
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+
+  background: rgba(8, 13, 28, 0.88);
+  border-bottom: 1px solid var(--border);
+
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+
+/* BRAND */
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+
+  flex-shrink: 0;
+}
+
+.brand-mark {
+  width: 46px;
+  height: 46px;
+
+  display: grid;
+  place-items: center;
+
+  color: #ffffff;
+  font-size: 0.95rem;
+  font-weight: 800;
+
+  border-radius: 14px;
+
+  background: linear-gradient(
+    135deg,
+    var(--primary),
+    var(--cyan)
+  );
+
+  box-shadow:
+    0 8px 25px rgba(128, 103, 255, 0.25);
+}
+
+.brand b {
+  display: block;
+  font-size: 0.95rem;
+  font-weight: 800;
+}
+
+.brand small {
+  display: block;
+  color: var(--muted);
+  font-size: 0.68rem;
+  letter-spacing: 0.5px;
+}
+
+
+/* NAVIGATION */
+
+.topnav {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+
+.topnav a {
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-weight: 600;
+
+  transition: color var(--transition);
+}
+
+.topnav a:hover {
+  color: var(--cyan);
+}
+
+
+/* HEADER ACTIONS */
+
+.top-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.mobile-menu {
+  display: none;
+}
+
+
+/* ==========================================
+   2. HERO SECTION
+========================================== */
+
+.hero {
+  min-height: 600px;
+  padding-top: 90px;
+  padding-bottom: 75px;
+
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+
+  align-items: center;
+  gap: 55px;
+}
+
+
+.hero-copy {
+  position: relative;
+  z-index: 2;
+}
+
+
+.hero-copy .eyebrow {
+  margin-bottom: 22px;
+}
+
+
+.hero-copy h1 {
+  max-width: 680px;
+  margin-bottom: 22px;
+}
+
+
+.hero-lead {
+  max-width: 570px;
+  margin-bottom: 30px;
+
+  font-size: 1.02rem;
+  line-height: 1.9;
+}
+
+
+.hero-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 22px;
+
+  margin-bottom: 35px;
+}
+
+
+.hero-proof {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+}
+
+
+.avatar-stack {
+  display: flex;
+  align-items: center;
+}
+
+
+.avatar-stack i {
+  width: 31px;
+  height: 31px;
+
+  display: grid;
+  place-items: center;
+
+  margin-left: -7px;
+
+  color: #ffffff;
+  background: var(--panel2);
+
+  border: 2px solid var(--bg);
+  border-radius: 50%;
+
+  font-size: 0.7rem;
+  font-style: normal;
+  font-weight: 800;
+}
+
+.avatar-stack i:first-child {
+  margin-left: 0;
+}
+
+.avatar-stack i:last-child {
+  background: var(--primary);
+}
+
+
+.hero-proof b {
+  display: block;
+  font-size: 0.82rem;
+}
+
+.hero-proof small {
+  display: block;
+  color: var(--muted);
+  font-size: 0.72rem;
+}
+
+
+/* ==========================================
+   3. HERO VISUAL
+========================================== */
+
+.hero-visual {
+  position: relative;
+
+  display: grid;
+  place-items: center;
+
+  min-height: 430px;
+}
+
+
+.orb {
+  position: absolute;
+
+  width: 190px;
+  height: 190px;
+
+  border-radius: 50%;
+  filter: blur(70px);
+
+  pointer-events: none;
+}
+
+
+.orb-a {
+  top: 15px;
+  right: 25px;
+
+  background: var(--primary);
+  opacity: 0.35;
+}
+
+
+.orb-b {
+  bottom: 15px;
+  left: 20px;
+
+  background: var(--cyan);
+  opacity: 0.22;
+}
+
+
+/* PREVIEW WINDOW */
+
+.preview-window {
+  position: relative;
+  z-index: 2;
+
+  width: min(100%, 480px);
+  padding: 22px;
+
+  background: rgba(17, 26, 46, 0.95);
+
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-radius: 22px;
+
+  box-shadow:
+    0 35px 90px rgba(0, 0, 0, 0.4);
+
+  transform: rotate(-2deg);
+}
+
+
+.preview-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+
+  padding-bottom: 17px;
+  border-bottom: 1px solid var(--border);
+
+  color: var(--muted);
+  font-size: 0.63rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+
+.window-dots {
+  color: var(--primary);
+  letter-spacing: 3px;
+}
+
+
+.live-tag {
+  color: var(--green);
+}
+
+
+.preview-welcome {
+  padding: 27px 0 22px;
+}
+
+
+.preview-welcome small {
+  color: var(--cyan);
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+}
+
+
+.preview-welcome h3 {
+  margin: 10px 0;
+
+  font-size: 1.9rem;
+  line-height: 1.25;
+}
+
+
+.preview-welcome h3 em {
+  color: var(--cyan);
+  font-style: normal;
+}
+
+
+.preview-welcome p {
+  font-size: 0.78rem;
+}
+
+
+/* PREVIEW GRID */
+
+.preview-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+
+.preview-tile {
+  min-height: 100px;
+  padding: 15px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  border: 1px solid var(--border);
+  border-radius: 14px;
+
+  font-size: 1.5rem;
+  font-weight: 800;
+}
+
+
+.preview-tile small {
+  color: var(--text);
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+
+.tile-purple {
+  background: rgba(128, 103, 255, 0.14);
+  color: var(--primary);
+}
+
+
+.tile-cyan {
+  background: rgba(32, 213, 232, 0.10);
+  color: var(--cyan);
+}
+
+
+.tile-green {
+  background: rgba(54, 214, 154, 0.10);
+  color: var(--green);
+}
+
+
+.tile-orange {
+  background: rgba(255, 173, 102, 0.10);
+  color: var(--orange);
+}
+
+
+.preview-foot {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+
+  padding-top: 17px;
+  margin-top: 18px;
+
+  border-top: 1px solid var(--border);
+
+  color: var(--muted);
+  font-size: 0.65rem;
+}
+
+
+/* ==========================================
+   4. STATISTICS
+========================================== */
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+
+  padding: 28px 0;
+
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+
+.stats > div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+
+  text-align: center;
+
+  border-right: 1px solid var(--border);
+}
+
+
+.stats > div:last-child {
+  border-right: none;
+}
+
+
+.stats b {
+  color: var(--text);
+  font-size: 2rem;
+  font-weight: 800;
+}
+
+
+.stats span {
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+
+/* ==========================================
+   5. FEATURES
+========================================== */
+
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 17px;
+}
+
+
+.feature-card {
+  min-height: 220px;
+  padding: 24px;
+
+  background: var(--panel);
+
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+
+  transition:
+    transform var(--transition),
+    border-color var(--transition),
+    background var(--transition);
+}
+
+
+.feature-card:hover {
+  transform: translateY(-6px);
+
+  border-color: rgba(128, 103, 255, 0.5);
+  background: var(--panel2);
+}
+
+
+.feature-icon {
+  width: 45px;
+  height: 45px;
+
+  display: grid;
+  place-items: center;
+
+  margin-bottom: 20px;
+
+  border-radius: 13px;
+
+  font-size: 1.35rem;
+  font-weight: 800;
+}
+
+
+.feature-icon.purple {
+  color: var(--primary);
+  background: rgba(128, 103, 255, 0.13);
+}
+
+
+.feature-icon.cyan {
+  color: var(--cyan);
+  background: rgba(32, 213, 232, 0.12);
+}
+
+
+.feature-icon.green {
+  color: var(--green);
+  background: rgba(54, 214, 154, 0.12);
+}
+
+
+.feature-icon.orange {
+  color: var(--orange);
+  background: rgba(255, 173, 102, 0.12);
+}
+
+
+.feature-card h3 {
+  margin-bottom: 12px;
+}
+
+
+.feature-card p {
+  font-size: 0.83rem;
+  line-height: 1.8;
+}
+
+
+/* ==========================================
+   END OF PART 2B
+   NEXT: PART 2C
 ========================================== */
