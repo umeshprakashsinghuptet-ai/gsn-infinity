@@ -5486,3 +5486,224 @@ function getQualityAuditSummary() {
 console.log(
   "PART 4P — Quality Audit & Production Check Loaded"
 );
+/* =========================================
+   PART 4Q — FINAL INITIALIZATION
+   UPS CREATOR STUDIO
+========================================= */
+
+(async function initializeUPSStudio() {
+
+  console.log("UPS Creator Studio Initializing...");
+
+  // 1. Basic Application Setup
+  function initializeBasicUI() {
+    const yearElement = $("year");
+
+    if (yearElement) {
+      yearElement.textContent = new Date().getFullYear();
+    }
+
+    if (typeof renderStudios === "function") {
+      renderStudios();
+    }
+
+    if (typeof renderDashboard === "function") {
+      renderDashboard();
+    }
+
+    if (typeof renderModules === "function") {
+      renderModules();
+    }
+
+    if (typeof renderLocks === "function") {
+      renderLocks();
+    }
+
+    if (typeof renderProjects === "function") {
+      renderProjects();
+    }
+
+    if (typeof renderPromptLibrary === "function") {
+      renderPromptLibrary();
+    }
+  }
+
+  // 2. Restore Existing Supabase Session
+  async function restoreUserSession() {
+
+    if (!supabase) {
+      console.warn("Supabase is not configured.");
+
+      showToast(
+        "Supabase configuration pending. Public mode available."
+      );
+
+      return;
+    }
+
+    try {
+      const { data, error } =
+        await supabase.auth.getSession();
+
+      if (error) throw error;
+
+      const session = data?.session;
+
+      if (session?.user) {
+        APP_STATE.user = session.user;
+
+        if (typeof updateAuthUI === "function") {
+          updateAuthUI(session.user);
+        }
+
+        if (typeof loadUserProfile === "function") {
+          await loadUserProfile(session.user);
+        }
+
+        if (typeof loadCloudProjects === "function") {
+          await loadCloudProjects();
+        }
+
+        if (typeof renderDashboard === "function") {
+          renderDashboard();
+        }
+
+        console.log("Existing session restored.");
+
+      } else {
+        APP_STATE.user = null;
+
+        if (typeof updateAuthUI === "function") {
+          updateAuthUI(null);
+        }
+      }
+
+    } catch (error) {
+      console.error("Session Restore Error:", error);
+
+      showToast("Login session check नहीं हो पाया।");
+    }
+  }
+
+  // 3. Listen for Authentication Changes
+  function initializeAuthListener() {
+
+    if (!supabase) return;
+
+    supabase.auth.onAuthStateChange(
+      async (event, session) => {
+
+        console.log("Auth Event:", event);
+
+        APP_STATE.user = session?.user || null;
+
+        if (typeof updateAuthUI === "function") {
+          updateAuthUI(session?.user || null);
+        }
+
+        if (session?.user) {
+
+          if (event === "SIGNED_IN" ||
+              event === "TOKEN_REFRESHED") {
+
+            setTimeout(async () => {
+
+              try {
+                if (typeof loadUserProfile === "function") {
+                  await loadUserProfile(session.user);
+                }
+
+                if (typeof loadCloudProjects === "function") {
+                  await loadCloudProjects();
+                }
+
+                if (typeof renderDashboard === "function") {
+                  renderDashboard();
+                }
+
+              } catch (error) {
+                console.error(
+                  "User Data Sync Error:",
+                  error
+                );
+              }
+
+            }, 0);
+          }
+
+        } else if (event === "SIGNED_OUT") {
+
+          APP_STATE.projects = [];
+
+          if (typeof renderDashboard === "function") {
+            renderDashboard();
+          }
+
+        }
+      }
+    );
+  }
+
+  // 4. Validate Core System
+  function validateCoreSystem() {
+
+    const results = {
+      config: typeof APP_CONFIG !== "undefined",
+      studio: Array.isArray(STUDIO_DATA),
+      modules: Array.isArray(CORE_MODULES),
+      locks: Array.isArray(WORKFLOW_LOCKS),
+      promptEngine:
+        typeof buildProductionPrompt === "function",
+      qualityAudit:
+        typeof runQualityAudit === "function"
+    };
+
+    const passed = Object.values(results)
+      .filter(Boolean).length;
+
+    console.table(results);
+
+    console.log(
+      "Core System Check:",
+      passed + "/" + Object.keys(results).length
+    );
+
+    return results;
+  }
+
+  // 5. Initialize Application
+  initializeBasicUI();
+
+  validateCoreSystem();
+
+  // Register listener before restoring session
+  initializeAuthListener();
+
+  await restoreUserSession();
+
+  // 6. Final Status
+  APP_STATE.initialized = true;
+
+  console.log(
+    "UPS Creator Studio Initialization Complete."
+  );
+
+  window.UPS_CREATOR_STUDIO = {
+    version: APP_CONFIG.VERSION,
+    state: APP_STATE,
+    validate: validateCoreSystem,
+    qualityAudit: runQualityAudit,
+    promptLibrary: getPromptLibrary,
+    buildPrompt: buildProductionPrompt
+  };
+
+  showToast("UPS Creator Studio तैयार है!");
+
+})().catch(error => {
+
+  console.error(
+    "UPS Creator Studio Fatal Initialization Error:",
+    error
+  );
+
+});
