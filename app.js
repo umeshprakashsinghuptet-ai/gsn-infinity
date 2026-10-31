@@ -828,4 +828,446 @@ renderStudios();
 
 /* =========================================
    END OF PART 4C
+   ========================================= /* =========================================
+   PART 4D — AUTO-PILOT WIZARD ENGINE
+   ========================================= */
+
+/* 1. WIZARD QUESTION BANK */
+
+const WIZARD_QUESTIONS = [
+
+  {
+    id: "platform",
+    title: "आप किस Platform के लिए Content बनाना चाहते हैं?",
+    description: "अपना Publishing Platform चुनें।",
+    type: "select",
+    options: [
+      "YouTube",
+      "Facebook",
+      "Instagram",
+      "Multi-platform"
+    ],
+    default: "Multi-platform"
+  },
+
+  {
+    id: "output",
+    title: "आप क्या बनाना चाहते हैं?",
+    description: "अपने Content का Output चुनें।",
+    type: "select",
+    options: [
+      "Video",
+      "Image",
+      "Poster",
+      "Reel",
+      "Short Film",
+      "Podcast",
+      "Educational Content"
+    ],
+    default: "Video"
+  },
+
+  {
+    id: "audience",
+    title: "आपकी Target Audience कौन है?",
+    description: "Content किसके लिए बनाया जाएगा?",
+    type: "select",
+    options: [
+      "India",
+      "USA",
+      "Global Audience",
+      "Students",
+      "General Audience"
+    ],
+    default: "India"
+  },
+
+  {
+    id: "language",
+    title: "Content की Language चुनें।",
+    description: "आपके Content में कौन-सी भाषा होगी?",
+    type: "select",
+    options: [
+      "Hindi",
+      "English",
+      "Hindi + English"
+    ],
+    default: "Hindi + English"
+  },
+
+  {
+    id: "category",
+    title: "Content की Category चुनें।",
+    description: "किस प्रकार का Content बनाना है?",
+    type: "select",
+    options: [
+      "Motivational",
+      "Educational",
+      "Entertainment",
+      "Facts",
+      "Podcast",
+      "Music",
+      "Dance",
+      "Vlog",
+      "Business",
+      "Auto-Detect"
+    ],
+    default: "Auto-Detect"
+  },
+
+  {
+    id: "topic",
+    title: "अपना Topic लिखें।",
+    description: "AUTO मोड में खाली छोड़ने पर सुझाव तैयार होगा।",
+    type: "text",
+    placeholder: "अपना Topic यहाँ लिखें...",
+    optional: true
+  },
+
+  {
+    id: "duration",
+    title: "Video की Duration चुनें।",
+    description: "आपके Video की कुल अवधि कितनी होगी?",
+    type: "select",
+    options: [
+      "10 Seconds",
+      "15 Seconds",
+      "30 Seconds",
+      "60 Seconds",
+      "2 Minutes",
+      "5 Minutes",
+      "10 Minutes"
+    ],
+    default: "30 Seconds",
+    condition: {
+      output: [
+        "Video",
+        "Reel",
+        "Short Film",
+        "Podcast"
+      ]
+    }
+  },
+
+  {
+    id: "aspectRatio",
+    title: "Video या Image का Ratio चुनें।",
+    description: "Platform के अनुसार बेहतर Ratio चुनें।",
+    type: "select",
+    options: [
+      "9:16",
+      "16:9",
+      "1:1",
+      "3:4"
+    ],
+    default: "9:16"
+  },
+
+  {
+    id: "mode",
+    title: "Creation Mode चुनें।",
+    description: "आप कितनी चीजें खुद तय करना चाहते हैं?",
+    type: "select",
+    options: [
+      "AUTO",
+      "MANUAL"
+    ],
+    default: "AUTO"
+  }
+
+];
+
+/* 2. FILTER ACTIVE QUESTIONS */
+
+function getActiveQuestions() {
+
+  const answers = APP_STATE.wizard.answers;
+
+  return WIZARD_QUESTIONS.filter(question => {
+
+    if (!question.condition) return true;
+
+    const requiredValues =
+      question.condition.output || [];
+
+    return requiredValues.includes(answers.output);
+
+  });
+
+}
+
+/* 3. START WIZARD */
+
+function startWizard(studioId) {
+
+  const studio = STUDIO_DATA.find(
+    item => item.id === studioId
+  );
+
+  if (!studio) return;
+
+  APP_STATE.currentStudio = studio;
+
+  APP_STATE.wizard.answers.studio = studio.id;
+  APP_STATE.wizard.step = 0;
+  APP_STATE.wizard.completed = false;
+
+  renderWizardQuestion();
+
+}
+
+/* 4. SET WIZARD MODE */
+
+function setWizardMode(mode) {
+
+  APP_STATE.wizard.mode =
+    mode === "MANUAL" ? "MANUAL" : "AUTO";
+
+  APP_STATE.wizard.answers.mode =
+    APP_STATE.wizard.mode;
+
+  renderWizardQuestion();
+
+}
+
+/* 5. SAVE CURRENT ANSWER */
+
+function saveWizardAnswer() {
+
+  const questions = getActiveQuestions();
+
+  const question =
+    questions[APP_STATE.wizard.step];
+
+  if (!question) return true;
+
+  const input = getElement("wizardAnswer");
+
+  if (!input) return true;
+
+  const value = input.value.trim();
+
+  if (!value && !question.optional) {
+
+    showToast(
+      "कृपया अपना जवाब चुनें।",
+      "error"
+    );
+
+    return false;
+  }
+
+  if (value) {
+    APP_STATE.wizard.answers[question.id] = value;
+  }
+
+  return true;
+
+}
+
+/* 6. RENDER QUESTION */
+
+function renderWizardQuestion() {
+
+  const area = getElement("questionArea");
+
+  if (!area) return;
+
+  const questions = getActiveQuestions();
+
+  const step = APP_STATE.wizard.step;
+
+  const question = questions[step];
+
+  if (!question) {
+    finishWizard();
+    return;
+  }
+
+  const savedValue =
+    APP_STATE.wizard.answers[question.id] ||
+    question.default ||
+    "";
+
+  let inputHTML = "";
+
+  if (question.type === "select") {
+
+    inputHTML = `
+      <select id="wizardAnswer">
+
+        <option value="">
+          Select an option
+        </option>
+
+        ${question.options.map(option => `
+          <option
+            value="${escapeHTML(option)}"
+            ${savedValue === option ? "selected" : ""}
+          >
+            ${escapeHTML(option)}
+          </option>
+        `).join("")}
+
+      </select>
+    `;
+
+  } else {
+
+    inputHTML = `
+      <input
+        id="wizardAnswer"
+        type="text"
+        maxlength="200"
+        placeholder="${escapeHTML(question.placeholder || "")}"
+        value="${escapeHTML(savedValue)}"
+      >
+    `;
+
+  }
+
+  area.innerHTML = `
+
+    <div class="wizard-question">
+
+      <div class="question-count">
+        Question ${step + 1} of ${questions.length}
+      </div>
+
+      <h2>${escapeHTML(question.title)}</h2>
+
+      <p>${escapeHTML(question.description)}</p>
+
+      <div class="wizard-input">
+        ${inputHTML}
+      </div>
+
+      <div class="wizard-mode-control">
+
+        <button
+          type="button"
+          class="btn btn-secondary"
+          data-wizard-mode="AUTO"
+        >
+          AUTO
+        </button>
+
+        <button
+          type="button"
+          class="btn btn-secondary"
+          data-wizard-mode="MANUAL"
+        >
+          MANUAL
+        </button>
+
+      </div>
+
+      <p class="wizard-mode-label">
+        Current Mode: ${APP_STATE.wizard.mode}
+      </p>
+
+    </div>
+
+  `;
+
+  const stepLabel = getElement("wizardStep");
+
+  if (stepLabel) {
+    stepLabel.textContent =
+      `${step + 1} / ${questions.length}`;
+  }
+
+  const progress = getElement("wizardProgress");
+
+  if (progress) {
+    progress.style.width =
+      `${((step + 1) / questions.length) * 100}%`;
+  }
+
+  const backButton = getElement("wizardBack");
+
+  if (backButton) {
+    backButton.disabled = step === 0;
+  }
+
+}
+
+/* 7. MODE BUTTON EVENTS */
+
+document.addEventListener("click", event => {
+
+  const button = event.target.closest(
+    "[data-wizard-mode]"
+  );
+
+  if (!button) return;
+
+  setWizardMode(button.dataset.wizardMode);
+
+});
+
+/* 8. NEXT QUESTION */
+
+getElement("wizardNext")?.addEventListener(
+  "click",
+  () => {
+
+    if (!saveWizardAnswer()) return;
+
+    APP_STATE.wizard.step++;
+
+    renderWizardQuestion();
+
+  }
+);
+
+/* 9. PREVIOUS QUESTION */
+
+getElement("wizardBack")?.addEventListener(
+  "click",
+  () => {
+
+    saveWizardAnswer();
+
+    if (APP_STATE.wizard.step > 0) {
+
+      APP_STATE.wizard.step--;
+
+      renderWizardQuestion();
+
+    }
+
+  }
+);
+
+/* 10. SKIP OPTIONAL QUESTION */
+
+getElement("wizardSkip")?.addEventListener(
+  "click",
+  () => {
+
+    const questions = getActiveQuestions();
+
+    const question =
+      questions[APP_STATE.wizard.step];
+
+    if (question?.optional) {
+
+      APP_STATE.wizard.step++;
+
+      renderWizardQuestion();
+
+    } else {
+
+      showToast(
+        "यह सवाल जरूरी है। इसे Skip नहीं कर सकते।"
+      );
+
+    }
+
+  }
+);
+
+/* =========================================
+   END OF PART 4D
    ========================================= */
