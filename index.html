@@ -773,3 +773,493 @@
           </div>
 
         </section>
+
+        <!-- ================================= -->
+        <!-- CREATIVE STUDIOS PAGE             -->
+        <!-- ================================= -->
+
+        <section class="page" id="page-studios">
+
+          <div class="page-intro">
+
+            <div class="eyebrow">
+              YOUR CREATIVE SUITE
+            </div>
+
+            <h2>
+              Creative
+              <span class="gradient-text">Studios</span>
+            </h2>
+
+            <p>
+              किसी भी studio को चुनें और guided workflow शुरू करें।
+            </p>
+
+          </div>
+
+          <div
+            class="studio-grid"
+            id="allStudios">
+          </div>
+
+        </section>
+
+
+        <!-- ================================= -->
+        <!-- MY PROJECTS PAGE                  -->
+        <!-- ================================= -->
+
+        <section class="page" id="page-projects">
+
+          <div class="page-intro">
+
+            <div class="eyebrow">
+              YOUR WORK, ORGANIZED
+            </div>
+
+            <h2>
+              My
+              <span class="gradient-text">Projects</span>
+            </h2>
+
+            <p>
+              अपने saved projects और production briefs यहाँ देखें।
+            </p>
+
+          </div>
+
+          <div
+            id="allProjects"
+            class="project-grid">
+          </div>
+
+        </section>
+
+
+        <!-- ================================= -->
+        <!-- MODULES AND WORKFLOW LOCKS         -->
+        <!-- ================================= -->
+
+        <section class="page" id="page-modules">
+
+          <div class="page-intro">
+
+            <div class="eyebrow">
+              PRODUCTION FRAMEWORK
+            </div>
+
+            <h2>
+              Modules
+              <span class="gradient-text">& Locks</span>
+            </h2>
+
+            <p>
+              Production planning, workflow validation
+              और quality checks के लिए framework.
+            </p>
+
+          </div>
+
+
+          <div class="two-col">
+
+            <div class="panel">
+
+              <h3>50 Core Modules</h3>
+
+              <div
+                id="moduleList"
+                class="name-list">
+              </div>
+
+            </div>
+
+
+            <div class="panel">
+
+              <h3>15 Workflow Locks</h3>
+
+              <div
+                id="lockList"
+                class="name-list">
+              </div>
+
+            </div>
+
+          </div>
+
+        </section>
+
+
+        <!-- ================================= -->
+        <!-- PROFILE AND BRANDING              -->
+        <!-- ================================= -->
+
+        <section class="page" id="page-profile">
+
+          <div class="page-intro">
+
+            <div class="eyebrow">
+              YOUR IDENTITY
+            </div>
+
+            <h2>
+              Profile &
+              <span class="gradient-text">Branding</span>
+            </h2>
+
+            <p>
+              अपने Creator Profile और Branding की जानकारी
+              manage करें।
+            </p>
+
+          </div>
+
+
+          <div class="panel profile-panel">
+
+
+            <!-- PROFILE PHOTO -->
+            <div class="profile-photo-wrap">
+
+              <div
+                class="profile-photo"
+                id="profilePhotoPreview">
+
+                U
+
+              </div>
+
+
+              <label
+                class="btn btn-ghost"
+                for="photoInput">
+
+                Upload photo
+
+              </label>
+
+
+              <input
+                id="photoInput"
+                type="file"
+                accept="image/png,image/jpeg,image/webp"
+                hidden>
+
+
+              <small>
+                PNG, JPG या WebP · Maximum 5 MB.
+                Photo Storage में सुरक्षित upload होने के बाद
+                ही cloud profile से जुड़ेगी।
+              </small>
+
+            </div>
+
+
+            <!-- PROFILE FORM -->
+            <form
+              id="profileForm"
+              class="profile-form">
+
+
+              <label>
+                Display Name
+
+                <input
+                  type="text"
+                  id="profileName"
+                  maxlength="80"
+                  placeholder="Your name">
+              </label>
+
+
+              <label>
+                Brand / Creator Title
+
+                <input
+                  type="text"
+                  id="profileBrand"
+                  maxlength="100"
+                  placeholder="Creator">
+              </label>
+
+
+              <label>
+                Tagline
+
+                <input
+                  type="text"
+                  id="profileTagline"
+                  maxlength="160"
+                  placeholder="Imagine. Create. Innovate.">
+              </label>
+
+
+              <button
+                class="btn btn-primary"
+                type="submit">
+
+                Save Profile
+
+              </button>
+
+
+              <p
+                class="form-note"
+                id="profileMessage">
+              </p>
+
+            </form>
+
+          </div>
+
+        </section>
+
+
+        <!-- ================================= -->
+        <!-- SUPER ADMIN CONSOLE               -->
+        <!-- ================================= -->
+
+        <section class="page" id="page-admin">
+
+          <div class="page-intro">
+
+            <div class="eyebrow">
+              RESTRICTED AREA
+            </div>
+
+            <h2>
+              Super Admin
+              <span class="gradient-text">Console</span>
+            </h2>
+
+            <p>
+              यह section केवल अधिकृत Super Admin account
+              के लिए उपलब्ध होगा।
+            </p>
+
+          </div>
+
+
+          <div class="panel">
+
+            <h3>Security Status</h3>
+
+            <p id="adminStatus">
+              Checking permissions...
+            </p>
+
+
+            <div class="notice">
+
+              Admin permissions केवल सुरक्षित Database
+              Policies और Server-side verification से नियंत्रित
+              होंगी।
+
+              User management, role changes, account deletion
+              और अन्य privileged operations को सुरक्षित
+              Backend / Edge Functions से लागू करना होगा।
+
+              Browser में Service Role Key कभी नहीं रखी जाएगी।
+
+            </div>
+
+          </div>
+
+        </section>
+
+
+      </div>
+      <!-- WORKSPACE CONTENT END -->
+
+    </section>
+    <!-- WORKSPACE MAIN AREA END -->
+
+  </main>
+  <!-- PRIVATE CREATOR WORKSPACE END -->
+
+
+  <!-- ===================================== -->
+  <!-- LOGIN / SIGNUP MODAL                 -->
+  <!-- ===================================== -->
+
+  <div
+    class="modal-backdrop hidden"
+    id="authModal">
+
+
+    <div class="auth-modal panel">
+
+
+      <button
+        class="modal-close"
+        id="modalClose"
+        aria-label="Close login">
+
+        ×
+
+      </button>
+
+
+      <div class="brand-mark">
+        UPS
+      </div>
+
+
+      <div class="eyebrow">
+        YOUR CREATIVE WORKSPACE
+      </div>
+
+
+      <h2 id="authTitle">
+        Welcome back
+      </h2>
+
+
+      <p id="authSubtitle">
+        Sign in to continue to your workspace.
+      </p>
+
+
+      <!-- AUTHENTICATION FORM -->
+      <form id="authForm">
+
+
+        <label>
+          Email Address
+
+          <input
+            type="email"
+            id="authEmail"
+            autocomplete="email"
+            required
+            placeholder="you@example.com">
+        </label>
+
+
+        <label>
+          Password
+
+          <input
+            type="password"
+            id="authPassword"
+            autocomplete="current-password"
+            minlength="8"
+            required
+            placeholder="At least 8 characters">
+        </label>
+
+
+        <button
+          class="btn btn-primary full-width"
+          id="authSubmit"
+          type="submit">
+
+          Sign in
+
+        </button>
+
+      </form>
+
+
+      <!-- SIGN IN / SIGN UP SWITCH -->
+      <button
+        class="text-link auth-switch"
+        id="authSwitch">
+
+        New here? Create an account
+
+      </button>
+
+
+      <p
+        class="form-note"
+        id="authMessage">
+      </p>
+
+
+      <small class="auth-foot">
+        Account authentication is handled by Supabase.
+        Never share your password or OTP.
+      </small>
+
+
+    </div>
+
+  </div>
+
+
+  <!-- ===================================== -->
+  <!-- TOAST NOTIFICATION                    -->
+  <!-- ===================================== -->
+
+  <div
+    class="toast"
+    id="toast"
+    role="status"
+    aria-live="polite">
+  </div>
+
+
+  <!-- ===================================== -->
+  <!-- WEBSITE FOOTER                        -->
+  <!-- ===================================== -->
+
+  <footer class="site-footer">
+
+    <div class="wrap footer-inner">
+
+
+      <div>
+
+        <a class="brand" href="#">
+
+          <span class="brand-mark">
+            UPS
+          </span>
+
+          <span>
+            <b>UPS Creator Studio</b>
+            <small>Imagine. Create. Innovate.</small>
+          </span>
+
+        </a>
+
+
+        <p>
+          All-in-One AI Creative Production Software
+        </p>
+
+      </div>
+
+
+      <div class="footer-credit">
+
+        Created by
+        <b>Umesh Prakash Singh</b>
+
+        <br>
+
+        <span>
+          © <span id="year"></span> UPS Creator Studio
+        </span>
+
+      </div>
+
+
+    </div>
+
+  </footer>
+
+
+  <!-- ===================================== -->
+  <!-- MAIN JAVASCRIPT CONNECTION            -->
+  <!-- ===================================== -->
+
+  <script
+    type="module"
+    src="app.js">
+  </script>
+
+</body>
+</html>
