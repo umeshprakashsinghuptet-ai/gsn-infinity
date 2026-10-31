@@ -241,8 +241,8 @@ function openAuthModal(mode = "login") {
   const modal = getElement("authModal");
 
   if (!modal) return;
-
-  modal.classList.add("open");
+modal.classList.remove("hidden");
+modal.classList.add("open");
   modal.setAttribute("aria-hidden", "false");
 
   setAuthMode(mode);
