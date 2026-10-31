@@ -1859,7 +1859,7 @@ function renderDashboardProjects() {
     getElement("recentProjects");
 
   const projectContainer =
-    getElement("projectList");
+    getElement("allProjects");
 
   const projects = APP_STATE.projects;
 
