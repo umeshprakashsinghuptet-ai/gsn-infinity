@@ -261,6 +261,7 @@ function closeAuthModal() {
 modal.classList.remove("open");
 modal.classList.add("hidden");
 modal.setAttribute("aria-hidden", "true");
+   }
 
 /* 3. LOGIN / SIGNUP MODE */
 
