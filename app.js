@@ -5707,3 +5707,412 @@ console.log(
   );
 
 });
+/* =========================================
+   UPS MOBILE REPAIR CENTER
+   DIAGNOSIS + SAFE AUTO FIX
+========================================= */
+
+(function UPSMobileRepairCenter() {
+
+  if (window.UPS_REPAIR_CENTER) return;
+
+  const errors = [];
+  const MAX_ERRORS = 30;
+
+  // Capture JavaScript errors
+  window.addEventListener("error", function(e) {
+    errors.unshift({
+      type: "JavaScript Error",
+      message: e.message || "Unknown error",
+      file: e.filename || "Unknown file",
+      line: e.lineno || 0,
+      time: new Date().toLocaleString()
+    });
+
+    errors.length = Math.min(errors.length, MAX_ERRORS);
+  });
+
+  // Capture rejected promises
+  window.addEventListener("unhandledrejection", function(e) {
+    errors.unshift({
+      type: "Promise Error",
+      message: String(e.reason || "Unknown rejection"),
+      file: "Promise",
+      line: 0,
+      time: new Date().toLocaleString()
+    });
+
+    errors.length = Math.min(errors.length, MAX_ERRORS);
+  });
+
+  function scanWebsite() {
+    const results = [];
+    const all = document.querySelectorAll("*");
+
+    // Duplicate IDs
+    const ids = {};
+
+    document.querySelectorAll("[id]").forEach(el => {
+      const id = el.id;
+      ids[id] = (ids[id] || 0) + 1;
+    });
+
+    Object.keys(ids).forEach(id => {
+      if (ids[id] > 1) {
+        results.push({
+          level: "ERROR",
+          title: "Duplicate HTML ID",
+          detail: id + " (" + ids[id] + " times)"
+        });
+      }
+    });
+
+    // Buttons without accessible text
+    document.querySelectorAll("button").forEach((btn, i) => {
+      if (!btn.textContent.trim() &&
+          !btn.getAttribute("aria-label") &&
+          !btn.querySelector("img[alt]")) {
+        results.push({
+          level: "WARNING",
+          title: "Button label missing",
+          detail: "Button #" + (i + 1)
+        });
+      }
+    });
+
+    // Links without destination
+    document.querySelectorAll("a").forEach((link, i) => {
+      const href = link.getAttribute("href");
+
+      if (!href || href === "#") {
+        results.push({
+          level: "WARNING",
+          title: "Link destination missing",
+          detail: "Link #" + (i + 1)
+        });
+      }
+    });
+
+    // Images without alt
+    document.querySelectorAll("img").forEach((img, i) => {
+      if (!img.hasAttribute("alt")) {
+        results.push({
+          level: "WARNING",
+          title: "Image ALT missing",
+          detail: "Image #" + (i + 1)
+        });
+      }
+    });
+
+    // Empty important containers
+    [
+      "publicView",
+      "appView",
+      "sidebar",
+      "page-dashboard",
+      "page-wizard"
+    ].forEach(id => {
+      if (!document.getElementById(id)) {
+        results.push({
+          level: "ERROR",
+          title: "Important HTML element missing",
+          detail: "#" + id
+        });
+      }
+    });
+
+    // JavaScript error report
+    errors.forEach(err => {
+      results.push({
+        level: "ERROR",
+        title: err.type,
+        detail: err.message + " | " + err.file +
+          " | Line: " + err.line
+      });
+    });
+
+    // Supabase check
+    if (!window.UPS_CREATOR_STUDIO) {
+      results.push({
+        level: "WARNING",
+        title: "Application API not initialized",
+        detail: "Final initialization object unavailable."
+      });
+    }
+
+    // Mobile viewport check
+    const viewport = document.querySelector(
+      'meta[name="viewport"]'
+    );
+
+    if (!viewport) {
+      results.push({
+        level: "WARNING",
+        title: "Mobile viewport missing",
+        detail: "Check index.html viewport meta tag."
+      });
+    }
+
+    return results;
+  }
+
+  // Safe repairs only
+  function runSafeRepairs() {
+    let repaired = 0;
+
+    // Buttons without type can accidentally submit forms
+    document.querySelectorAll("button").forEach(btn => {
+      if (!btn.hasAttribute("type")) {
+        btn.setAttribute("type", "button");
+        repaired++;
+      }
+    });
+
+    // Add empty alt to decorative images
+    document.querySelectorAll("img:not([alt])").forEach(img => {
+      img.setAttribute("alt", "");
+      repaired++;
+    });
+
+    return repaired;
+  }
+
+  function createRepairCenter() {
+    if (document.getElementById("upsRepairButton")) return;
+
+    const style = document.createElement("style");
+
+    style.textContent = `
+      #upsRepairButton {
+        position:fixed;
+        right:16px;
+        bottom:18px;
+        z-index:99998;
+        border:0;
+        border-radius:30px;
+        padding:14px 19px;
+        background:#6d5dfc;
+        color:white;
+        font-size:14px;
+        font-weight:700;
+        box-shadow:0 5px 25px #0005;
+        cursor:pointer;
+      }
+
+      #upsRepairPanel {
+        position:fixed;
+        inset:0;
+        z-index:99999;
+        background:#080d1b;
+        color:#fff;
+        padding:18px;
+        overflow-y:auto;
+        font-family:Arial,sans-serif;
+        display:none;
+      }
+
+      #upsRepairPanel h2 {
+        font-size:23px;
+        margin:12px 0;
+      }
+
+      .ups-repair-card {
+        background:#172238;
+        border:1px solid #34435f;
+        border-radius:12px;
+        padding:13px;
+        margin:10px 0;
+        overflow-wrap:anywhere;
+      }
+
+      .ups-repair-card small {
+        color:#b9c7df;
+        display:block;
+        margin-top:6px;
+      }
+
+      .ups-repair-action {
+        width:100%;
+        padding:14px;
+        margin:7px 0;
+        border:0;
+        border-radius:9px;
+        font-weight:bold;
+        font-size:15px;
+        cursor:pointer;
+      }
+
+      .ups-repair-primary {
+        background:#6d5dfc;
+        color:white;
+      }
+
+      .ups-repair-secondary {
+        background:#263550;
+        color:white;
+      }
+    `;
+
+    document.head.appendChild(style);
+
+    const button = document.createElement("button");
+
+    button.id = "upsRepairButton";
+    button.type = "button";
+    button.textContent = "🔧 Repair Center";
+
+    const panel = document.createElement("div");
+
+    panel.id = "upsRepairPanel";
+
+    panel.innerHTML = `
+      <h2>🔧 UPS Repair Center</h2>
+      <p>Website Diagnosis & Safe Repair</p>
+
+      <div id="upsRepairSummary" class="ups-repair-card">
+        अभी वेबसाइट की जाँच नहीं हुई है।
+      </div>
+
+      <button class="ups-repair-action ups-repair-primary"
+        id="upsRunScan">
+        🔍 Scan Website
+      </button>
+
+      <button class="ups-repair-action ups-repair-secondary"
+        id="upsSafeFix">
+        🛠️ Apply Safe Fixes
+      </button>
+
+      <button class="ups-repair-action ups-repair-secondary"
+        id="upsCopyReport">
+        📋 Copy Error Report
+      </button>
+
+      <button class="ups-repair-action ups-repair-secondary"
+        id="upsClosePanel">
+        Close
+      </button>
+
+      <div id="upsRepairResults"></div>
+    `;
+
+    document.body.append(button, panel);
+
+    button.onclick = () => {
+      panel.style.display = "block";
+      displayScan();
+    };
+
+    document.getElementById("upsClosePanel").onclick = () => {
+      panel.style.display = "none";
+    };
+
+    document.getElementById("upsRunScan").onclick =
+      displayScan;
+
+    document.getElementById("upsSafeFix").onclick = () => {
+      const count = runSafeRepairs();
+
+      displayScan();
+
+      alert(
+        count + " सुरक्षित सुधार लागू किए गए।"
+      );
+    };
+
+    document.getElementById("upsCopyReport").onclick =
+      async () => {
+        const report = JSON.stringify(
+          {
+            date: new Date().toISOString(),
+            url: location.href,
+            errors,
+            diagnosis: scanWebsite()
+          },
+          null,
+          2
+        );
+
+        try {
+          await navigator.clipboard.writeText(report);
+          alert("Report Copy हो गई।");
+        } catch (e) {
+          const area = document.createElement("textarea");
+          area.value = report;
+          panel.appendChild(area);
+          area.select();
+          alert("Report Select हो गई। Copy करें।");
+        }
+      };
+  }
+
+  function displayScan() {
+    const results = scanWebsite();
+
+    const summary =
+      document.getElementById("upsRepairSummary");
+
+    const output =
+      document.getElementById("upsRepairResults");
+
+    const errorCount = results.filter(
+      x => x.level === "ERROR"
+    ).length;
+
+    const warningCount = results.filter(
+      x => x.level === "WARNING"
+    ).length;
+
+    summary.textContent =
+      "कुल समस्याएँ: " + results.length +
+      " | Errors: " + errorCount +
+      " | Warnings: " + warningCount;
+
+    if (!results.length) {
+      output.innerHTML = `
+        <div class="ups-repair-card">
+          🟢 कोई समस्या इस Scan में नहीं मिली।
+          <small>यह पूर्ण Functionality Test नहीं है।</small>
+        </div>
+      `;
+      return;
+    }
+
+    output.innerHTML = results.map(item => {
+      const card = document.createElement("div");
+
+      card.className = "ups-repair-card";
+
+      const title = document.createElement("strong");
+      title.textContent =
+        (item.level === "ERROR" ? "🔴 " : "🟡 ") +
+        item.title;
+
+      const detail = document.createElement("small");
+      detail.textContent = item.detail;
+
+      card.append(title, detail);
+
+      return card.outerHTML;
+    }).join("");
+  }
+
+  function start() {
+    createRepairCenter();
+
+    window.UPS_REPAIR_CENTER = {
+      scan: scanWebsite,
+      repair: runSafeRepairs,
+      errors: errors
+    };
+
+    console.log("UPS Mobile Repair Center Ready.");
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", start);
+  } else {
+    start();
+  }
+
+})();
