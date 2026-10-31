@@ -4918,8 +4918,8 @@ renderGeneratedPrompt = function(result) {
 
 const previousProjectsRender = renderDashboardProjects;
 if (typeof previousProjectsRender === "function") {
-  renderProjects = function() {
-    previousProjectsRender();
+renderDashboardProjects = function() {
+   previousProjectsRender();
     renderPromptLibrary();
   };
 }
