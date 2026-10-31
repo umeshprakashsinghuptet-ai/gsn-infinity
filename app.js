@@ -2814,4 +2814,461 @@ renderDashboard();
 
 /* =========================================
    END OF PART 4H
+   ========================================= 
+/* =========================================
+   PART 4I — 50 CORE MODULES ENGINE
+   ========================================= */
+
+/* 1. CORE MODULE DATABASE */
+
+const CORE_MODULES = [
+
+  // THEME & PLANNING
+
+  {
+    id: 1,
+    name: "Theme Engine",
+    category: "Planning",
+    description: "Selects suitable creative themes."
+  },
+  {
+    id: 2,
+    name: "Topic Discovery",
+    category: "Planning",
+    description: "Suggests relevant content topics."
+  },
+  {
+    id: 3,
+    name: "Audience Intelligence",
+    category: "Planning",
+    description: "Defines the intended audience."
+  },
+  {
+    id: 4,
+    name: "Platform Strategy",
+    category: "Planning",
+    description: "Plans content for publishing platforms."
+  },
+  {
+    id: 5,
+    name: "Content Category",
+    category: "Planning",
+    description: "Organizes content by category."
+  },
+
+  // STORY & SCRIPT
+
+  {
+    id: 6,
+    name: "Story Engine",
+    category: "Script",
+    description: "Develops the main story structure."
+  },
+  {
+    id: 7,
+    name: "Script Writer",
+    category: "Script",
+    description: "Creates production scripts."
+  },
+  {
+    id: 8,
+    name: "Dialogue Engine",
+    category: "Script",
+    description: "Creates natural dialogue."
+  },
+  {
+    id: 9,
+    name: "Hook Generator",
+    category: "Script",
+    description: "Creates attention-grabbing openings."
+  },
+  {
+    id: 10,
+    name: "Narration Planner",
+    category: "Script",
+    description: "Plans voice narration."
+  },
+
+  // IDENTITY & PERFORMANCE
+
+  {
+    id: 11,
+    name: "Identity Engine",
+    category: "Identity",
+    description: "Defines identity preservation requirements."
+  },
+  {
+    id: 12,
+    name: "Character Consistency",
+    category: "Identity",
+    description: "Maintains character continuity."
+  },
+  {
+    id: 13,
+    name: "Voice Planner",
+    category: "Performance",
+    description: "Plans voice characteristics."
+  },
+  {
+    id: 14,
+    name: "Pronunciation Checker",
+    category: "Performance",
+    description: "Reviews pronunciation requirements."
+  },
+  {
+    id: 15,
+    name: "Lip-Sync Planner",
+    category: "Performance",
+    description: "Plans dialogue and lip-sync alignment."
+  },
+
+  // VISUAL PRODUCTION
+
+  {
+    id: 16,
+    name: "Scene Engine",
+    category: "Visual",
+    description: "Organizes scenes and sequences."
+  },
+  {
+    id: 17,
+    name: "Shot Planner",
+    category: "Visual",
+    description: "Plans camera shots."
+  },
+  {
+    id: 18,
+    name: "Camera Movement",
+    category: "Visual",
+    description: "Defines camera movement requirements."
+  },
+  {
+    id: 19,
+    name: "Lighting Designer",
+    category: "Visual",
+    description: "Plans lighting conditions."
+  },
+  {
+    id: 20,
+    name: "Background Designer",
+    category: "Visual",
+    description: "Defines background environments."
+  },
+
+  // CINEMATIC PRODUCTION
+
+  {
+    id: 21,
+    name: "Cinematic Engine",
+    category: "Cinematic",
+    description: "Plans cinematic visual presentation."
+  },
+  {
+    id: 22,
+    name: "Color Grading",
+    category: "Cinematic",
+    description: "Defines color treatment."
+  },
+  {
+    id: 23,
+    name: "VFX Planner",
+    category: "Cinematic",
+    description: "Plans visual effects."
+  },
+  {
+    id: 24,
+    name: "Transition Designer",
+    category: "Cinematic",
+    description: "Plans scene transitions."
+  },
+  {
+    id: 25,
+    name: "Motion Graphics",
+    category: "Cinematic",
+    description: "Plans animated graphic elements."
+  },
+
+  // AUDIO PRODUCTION
+
+  {
+    id: 26,
+    name: "Music Planner",
+    category: "Audio",
+    description: "Plans background music."
+  },
+  {
+    id: 27,
+    name: "Sound Effects",
+    category: "Audio",
+    description: "Plans sound effects."
+  },
+  {
+    id: 28,
+    name: "Audio Mixing",
+    category: "Audio",
+    description: "Defines audio mixing requirements."
+  },
+  {
+    id: 29,
+    name: "Voice Synchronization",
+    category: "Audio",
+    description: "Aligns voice and scene timing."
+  },
+  {
+    id: 30,
+    name: "Audio Quality",
+    category: "Audio",
+    description: "Reviews audio quality requirements."
+  },
+
+  // ACCURACY & LANGUAGE
+
+  {
+    id: 31,
+    name: "Accuracy Engine",
+    category: "Accuracy",
+    description: "Reviews factual and production accuracy."
+  },
+  {
+    id: 32,
+    name: "Fact Verification",
+    category: "Accuracy",
+    description: "Identifies facts requiring verification."
+  },
+  {
+    id: 33,
+    name: "Hindi Typography",
+    category: "Language",
+    description: "Checks Hindi text presentation."
+  },
+  {
+    id: 34,
+    name: "Caption Generator",
+    category: "Language",
+    description: "Prepares caption text."
+  },
+  {
+    id: 35,
+    name: "Multilingual Support",
+    category: "Language",
+    description: "Plans multilingual content."
+  },
+
+  // IMAGE & DESIGN
+
+  {
+    id: 36,
+    name: "Image Composition",
+    category: "Design",
+    description: "Plans image composition."
+  },
+  {
+    id: 37,
+    name: "Poster Designer",
+    category: "Design",
+    description: "Plans poster layouts."
+  },
+  {
+    id: 38,
+    name: "Typography Designer",
+    category: "Design",
+    description: "Plans typography and text hierarchy."
+  },
+  {
+    id: 39,
+    name: "Brand Identity",
+    category: "Design",
+    description: "Maintains brand presentation."
+  },
+  {
+    id: 40,
+    name: "Visual Consistency",
+    category: "Design",
+    description: "Reviews visual consistency."
+  },
+
+  // QUALITY & EXPORT
+
+  {
+    id: 41,
+    name: "Privacy Protection",
+    category: "Security",
+    description: "Reviews privacy requirements."
+  },
+  {
+    id: 42,
+    name: "Safe Content Review",
+    category: "Security",
+    description: "Checks content safety requirements."
+  },
+  {
+    id: 43,
+    name: "Artifact Detection",
+    category: "Quality",
+    description: "Identifies visual artifact risks."
+  },
+  {
+    id: 44,
+    name: "Continuity Audit",
+    category: "Quality",
+    description: "Reviews scene continuity."
+  },
+  {
+    id: 45,
+    name: "Visual QA",
+    category: "Quality",
+    description: "Reviews visual quality requirements."
+  },
+
+  // DELIVERY & PERFORMANCE
+
+  {
+    id: 46,
+    name: "Duration Controller",
+    category: "Delivery",
+    description: "Checks target duration."
+  },
+  {
+    id: 47,
+    name: "Aspect Ratio Controller",
+    category: "Delivery",
+    description: "Checks output aspect ratio."
+  },
+  {
+    id: 48,
+    name: "Export Manager",
+    category: "Delivery",
+    description: "Plans final export settings."
+  },
+  {
+    id: 49,
+    name: "Compatibility Checker",
+    category: "Delivery",
+    description: "Reviews platform compatibility."
+  },
+  {
+    id: 50,
+    name: "Final Production Audit",
+    category: "Delivery",
+    description: "Reviews final production readiness."
+  }
+
+];
+
+/* 2. MODULE COUNT VALIDATION */
+
+function validateCoreModules() {
+
+  const expectedCount =
+    APP_CONFIG.TOTAL_CORE_MODULES;
+
+  const actualCount =
+    CORE_MODULES.length;
+
+  const uniqueIds = new Set(
+    CORE_MODULES.map(module => module.id)
+  );
+
+  return {
+    valid:
+      actualCount === expectedCount &&
+      uniqueIds.size === expectedCount,
+
+    expected: expectedCount,
+
+    actual: actualCount,
+
+    unique: uniqueIds.size
+  };
+
+}
+
+/* 3. RENDER CORE MODULES */
+
+function renderCoreModules() {
+
+  const container = getElement("moduleList");
+
+  if (!container) return;
+
+  container.innerHTML = CORE_MODULES.map(module => `
+
+    <article class="module-card panel">
+
+      <div class="module-card-header">
+
+        <span class="module-number">
+          ${String(module.id).padStart(2, "0")}
+        </span>
+
+        <span class="tag">
+          ${escapeHTML(module.category)}
+        </span>
+
+      </div>
+
+      <h3>
+        ${escapeHTML(module.name)}
+      </h3>
+
+      <p>
+        ${escapeHTML(module.description)}
+      </p>
+
+      <span class="module-status">
+        Defined
+      </span>
+
+    </article>
+
+  `).join("");
+
+}
+
+/* 4. MODULE SUMMARY */
+
+function renderModuleSummary() {
+
+  const result = validateCoreModules();
+
+  const summary = getElement("moduleSummary");
+
+  if (!summary) return;
+
+  summary.textContent = result.valid
+    ? `${result.actual}/50 Core Modules defined`
+    : `Module validation issue: ${result.actual}/${result.expected}`;
+
+}
+
+/* 5. INITIALIZE MODULE SYSTEM */
+
+function initializeCoreModules() {
+
+  const result = validateCoreModules();
+
+  console.log(
+    "UPS Core Modules:",
+    result
+  );
+
+  renderCoreModules();
+
+  renderModuleSummary();
+
+  if (!result.valid) {
+    showToast(
+      "Core Module count validation failed.",
+      "error"
+    );
+  }
+
+}
+
+/* 6. RUN MODULE SYSTEM */
+
+initializeCoreModules();
+
+/* =========================================
+   END OF PART 4I
    ========================================= */
