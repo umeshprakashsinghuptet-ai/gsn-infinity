@@ -1597,4 +1597,347 @@ function finishWizard() {
 
 /* =========================================
    END OF PART 4E
+   ========================================= 
+/* =========================================
+   PART 4F — PROJECT MANAGEMENT SYSTEM
+   ========================================= */
+
+/* 1. PROJECT STORAGE KEY */
+
+const PROJECT_STORAGE_KEY = "ups_creator_projects_v1";
+
+/* 2. LOAD LOCAL PROJECTS */
+
+function loadLocalProjects() {
+
+  try {
+
+    const saved = localStorage.getItem(
+      PROJECT_STORAGE_KEY
+    );
+
+    APP_STATE.projects = saved
+      ? JSON.parse(saved)
+      : [];
+
+    if (!Array.isArray(APP_STATE.projects)) {
+      APP_STATE.projects = [];
+    }
+
+  } catch (error) {
+
+    console.error("Project loading error:", error);
+
+    APP_STATE.projects = [];
+
+  }
+
+  return APP_STATE.projects;
+}
+
+/* 3. SAVE PROJECTS TO LOCAL STORAGE */
+
+function persistLocalProjects() {
+
+  try {
+
+    localStorage.setItem(
+      PROJECT_STORAGE_KEY,
+      JSON.stringify(APP_STATE.projects)
+    );
+
+    return true;
+
+  } catch (error) {
+
+    console.error("Project saving error:", error);
+
+    showToast(
+      "Project save नहीं हो पाया। Browser storage check करें।",
+      "error"
+    );
+
+    return false;
+
+  }
+
+}
+
+/* 4. CREATE PROJECT FROM BRIEF */
+
+function createProjectFromBrief(brief) {
+
+  const project = {
+
+    id: crypto.randomUUID
+      ? crypto.randomUUID()
+      : `project_${Date.now()}`,
+
+    title: brief.topic || "Untitled Project",
+
+    studio: brief.studio,
+
+    output: brief.output,
+
+    platform: brief.platform,
+
+    category: brief.category,
+
+    brief: brief,
+
+    status: "Draft",
+
+    createdAt: new Date().toISOString(),
+
+    updatedAt: new Date().toISOString()
+
+  };
+
+  return project;
+
+}
+
+/* 5. SAVE CURRENT PROJECT */
+
+function saveCurrentProject() {
+
+  const brief = APP_STATE.wizard.brief;
+
+  if (!brief) {
+
+    showToast(
+      "पहले Creative Brief तैयार करें।",
+      "error"
+    );
+
+    return;
+
+  }
+
+  const project = createProjectFromBrief(brief);
+
+  APP_STATE.projects.unshift(project);
+
+  if (!persistLocalProjects()) {
+
+    APP_STATE.projects.shift();
+
+    return;
+
+  }
+
+  showToast(
+    "Project successfully saved!",
+    "success"
+  );
+
+  renderDashboardProjects();
+
+}
+
+/* 6. ADD SAVE BUTTON TO CREATIVE BRIEF */
+
+const originalRenderCreativeBrief =
+  renderCreativeBrief;
+
+renderCreativeBrief = function(brief) {
+
+  originalRenderCreativeBrief(brief);
+
+  const container = $(
+    "#questionArea .recommendation"
+  );
+
+  if (!container) return;
+
+  const saveButton = document.createElement("button");
+
+  saveButton.type = "button";
+  saveButton.id = "saveCurrentProject";
+  saveButton.className = "btn btn-primary";
+  saveButton.textContent = "💾 Save Project";
+
+  container.appendChild(saveButton);
+
+  saveButton.addEventListener(
+    "click",
+    saveCurrentProject
+  );
+
+};
+
+/* 7. DELETE PROJECT */
+
+function deleteProject(projectId) {
+
+  const previousProjects = [...APP_STATE.projects];
+
+  APP_STATE.projects =
+    APP_STATE.projects.filter(
+      project => project.id !== projectId
+    );
+
+  if (!persistLocalProjects()) {
+
+    APP_STATE.projects = previousProjects;
+
+    return;
+
+  }
+
+  showToast("Project deleted.", "success");
+
+  renderDashboardProjects();
+
+}
+
+/* 8. RENDER PROJECT CARD */
+
+function createProjectCard(project) {
+
+  return `
+
+    <article class="project-card panel">
+
+      <div class="project-card-header">
+
+        <span class="tag">
+          ${escapeHTML(project.studio)}
+        </span>
+
+        <span class="tag">
+          ${escapeHTML(project.status)}
+        </span>
+
+      </div>
+
+      <h3>
+        ${escapeHTML(project.title)}
+      </h3>
+
+      <p>
+        ${escapeHTML(project.output)}
+        ·
+        ${escapeHTML(project.platform)}
+      </p>
+
+      <small>
+        Created: ${formatDate(project.createdAt)}
+      </small>
+
+      <div class="project-actions">
+
+        <button
+          type="button"
+          class="btn btn-secondary"
+          data-view-project="${escapeHTML(project.id)}"
+        >
+          View Brief
+        </button>
+
+        <button
+          type="button"
+          class="btn btn-secondary"
+          data-delete-project="${escapeHTML(project.id)}"
+        >
+          Delete
+        </button>
+
+      </div>
+
+    </article>
+
+  `;
+
+}
+
+/* 9. RENDER PROJECT LIST */
+
+function renderDashboardProjects() {
+
+  const recentContainer =
+    getElement("recentProjects");
+
+  const projectContainer =
+    getElement("projectList");
+
+  const projects = APP_STATE.projects;
+
+  if (recentContainer) {
+
+    recentContainer.innerHTML = projects.length
+      ? projects.slice(0, 5)
+          .map(createProjectCard)
+          .join("")
+      : "<p>No projects saved yet.</p>";
+
+  }
+
+  if (projectContainer) {
+
+    projectContainer.innerHTML = projects.length
+      ? projects.map(createProjectCard).join("")
+      : "<p>No projects saved yet.</p>";
+
+  }
+
+  const count = getElement("projectCount");
+
+  if (count) {
+    count.textContent = projects.length;
+  }
+
+}
+
+/* 10. PROJECT ACTION EVENTS */
+
+document.addEventListener("click", event => {
+
+  const deleteButton = event.target.closest(
+    "[data-delete-project]"
+  );
+
+  if (deleteButton) {
+
+    const projectId =
+      deleteButton.dataset.deleteProject;
+
+    deleteProject(projectId);
+
+    return;
+
+  }
+
+  const viewButton = event.target.closest(
+    "[data-view-project]"
+  );
+
+  if (viewButton) {
+
+    const project = APP_STATE.projects.find(
+      item => item.id === viewButton.dataset.viewProject
+    );
+
+    if (!project) return;
+
+    showPage("wizard");
+
+    const area = getElement("questionArea");
+
+    if (area) {
+      renderCreativeBrief(project.brief);
+    }
+
+  }
+
+});
+
+/* 11. INITIAL PROJECT LOAD */
+
+loadLocalProjects();
+
+renderDashboardProjects();
+
+/* =========================================
+   END OF PART 4F
    ========================================= */
