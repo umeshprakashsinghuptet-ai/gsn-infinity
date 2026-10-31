@@ -598,4 +598,234 @@ getElement("topLogout")?.addEventListener(
 
 /* =========================================
    END OF PART 4B
+   ========================================= 
+/* =========================================
+   PART 4C — SEVEN CREATIVE STUDIOS
+   ========================================= */
+
+/* 1. STUDIO INFORMATION */
+
+const STUDIO_DATA = [
+
+  {
+    id: "video",
+    name: "Video Studio",
+    icon: "🎬",
+    description: "Create engaging videos and reels.",
+    outputs: ["Reels", "Shorts", "Long Videos"]
+  },
+
+  {
+    id: "image",
+    name: "Image Studio",
+    icon: "🖼️",
+    description: "Create creative AI image concepts.",
+    outputs: ["AI Images", "Portraits", "Artwork"]
+  },
+
+  {
+    id: "poster",
+    name: "Poster Studio",
+    icon: "🎨",
+    description: "Design professional promotional posters.",
+    outputs: ["Posters", "Banners", "Social Graphics"]
+  },
+
+  {
+    id: "dance",
+    name: "Dance Studio",
+    icon: "💃",
+    description: "Plan dance videos and choreography.",
+    outputs: ["Dance Reels", "Choreography", "Music Scenes"]
+  },
+
+  {
+    id: "film",
+    name: "Film Maker Studio",
+    icon: "🎥",
+    description: "Develop cinematic film concepts.",
+    outputs: ["Short Films", "Scenes", "Storyboards"]
+  },
+
+  {
+    id: "podcast",
+    name: "Podcast Studio",
+    icon: "🎙️",
+    description: "Create professional podcast scripts.",
+    outputs: ["Interviews", "Discussions", "Episodes"]
+  },
+
+  {
+    id: "education",
+    name: "Education Studio",
+    icon: "📚",
+    description: "Create educational and learning content.",
+    outputs: ["MCQ", "GK", "Lessons", "Explainers"]
+  }
+
+];
+
+/* 2. CREATE STUDIO CARD */
+
+function createStudioCard(studio) {
+
+  return `
+    <article class="studio-card panel">
+
+      <div class="studio-icon">
+        ${studio.icon}
+      </div>
+
+      <h3>${escapeHTML(studio.name)}</h3>
+
+      <p>${escapeHTML(studio.description)}</p>
+
+      <div class="studio-tags">
+        ${studio.outputs.map(output => `
+          <span class="tag">
+            ${escapeHTML(output)}
+          </span>
+        `).join("")}
+      </div>
+
+      <button
+        class="btn btn-primary studio-open"
+        data-studio="${escapeHTML(studio.id)}"
+        type="button"
+      >
+        Open Studio →
+      </button>
+
+    </article>
+  `;
+}
+
+/* 3. RENDER ALL STUDIOS */
+
+function renderStudios() {
+
+  const publicContainer =
+    getElement("publicStudios");
+
+  const appContainer =
+    getElement("allStudios");
+
+  const cards = STUDIO_DATA
+    .map(createStudioCard)
+    .join("");
+
+  if (publicContainer) {
+    publicContainer.innerHTML = cards;
+  }
+
+  if (appContainer) {
+    appContainer.innerHTML = cards;
+  }
+
+}
+
+/* 4. OPEN SELECTED STUDIO */
+
+function openStudio(studioId) {
+
+  const studio = STUDIO_DATA.find(
+    item => item.id === studioId
+  );
+
+  if (!studio) {
+    showToast("Studio not found.", "error");
+    return;
+  }
+
+  APP_STATE.currentStudio = studio;
+
+  APP_STATE.wizard = {
+    mode: "AUTO",
+    step: 0,
+    answers: {
+      studio: studio.id
+    },
+    questions: [],
+    completed: false
+  };
+
+  showPage("wizard");
+
+  const title = getElement("pageTitle");
+
+  if (title) {
+    title.textContent = studio.name;
+  }
+
+  const questionArea = getElement("questionArea");
+
+  if (questionArea) {
+
+    questionArea.innerHTML = `
+      <div class="recommendation">
+
+        <h3>
+          ${studio.icon}
+          ${escapeHTML(studio.name)}
+        </h3>
+
+        <p>
+          ${escapeHTML(studio.description)}
+        </p>
+
+        <p><strong>Available outputs:</strong></p>
+
+        <p>
+          ${studio.outputs
+            .map(escapeHTML)
+            .join(" • ")}
+        </p>
+
+        <button
+          class="btn btn-primary"
+          id="startStudioWizard"
+          type="button"
+        >
+          Start Auto-Pilot →
+        </button>
+
+      </div>
+    `;
+  }
+
+  getElement("startStudioWizard")?.addEventListener(
+    "click",
+    () => startWizard(studio.id)
+  );
+
+}
+
+/* 5. STUDIO CLICK EVENTS */
+
+document.addEventListener("click", (event) => {
+
+  const button = event.target.closest(
+    "[data-studio]"
+  );
+
+  if (!button) return;
+
+  const studioId = button.dataset.studio;
+
+  if (!APP_STATE.user) {
+    openAuthModal("login");
+    showToast("पहले Login करें।");
+    return;
+  }
+
+  openStudio(studioId);
+
+});
+
+/* 6. INITIAL STUDIO RENDER */
+
+renderStudios();
+
+/* =========================================
+   END OF PART 4C
    ========================================= */
