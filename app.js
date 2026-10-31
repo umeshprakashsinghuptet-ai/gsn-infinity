@@ -5223,9 +5223,9 @@ console.log(
       renderDashboard();
     }
 
-    if (typeof renderModules === "function") {
-      renderModules();
-    }
+    if (typeof renderCoreModules === "function") {
+  renderCoreModules();
+}
 
     if (typeof renderLocks === "function") {
       renderLocks();
