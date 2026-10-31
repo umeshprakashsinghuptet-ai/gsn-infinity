@@ -2506,4 +2506,312 @@ renderProfileForm();
 
 /* =========================================
    END OF PART 4G
+   ========================================= 
+/* =========================================
+   PART 4H — DASHBOARD SYSTEM
+   ========================================= */
+
+/* 1. DASHBOARD GREETING */
+
+function getDashboardGreeting() {
+
+  const hour = new Date().getHours();
+
+  if (hour < 12) return "Good Morning";
+
+  if (hour < 17) return "Good Afternoon";
+
+  return "Good Evening";
+
+}
+
+/* 2. UPDATE DASHBOARD WELCOME */
+
+function updateDashboardWelcome() {
+
+  const greeting = getDashboardGreeting();
+
+  const userName =
+    APP_STATE.profile?.full_name ||
+    APP_STATE.user?.user_metadata?.full_name ||
+    APP_STATE.user?.email?.split("@")[0] ||
+    "Creator";
+
+  const welcomeName = getElement("welcomeName");
+
+  if (welcomeName) {
+    welcomeName.textContent =
+      `${greeting}, ${userName}!`;
+  }
+
+}
+
+/* 3. DASHBOARD STATISTICS */
+
+function renderDashboardStats() {
+
+  const projects = APP_STATE.projects || [];
+
+  const totalProjects = projects.length;
+
+  const draftProjects = projects.filter(
+    project => project.status === "Draft"
+  ).length;
+
+  const completedProjects = projects.filter(
+    project => project.status === "Completed"
+  ).length;
+
+  const statsContainer = $(
+    "#page-dashboard .dashboard-stats"
+  );
+
+  if (statsContainer) {
+
+    statsContainer.innerHTML = `
+
+      <div class="metric-card panel">
+
+        <span class="metric-label">
+          Total Projects
+        </span>
+
+        <strong class="metric-value">
+          ${totalProjects}
+        </strong>
+
+        <span class="metric-note">
+          Your saved projects
+        </span>
+
+      </div>
+
+      <div class="metric-card panel">
+
+        <span class="metric-label">
+          Draft Projects
+        </span>
+
+        <strong class="metric-value">
+          ${draftProjects}
+        </strong>
+
+        <span class="metric-note">
+          Projects in progress
+        </span>
+
+      </div>
+
+      <div class="metric-card panel">
+
+        <span class="metric-label">
+          Completed Projects
+        </span>
+
+        <strong class="metric-value">
+          ${completedProjects}
+        </strong>
+
+        <span class="metric-note">
+          Finished projects
+        </span>
+
+      </div>
+
+      <div class="metric-card panel">
+
+        <span class="metric-label">
+          Available Studios
+        </span>
+
+        <strong class="metric-value">
+          ${STUDIO_DATA.length}
+        </strong>
+
+        <span class="metric-note">
+          Creative production studios
+        </span>
+
+      </div>
+
+    `;
+
+  }
+
+  const projectCount = getElement("projectCount");
+
+  if (projectCount) {
+    projectCount.textContent = totalProjects;
+  }
+
+}
+
+/* 4. DASHBOARD STUDIO CARDS */
+
+function renderDashboardStudios() {
+
+  const container =
+    getElement("dashboardStudios");
+
+  if (!container) return;
+
+  container.innerHTML = STUDIO_DATA.map(studio => `
+
+    <button
+      type="button"
+      class="dashboard-studio-card panel"
+      data-dashboard-studio="${escapeHTML(studio.id)}"
+    >
+
+      <span class="studio-icon">
+        ${studio.icon}
+      </span>
+
+      <strong>
+        ${escapeHTML(studio.name)}
+      </strong>
+
+      <small>
+        ${escapeHTML(studio.description)}
+      </small>
+
+      <span class="studio-card-action">
+        Open Studio →
+      </span>
+
+    </button>
+
+  `).join("");
+
+}
+
+/* 5. DASHBOARD STUDIO EVENTS */
+
+document.addEventListener("click", event => {
+
+  const button = event.target.closest(
+    "[data-dashboard-studio]"
+  );
+
+  if (!button) return;
+
+  const studioId =
+    button.dataset.dashboardStudio;
+
+  if (!APP_STATE.user) {
+    openAuthModal("login");
+    return;
+  }
+
+  openStudio(studioId);
+
+});
+
+/* 6. RECENT PROJECTS */
+
+function renderRecentProjects() {
+
+  const container =
+    getElement("recentProjects");
+
+  if (!container) return;
+
+  const recentProjects =
+    APP_STATE.projects.slice(0, 5);
+
+  if (!recentProjects.length) {
+
+    container.innerHTML = `
+      <div class="empty-state">
+
+        <h3>No Projects Yet</h3>
+
+        <p>
+          अपना पहला Creative Project शुरू करें।
+        </p>
+
+        <button
+          type="button"
+          class="btn btn-primary"
+          data-dashboard-action="create"
+        >
+          Create Your First Project
+        </button>
+
+      </div>
+    `;
+
+    return;
+
+  }
+
+  container.innerHTML = recentProjects
+    .map(createProjectCard)
+    .join("");
+
+}
+
+/* 7. DASHBOARD QUICK ACTIONS */
+
+document.addEventListener("click", event => {
+
+  const button = event.target.closest(
+    "[data-dashboard-action]"
+  );
+
+  if (!button) return;
+
+  const action = button.dataset.dashboardAction;
+
+  if (action === "create") {
+
+    showPage("studios");
+
+  }
+
+  if (action === "projects") {
+
+    showPage("projects");
+
+  }
+
+  if (action === "profile") {
+
+    showPage("profile");
+    renderProfileForm();
+
+  }
+
+});
+
+/* 8. COMPLETE DASHBOARD RENDER */
+
+function renderDashboard() {
+
+  updateDashboardWelcome();
+
+  renderDashboardStats();
+
+  renderDashboardStudios();
+
+  renderRecentProjects();
+
+}
+
+/* 9. DASHBOARD REFRESH */
+
+function refreshDashboard() {
+
+  loadLocalProjects();
+
+  renderDashboard();
+
+}
+
+/* 10. DASHBOARD INITIAL RENDER */
+
+renderDashboard();
+
+/* =========================================
+   END OF PART 4H
    ========================================= */
